@@ -1,0 +1,321 @@
+/* reset.css v0.0.1 | Apache-2.0 License | https://sine-wave-generator.com
+ *
+ * Reset.css is a Cascading Style Sheets (CSS) file that standardizes browser
+ * defaults, providing a consistent layout and typography foundation while
+ * supporting light and dark mode themes, responsive design, and modern reset
+ * approaches.
+ *
+ * Features:
+ *
+ * - Consistent cross-browser experience
+ * - Remove unwanted default styles
+ * - Set responsive base font-size
+ * - Custom properties ready for theming
+ * - Accessibility best practices
+ * - Extendable minimal styles
+ * - Performance optimized
+ * - Accessibility focused
+ * - Keyboard friendly focus styles
+ * - Tiny file size overhead
+ * - Only normalize the essentials
+ *
+ * Website:
+ *
+ * https://sine-wave-generator.com
+ *
+ * Source:
+ *
+ * https://github.com/sebastienrousseau/sine-wave-generator
+ *
+ * @version 0.0.1
+ * @license Apache-2.0
+ * @author Sebastien Rousseau
+ * @copyright 2024 Sine Wave Generator. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* Reset styles */
+
+/* Box sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Remove margin and padding */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr,
+button,
+input,
+select,
+optgroup,
+option,
+fieldset {
+    margin: 0;
+    padding: 0;
+}
+
+/* Remove list styles */
+ul,
+ol {
+    list-style: none;
+}
+
+/* Remove default styles for headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+/* Remove default styles for form elements */
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    appearance: none; /* Remove default styles */
+    background-color: transparent; /* Make background transparent */
+    border: none; /* Remove default border */
+    border-radius: 0; /* Remove default border radius */
+    outline: none; /* Remove default focus outline */
+    resize: none; /* Disable textarea resizing */
+}
+
+/* Reset fonts to ensure consistency */
+html {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    font-size: clamp(16px, 1vw, 20px); /* Responsive font size using clamp() */
+}
+
+/* Remove default styles for hyperlinks */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Remove default styles for buttons */
+button {
+    cursor: pointer;
+}
+
+/* Remove default styles for images */
+img {
+    max-width: 100%;
+    height: auto;
+    border-style: none;
+}
+
+/* Custom properties */
+:root {
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --golden-ratio: 1.618;
+    --transition-duration: 0.3s;
+    --z-index-menu: 100;
+}
+
+/* Colors */
+:root {
+    --background-color: #f1edf4; /* Light Purple */
+    --primary-color: #151513; /* Dark Gray */
+    --secondary-color: #007bff; /* Blue (default macOS accent color) */
+    --tertiary-color: #727680; /* Light Gray */
+	--fourth-color-light: #89729e; /* Light Purple */
+}
+
+/* Light Mode */
+@media (prefers-color-scheme: light) {
+    :root {
+        --background-color: #f1edf4; /* Light Purple */
+        --primary-color: #151513; /* Dark Gray */
+        --secondary-color: #007bff; /* Blue (default macOS accent color) */
+        --tertiary-color: #727680; /* Light Gray */
+		--fourth-color-light: #89729e; /* Light Purple */
+    }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #2a2530; /* Dark Purple */
+        --primary-color: #dedede; /* Light Gray */
+        --secondary-color: #007bff; /* Blue (default macOS accent color) */
+        --tertiary-color: #dedede; /* Light Gray */
+		--fourth-color: #2a2530; /* Dark Purple */
+    }
+}
+
+/* Typography */
+body {
+    color: var(--primary-color);
+    font-weight: 400;
+    letter-spacing: -.022em;
+    line-height: var(--golden-ratio)vh;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: clamp(2em, 5vw, 3em); /* Responsive font size using clamp() */
+}
+
+h2 {
+    color: var(--secondary-color);
+    font-size: clamp(1.5em, 4vw, 2em); /* Responsive font size using clamp() */
+}
+
+h3 {
+    color: var(--tertiary-color);
+    font-size: clamp(1.2em, 3vw, 1.5em); /* Responsive font size using clamp() */
+}
+
+/* Layout */
+body {
+    background-color: var(--background-color);
+    display: grid;
+    gap: var(--golden-ratio)vh;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 20px;
+}
+
+header {
+    background-color: var(--background-color);
+    grid-column: span 2;
+    grid-row: span 2;
+    padding: 20px;
+    text-align: center;
+}
+
+footer {
+    align-items: center;
+    background-color: var(--background-color);
+    display: flex;
+    grid-column: span 2;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+}
+
+section {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+canvas {
+    /* Calculate width and height using the golden ratio */
+    height: calc(40vh / var(--golden-ratio));
+    max-height: 100%;
+    max-width: 100%;
+    min-height: calc(40vh / var(--golden-ratio));
+    min-width: calc(40vw / var(--golden-ratio));
+    width: calc(40vw / var(--golden-ratio));
+}
+
+/* Animations and transitions */
+@media (prefers-reduced-motion: no-preference) {
+    canvas {
+        transition: transform var(--transition-duration);
+    }
+
+    canvas:hover {
+        transform: scale(1.05);
+    }
+}
+
+/* Breakpoints */
+@media screen and (max-width: 768px) {
+    body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    section {
+        margin-bottom: 20px;
+    }
+}
+
+/* CSS Subgrid for nested layouts */
+.container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+}
+
+.item {
+    display: subgrid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+}
+
+/* Leveraging containment for isolation */
+.isolated-container {
+    contain: layout;
+}
+
+/* Modern reset approaches like Josh Comeau's Baseline */
+html {
+    /* Apply Josh Comeau's Baseline reset styles */
+    font-size: 100%;
+    line-height: 1.5;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Animation start/end events to trigger JS */
+@keyframes example {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.example {
+    animation: example 1s ease-in-out;
+}

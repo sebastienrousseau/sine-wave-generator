@@ -1,0 +1,60 @@
+{
+    "author": {
+        "name": "Team Sine Wave Generator",
+        "email": "contact@sine-wave-generator.com",
+        "url": "https://sine-wave-generator.com"
+    },
+    "bugs": {
+        "url": "https://github.com/sebastienrousseau/sine-wave-generator/issues"
+    },
+    "dependencies": {
+        "path": "^0.12.7",
+        "remark": "^15.0.1"
+    },
+    "description": "A JavaScript library for generating animated sine waves on a canvas.",
+    "devDependencies": {
+        "@babel/core": "^7.23.9",
+        "@babel/preset-env": "^7.23.9",
+        "babel-loader": "^9.1.3",
+        "copy-webpack-plugin": "^12.0.2",
+        "fs-extra": "^11.2.0",
+        "html-webpack-plugin": "^5.6.0",
+        "terser-webpack-plugin": "^5.3.10",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.0.2"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "files": [
+        "dist",
+        "src",
+        "LICENSE",
+        "README.md"
+    ],
+    "homepage": "https://sine-wave-generator.com",
+    "keywords": [
+        "animation",
+        "canvas",
+        "generative art",
+        "sine wave",
+        "wave"
+    ],
+    "license": "Apache-2.0",
+    "main": "./src/sine-wave-generator.js",
+    "name": "sine-wave-generator",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sebastienrousseau/sine-wave-generator.git"
+    },
+    "scripts": {
+        "build": "webpack --mode production",
+        "format": "prettier --write .",
+        "lint": "eslint .",
+        "prepare": "npm run build && node copyDistToDocs.js",
+        "start": "webpack-dev-server --open",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "sideEffects": false,
+    "version": "0.0.1"
+}
