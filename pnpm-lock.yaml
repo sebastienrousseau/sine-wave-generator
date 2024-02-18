@@ -34,6 +34,9 @@ devDependencies:
   terser-webpack-plugin:
     specifier: ^5.3.10
     version: 5.3.10(webpack@5.90.2)
+  webpack:
+    specifier: ^5.90.2
+    version: 5.90.2(webpack-cli@5.1.4)
   webpack-cli:
     specifier: ^5.1.4
     version: 5.1.4(webpack-dev-server@5.0.2)(webpack@5.90.2)
