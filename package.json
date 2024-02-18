@@ -24,7 +24,7 @@
         "webpack-dev-server": "^5.0.2"
     },
     "engines": {
-        "node": ">=18"
+        "node": ">=16"
     },
     "files": [
         "dist",
