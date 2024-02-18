@@ -29,7 +29,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
 
+  # Publish to npm on push to main branch
   publish:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     steps:
