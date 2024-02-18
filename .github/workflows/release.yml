@@ -8,74 +8,40 @@ concurrency:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [16.x]
-
     steps:
-      - run: echo ${{github.ref}}
-
       - uses: actions/checkout@v2
-
       - uses: pnpm/action-setup@v2.2.2
         with:
           version: 7
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # - name: Lint fix
-      #   run: pnpm run lint:fix
-
-      # - name: Run prettier
-      #   run: pnpm run format
-
-      # - name: Run remark
-      #   run: pnpm run lint:markdown
-
-      - name: Build
-        run: pnpm run build
-
-      # - name: Testing & Coverage
-      #   run: pnpm run test
+          registry-url: "https://registry.npmjs.org" # Specify npm registry URL here for setup-node
+          scope: "@sebastienrousseau" # Ensure this matches your package scope
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # npm token for authentication
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
 
   publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: pnpm/action-setup@v2.2.2
         with:
           version: 7
-          registry-url: "https://registry.npmjs.org"
-          scope: sebastienrousseau
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm publish --access public --tag latest
+      - name: Configure npm for publishing
+        run: pnpm config set registry "https://registry.npmjs.org/"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Set package registry
-        run: pnpm config set registry https://npm.pkg.github.com
-
-      - name: Github package registry authentication
-        run: pnpm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Npm registry authentication
-        run: pnpm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish the package to Github and Npm package registries
-        run: pnpm -r publish --access public
+      - name: Publish to npm
+        run: pnpm publish --access public --tag latest
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
