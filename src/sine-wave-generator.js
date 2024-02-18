@@ -1,5 +1,5 @@
 /**
- * sine-wave-generator.js v0.0.1
+ * sine-wave-generator.js v0.0.2
  *
  * A JavaScript library designed for generating animated sine waves on a canvas,
  * offering configurable parameters, easing functions for smooth animations, and
@@ -17,6 +17,7 @@
  * @requires Wave
  * @requires sine-wave-generator
 */
+
 "use strict";
 
 /**
@@ -80,8 +81,8 @@ const SPEED = FIBONACCI;
 class Wave {
   /**
    * Creates an instance of Wave.
-   * @constructor
    * @param {WaveConfig} config - The configuration object for the wave.
+   * @throws {Error} Throws an error if any configuration value is invalid.
    */
   constructor({
     phase = Math.random() * Math.PI * 2,
@@ -143,9 +144,11 @@ class Wave {
   /**
    * Updates the wave's configuration.
    * @param {WaveConfig} config - The new configuration object.
+   * @returns {this} - The updated Wave instance.
    */
   update(config) {
     Object.assign(this, config);
+    return this;
   }
 }
 
@@ -156,13 +159,15 @@ class Wave {
 class SineWaveGenerator {
   /**
    * Creates an instance of SineWaveGenerator.
-   * @constructor
    * @param {Object} options - The initialization options.
    * @param {HTMLElement|string} options.el - The canvas element or selector for the canvas.
    * @param {Wave[]} [options.waves=[]] - Array of Wave instances to be animated.
+   * @throws {Error} Throws an error if the canvas element is not provided.
    */
   constructor({ el, waves = [] }) {
-    if (!el) throw new Error('SineWaveGenerator requires "el" option.');
+    if (!el || !(el instanceof HTMLElement)) {
+      throw new Error('SineWaveGenerator requires a valid canvas element.');
+    }
     this.el = typeof el === "string" ? document.querySelector(el) : el;
     this.ctx = this.el.getContext("2d");
     this.waves = waves.map((wave) => new Wave(wave));
@@ -184,20 +189,24 @@ class SineWaveGenerator {
 
   /**
    * Binds necessary events.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
    */
   bindEvents() {
     window.addEventListener("resize", this.handleResize);
     this.el.addEventListener("mousemove", this.handleMouseMove);
     this.el.addEventListener("touchmove", this.handleTouchMove);
+    return this;
   }
 
   /**
    * Unbinds events.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
    */
   unbindEvents() {
     window.removeEventListener("resize", this.handleResize);
     this.el.removeEventListener("mousemove", this.handleMouseMove);
     this.el.removeEventListener("touchmove", this.handleTouchMove);
+    return this;
   }
 
   /**
@@ -224,6 +233,7 @@ class SineWaveGenerator {
 
   /**
    * Starts the animation of waves.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
    */
   start() {
     const draw = () => {
@@ -233,10 +243,12 @@ class SineWaveGenerator {
     };
     draw();
     this.resize();
+    return this;
   }
 
   /**
    * Stops the animation of waves.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
    */
   stop() {
     if (this.animationFrameId) {
@@ -244,21 +256,26 @@ class SineWaveGenerator {
       this.animationFrameId = null;
     }
     this.unbindEvents();
+    return this;
   }
 
   /**
    * Adjusts the canvas size on window resize to maintain the full-screen effect.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
    */
   resize() {
     this.el.width = window.innerWidth / 2;
     this.el.height = window.innerHeight / 2;
+    return this;
   }
 
   /**
    * Draws a wave on the canvas.
    * @param {Wave} wave - The wave to be drawn.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
    */
   drawWave(wave) {
+    // Method implementation
     this.ctx.save();
     if (wave.rotate) {
       this.ctx.translate(this.el.width / 2, this.el.height / 2);
@@ -293,26 +310,38 @@ class SineWaveGenerator {
     wave.phase += wave.speed * Math.PI * 2;
 
     this.ctx.restore();
+
+    return this;
   }
 
   /**
    * Adds a new wave to the generator.
    * @param {WaveConfig} config - The configuration object for the new wave.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
+   * @throws {Error} Throws an error if the configuration object is not provided.
    */
   addWave(config) {
+    if (!config || typeof config !== 'object') {
+      throw new Error('Invalid wave configuration provided.');
+    }
     const newWave = new Wave(config);
     this.waves.push(newWave);
+    return this;
   }
 
   /**
    * Removes a wave from the generator.
    * @param {number} index - The index of the wave to be removed.
+   * @returns {this} - The SineWaveGenerator instance for chaining.
+   * @throws {Error} Throws an error if the index is out of bounds.
    */
   removeWave(index) {
-    if (index >= 0 && index < this.waves.length) {
-      this.waves.splice(index, 1);
+    if (index < 0 || index >= this.waves.length) {
+      throw new Error('Wave index out of bounds.');
     }
+    this.waves.splice(index, 1);
+    return this;
   }
 }
-window.SineWaveGenerator = SineWaveGenerator;
 
+window.SineWaveGenerator = SineWaveGenerator;

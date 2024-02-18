@@ -1,5 +1,5 @@
 /*!
- * sine-wave-generator.js v0.0.1 | Apache-2.0 License | https://sine-wave-generator.com
+ * sine-wave-generator.js v0.0.2 | Apache-2.0 License | https://sine-wave-generator.com
  *
  * A JavaScript library designed for generating animated sine waves on a canvas,
  * offering configurable parameters, easing functions for smooth animations, and
@@ -13,7 +13,7 @@
  *
  * https://github.com/sebastienrousseau/sine-wave-generator
  *
- * @version 0.0.1
+ * @version 0.0.2
  * @license Apache-2.0
  * @author Sebastien Rousseau
  * @copyright 2024 Sine Wave Generator. All rights reserved.
