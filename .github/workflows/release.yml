@@ -41,6 +41,14 @@ jobs:
         run: pnpm config set registry "https://registry.npmjs.org/"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org" # Specify npm registry URL here for setup-node
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
       - name: Publish to npm
         run: pnpm publish --access public --tag latest
         env:
