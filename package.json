@@ -42,7 +42,7 @@
     ],
     "license": "Apache-2.0",
     "main": "./src/sine-wave-generator.js",
-    "name": "sine-wave-generator",
+    "name": "@sebastienrousseau/sine-wave-generator",
     "repository": {
         "type": "git",
         "url": "https://github.com/sebastienrousseau/sine-wave-generator.git"
