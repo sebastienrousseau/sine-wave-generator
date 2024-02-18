@@ -1,5 +1,5 @@
 /**
- * copyDistToDocs.js v0.0.1
+ * copyDistToDocs.js v0.0.2
  *
  * A JavaScript file to copy the contents of the 'dist' directory to the 'docs'
  * directory in the root of the project. This is useful for GitHub Pages to

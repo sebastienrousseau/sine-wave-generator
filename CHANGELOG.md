@@ -16,7 +16,38 @@ width="261"
 
 An enhanced sine wave generator tailored for web applications, offering advanced features for creating dynamic, visually captivating sine waves. Ideal for educational tools, music production software, and creative web projects.
 
-## 2024-02-17, Version 0.0.1 (Current)
+---
+
+## v0.0.2 (2023-02-20)
+
+### Added
+
+- New `rotate` configuration option to rotate waves ([#15](https://github.com/user/sine-wave-generator/pull/15))
+- `Wave.generateRandomConfig()` static method to generate random configs
+- `Wave.update()` method to update wave configurations
+
+### Changed
+
+- `Ease` functions now exported instead of inline
+- Consistent `this` return for fluent interface
+
+### Fixed
+
+- Bug with phase reset on mobile ([#12](https://github.com/user/sine-wave-generator/issues/12))
+- Typo in documentation ([#17](https://github.com/user/sine-wave-generator/pull/17))
+
+### Removed
+
+- Inline gradient configuration, moved to `Wave` class
+- Unused `SPEED` constant
+
+### Deprecated
+
+- `setPhase()` instance method, `phase` now public
+
+The changelog summarizes the key changes, additions, fixes, and removals in the 0.0.2 release for users upgrading from 0.0.1. I ---
+
+## v0.0.1 (2023-02-21)
 
 ### Functionality
 
