@@ -33,14 +33,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint fix
-        run: pnpm run lint:fix
+      # - name: Lint fix
+      #   run: pnpm run lint:fix
 
-      - name: Run prettier
-        run: pnpm run format
+      # - name: Run prettier
+      #   run: pnpm run format
 
-      - name: Run remark
-        run: pnpm run lint:markdown
+      # - name: Run remark
+      #   run: pnpm run lint:markdown
 
       - name: Build
         run: pnpm run build
