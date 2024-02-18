@@ -52,7 +52,7 @@
         "build": "webpack --mode production",
         "format": "prettier --write .",
         "lint": "eslint .",
-        "prepare": "npm run build && node copyDistToDocs.js",
+        "prepare": "pnpm run build && node copyDistToDocs.js",
         "start": "webpack-dev-server --open",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
