@@ -1,5 +1,5 @@
 /**
- * webpack.config.js v0.0.2
+ * webpack.config.js v0.1.0
  *
  * A simple webpack configuration file for the sine-wave-generator library.
  *

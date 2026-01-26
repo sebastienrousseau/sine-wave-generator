@@ -27,6 +27,8 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # npm token for authentication
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run format:check
+      - run: pnpm run lint
       - run: pnpm run build
 
   # Publish to npm on push to main branch

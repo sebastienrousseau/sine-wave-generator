@@ -1,321 +1,295 @@
-/* reset.css v0.0.2 | Apache-2.0 License | https://sine-wave-generator.com
- *
- * Reset.css is a Cascading Style Sheets (CSS) file that standardizes browser
- * defaults, providing a consistent layout and typography foundation while
- * supporting light and dark mode themes, responsive design, and modern reset
- * approaches.
- *
- * Features:
- *
- * - Consistent cross-browser experience
- * - Remove unwanted default styles
- * - Set responsive base font-size
- * - Custom properties ready for theming
- * - Accessibility best practices
- * - Extendable minimal styles
- * - Performance optimized
- * - Accessibility focused
- * - Keyboard friendly focus styles
- * - Tiny file size overhead
- * - Only normalize the essentials
- *
- * Website:
- *
- * https://sine-wave-generator.com
- *
- * Source:
- *
- * https://github.com/sebastienrousseau/sine-wave-generator
- *
- * @version 0.0.2
- * @license Apache-2.0
- * @author Sebastien Rousseau
- * @copyright 2024 Sine Wave Generator. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/*
+ * Site styles (Apple-inspired documentation tone and layout)
  */
-
-/* Reset styles */
-
-/* Box sizing */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-/* Remove margin and padding */
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-ul,
-ol,
-li,
-dl,
-dt,
-dd,
-blockquote,
-figure,
-fieldset,
-legend,
-textarea,
-pre,
-iframe,
-hr,
-button,
-input,
-select,
-optgroup,
-option,
-fieldset {
-    margin: 0;
-    padding: 0;
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
-/* Remove list styles */
-ul,
-ol {
-    list-style: none;
+body {
+  font-family: "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Segoe UI", sans-serif;
+  color: #0f172a;
+  background: radial-gradient(circle at 10% 10%, #eef5ff 0%, #f7f9fc 40%, #ffffff 100%);
+  min-height: 100vh;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
 }
 
-/* Remove default styles for headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-size: inherit;
-    font-weight: inherit;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(120deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.7;
+  z-index: 0;
 }
 
-/* Remove default styles for form elements */
-button,
-input,
-optgroup,
-select,
-textarea {
-    font-family: inherit;
-    font-size: inherit;
-    font-style: inherit;
-    font-weight: inherit;
-    appearance: none; /* Remove default styles */
-    background-color: transparent; /* Make background transparent */
-    border: none; /* Remove default border */
-    border-radius: 0; /* Remove default border radius */
-    outline: none; /* Remove default focus outline */
-    resize: none; /* Disable textarea resizing */
-}
-
-/* Reset fonts to ensure consistency */
-html {
-    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-    font-size: clamp(16px, 1vw, 20px); /* Responsive font size using clamp() */
-}
-
-/* Remove default styles for hyperlinks */
 a {
-    text-decoration: none;
-    color: inherit;
+  color: inherit;
+  text-decoration: none;
 }
 
-/* Remove default styles for buttons */
-button {
-    cursor: pointer;
-}
-
-/* Remove default styles for images */
 img {
-    max-width: 100%;
-    height: auto;
-    border-style: none;
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
-/* Custom properties */
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
 :root {
-    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --golden-ratio: 1.618;
-    --transition-duration: 0.3s;
-    --z-index-menu: 100;
+  --card-bg: #ffffff;
+  --card-border: rgba(15, 23, 42, 0.08);
+  --accent: #0ea5e9;
+  --accent-dark: #0284c7;
+  --muted: #475569;
+  --shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+  --radius: 18px;
 }
 
-/* Colors */
-:root {
-    --background-color: #f1edf4; /* Light Purple */
-    --primary-color: #151513; /* Dark Gray */
-    --secondary-color: #007bff; /* Blue (default macOS accent color) */
-    --tertiary-color: #727680; /* Light Gray */
-	--fourth-color-light: #89729e; /* Light Purple */
+.page {
+  position: relative;
+  z-index: 1;
+  padding: 32px 6vw 96px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Light Mode */
-@media (prefers-color-scheme: light) {
-    :root {
-        --background-color: #f1edf4; /* Light Purple */
-        --primary-color: #151513; /* Dark Gray */
-        --secondary-color: #007bff; /* Blue (default macOS accent color) */
-        --tertiary-color: #727680; /* Light Gray */
-		--fourth-color-light: #89729e; /* Light Purple */
-    }
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 0 40px;
 }
 
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-color: #2a2530; /* Dark Purple */
-        --primary-color: #dedede; /* Light Gray */
-        --secondary-color: #007bff; /* Blue (default macOS accent color) */
-        --tertiary-color: #dedede; /* Light Gray */
-		--fourth-color: #2a2530; /* Dark Purple */
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
-/* Typography */
-body {
-    color: var(--primary-color);
-    font-weight: 400;
-    letter-spacing: -.022em;
-    line-height: var(--golden-ratio)vh;
+.brand img {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.15);
 }
 
-h1 {
-    color: var(--primary-color);
-    font-size: clamp(2em, 5vw, 3em); /* Responsive font size using clamp() */
+.nav {
+  display: flex;
+  gap: 20px;
+  font-size: 0.95rem;
+  color: var(--muted);
 }
 
-h2 {
-    color: var(--secondary-color);
-    font-size: clamp(1.5em, 4vw, 2em); /* Responsive font size using clamp() */
+.nav a:hover {
+  color: #0f172a;
 }
 
-h3 {
-    color: var(--tertiary-color);
-    font-size: clamp(1.2em, 3vw, 1.5em); /* Responsive font size using clamp() */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(14, 165, 233, 0.25);
 }
 
-/* Layout */
-body {
-    background-color: var(--background-color);
-    display: grid;
-    gap: var(--golden-ratio)vh;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    padding: 20px;
+.hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 64px;
 }
 
-header {
-    background-color: var(--background-color);
-    grid-column: span 2;
-    grid-row: span 2;
-    padding: 20px;
-    text-align: center;
+.hero h1 {
+  font-size: clamp(2.6rem, 4vw, 3.6rem);
+  line-height: 1.1;
+  margin: 0 0 16px;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 1.1rem;
+  margin: 0 0 24px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.hero-actions .btn-secondary {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  color: #0f172a;
+  background: #ffffff;
+}
+
+.hero-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.hero-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.hero-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.section {
+  margin-bottom: 64px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.section-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.card p {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
+
+.code-block {
+  background: #0b1220;
+  color: #e2e8f0;
+  padding: 16px;
+  border-radius: 14px;
+  font-family: "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
+
+.demo-canvas {
+  display: block;
+  width: 100%;
+  height: 220px;
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.08), transparent 45%),
+    linear-gradient(120deg, rgba(15, 23, 42, 0.03), rgba(15, 23, 42, 0.01));
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.12);
+  color: #0369a1;
+  font-weight: 600;
 }
 
 footer {
-    align-items: center;
-    background-color: var(--background-color);
-    display: flex;
-    grid-column: span 2;
-    justify-content: center;
-    padding: 20px;
-    text-align: center;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  padding-top: 24px;
 }
 
-section {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-}
-
-canvas {
-    /* Calculate width and height using the golden ratio */
-    height: calc(40vh / var(--golden-ratio));
-    max-height: 100%;
-    max-width: 100%;
-    min-height: calc(40vh / var(--golden-ratio));
-    min-width: calc(40vw / var(--golden-ratio));
-    width: calc(40vw / var(--golden-ratio));
-}
-
-/* Animations and transitions */
 @media (prefers-reduced-motion: no-preference) {
-    canvas {
-        transition: transform var(--transition-duration);
-    }
+  .hero,
+  .card,
+  .hero-card {
+    animation: fadeUp 0.8s ease both;
+  }
 
-    canvas:hover {
-        transform: scale(1.05);
-    }
+  .card:nth-child(2n) {
+    animation-delay: 0.1s;
+  }
+
+  .card:nth-child(3n) {
+    animation-delay: 0.2s;
+  }
 }
 
-/* Breakpoints */
-@media screen and (max-width: 768px) {
-    body {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-    }
-
-    section {
-        margin-bottom: 20px;
-    }
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* CSS Subgrid for nested layouts */
-.container {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-}
+@media (max-width: 720px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-.item {
-    display: subgrid;
-    gap: 10px;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-}
-
-/* Leveraging containment for isolation */
-.isolated-container {
-    contain: layout;
-}
-
-/* Modern reset approaches like Josh Comeau's Baseline */
-html {
-    /* Apply Josh Comeau's Baseline reset styles */
-    font-size: 100%;
-    line-height: 1.5;
-    scroll-behavior: smooth;
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* Animation start/end events to trigger JS */
-@keyframes example {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-.example {
-    animation: example 1s ease-in-out;
+  .nav {
+    flex-wrap: wrap;
+  }
 }

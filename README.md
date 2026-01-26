@@ -1,39 +1,29 @@
-<!-- markdownlint-disable MD033 MD041 -->
+# Sine Wave Generator
 
-<img
-src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
-align="right"
-alt="Sine Wave Generator"
-height="261"
-width="261"
-/>
+Sine Wave Generator is a fast, canvas-first animation engine for smooth, layered sine waves. It ships with performance-focused defaults, responsive sizing, and a compact API that feels at home in modern UI work.
 
-<!-- markdownlint-enable MD033 MD041 -->
+## Overview
 
-# sine-wave-generator.js
+- **Performance-first rendering** with segment-based drawing and pixel-ratio caps.
+- **Multi-wave layering** for depth, parallax, and subtle motion design.
+- **Pointer-ready interaction** with passive touch listeners.
+- **Predictable configuration** through a small, focused API.
 
-![Banner for the Sine Wave Generator][banner]
+## Get started
 
-An enhanced sine wave generator tailored for web applications, offering advanced features for creating dynamic, visually captivating sine waves. Ideal for educational tools, music production software, and creative web projects.
-
-## Installation
-
-Install using npm for easy incorporation into your project:
+Install the package:
 
 ```sh
-npm install sine-wave-generator
+npm install @sebastienrousseau/sine-wave-generator
 ```
 
-## Usage
+Add a canvas and initialize:
 
 ```js
-import {SineWaveGenerator} from 'sine-wave-generator';
-
-const waves = [/* array of Wave configs */];
-
 const generator = new SineWaveGenerator({
-  el: '#sineCanvas',
-  waves
+  el: "#sine",
+  maxPixelRatio: 2,
+  waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
 });
 
 generator.start();
@@ -41,91 +31,74 @@ generator.start();
 
 ## Examples
 
-Check out the [examples](/examples) directory for a complete set of usage examples, including:
+See the living examples in `examples/example.html` and the published demos in `docs/index.html`.
 
 - Basic single wave
-- Multiple waves configuration
-- Interactive mouse movement
-- Dynamic wave management
+- Layered wave stacks
+- Pointer-reactive waves
+- Dynamic add/remove waves
+- Performance-tuned mode
+- Custom easing curves
+- Pause/resume control
 
-## API
+## API reference
 
-### SineWaveGenerator(options)
+### `new SineWaveGenerator(options)`
 
-Initializes the sine wave generator with the provided options.
+Options:
 
-#### options
+- `el` **(required)**: `HTMLCanvasElement | string`
+- `waves`: `WaveConfig[]` (optional)
+- `pixelRatio`: `number` (optional, defaults to device pixel ratio)
+- `maxPixelRatio`: `number` (optional, defaults to `2`)
+- `autoResize`: `boolean` (optional, defaults to `true`)
 
-Type: `object`
+### `WaveConfig`
 
-##### el
+```js
+{
+  phase?: number,
+  speed?: number,
+  amplitude?: number,
+  wavelength?: number,
+  strokeStyle?: string | null,
+  segmentLength?: number,
+  easing?: (percent, amplitude) => number,
+  rotate?: number
+}
+```
 
-Type: `HTMLElement|string`
+Notes:
 
-The canvas element or selector for the canvas.
+- `segmentLength` must be greater than `0`.
+- Set `strokeStyle` to `null` to use the built-in gradient stroke.
 
-##### waves
+### Instance methods
 
-Type: `Wave[]`
+- `start()` — Begin animation.
+- `stop()` — Stop animation and unbind listeners.
+- `resize()` — Recalculate canvas size and gradients.
+- `addWave(config)` — Add a new wave.
+- `removeWave(index)` — Remove a wave by index.
 
-Array of `Wave` instances to be animated.
+## Performance guide
 
-### Wave(config)
+- **Cap pixel ratio** with `maxPixelRatio` on high-DPI displays to reduce memory usage.
+- **Increase segment length** to reduce per-frame points when layering waves.
+- **Keep wave count tight** for mobile, where each additional layer costs draw time.
 
-Represents a single wave configuration.
+## Accessibility
 
-#### config
+The generator is canvas-based; provide fallback text in the DOM and ensure controls (pause/resume) are accessible with keyboard focus if you expose them.
 
-Type: `object`
+## Browser support
 
-Configuration object for the wave.
-
-### Instance Methods
-
-#### .start()
-
-Starts the animation of waves.
-
-#### .stop()
-
-Stops the animation of waves.
-
-#### .addWave(config)
-
-Adds a new wave to the animation.
-
-#### .removeWave(index)
-
-Removes a wave from the animation.
-
-## FAQ
-
-### What browsers are supported?
-
-All modern browsers, including Chrome, Firefox, Safari, Edge. Falls back to 2D canvas.
-
-### How do I change the appearance of the waves?
-
-You can customize the waves by changing their configuration options, such as `amplitude`, `wavelength`, `speed`, and `strokeStyle`.
-
-### Can I add interactivity to the waves?
-
-Yes, the `SineWaveGenerator` supports mouse interaction to disturb the waves. You can also extend its functionality by adding event listeners to the canvas.
+All modern browsers with Canvas 2D support (Chrome, Edge, Safari, Firefox).
 
 ## Changelog
 
-Check out the [CHANGELOG](CHANGELOG.md) for the latest updates and changes to the project.
-
-## Acknowledgements
-
-I would like to express my appreciation to [sine-waves](https://github.com/isuttell/sine-waves) code repository and its creator, [Isaac Suttell](https://github.com/isuttell), for serving as an incredible source of inspiration.
-
-## Contributing
-
-Pull requests welcome! Please check out the [contribution guidelines](CONTRIBUTING.md).
+See `CHANGELOG.md` for release history.
 
 ## License
 
-Apache-2.0 © Copyright 2024 Sine Wave Generator. All rights reserved.
-
-[banner]: https://kura.pro/sinewavegenerator/images/titles/title-sinewavegenerator.webp "Title of Sine Wave Generator"
+Apache-2.0 © 2026 Sine Wave Generator. All rights reserved.

@@ -15,10 +15,14 @@
     "devDependencies": {
         "@babel/core": "^7.23.9",
         "@babel/preset-env": "^7.23.9",
+        "@sebastienrousseau/prettier-config": "^1.1.0",
         "babel-loader": "^9.1.3",
         "copy-webpack-plugin": "^12.0.2",
+        "eslint": "^8.57.1",
+        "eslint-config-prettier": "^9.1.0",
         "fs-extra": "^11.2.0",
         "html-webpack-plugin": "^5.6.0",
+        "prettier": "^3.2.5",
         "terser-webpack-plugin": "^5.3.10",
         "webpack": "^5.90.2",
         "webpack-cli": "^5.1.4",
@@ -51,11 +55,13 @@
     "scripts": {
         "build": "webpack --mode production",
         "format": "prettier --write .",
-        "lint": "eslint .",
+        "format:check": "prettier --check .",
+        "lint": "eslint . --ext .js",
+        "lint:fix": "eslint . --ext .js --fix",
         "prepare": "pnpm run build && node copyDistToDocs.js",
         "start": "webpack-dev-server --open",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "sideEffects": false,
-    "version": "0.0.2"
+    "version": "0.0.3"
 }

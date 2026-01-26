@@ -18,6 +18,25 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 
 ---
 
+## v0.0.3 (2026-01-26)
+
+### Added
+
+- Apple-inspired documentation refresh with new examples and performance guidance
+- New options: `pixelRatio`, `maxPixelRatio`, and `autoResize`
+- Pause/resume example controls and a performance-tuned demo
+
+### Changed
+
+- Responsive canvas sizing now respects element dimensions and device pixel ratio caps
+- `strokeStyle` is now honored; set to `null` for the built-in gradient
+- `Wave.update()` validates configuration changes before applying
+
+### Fixed
+
+- Pointer interactions now clamp to valid ranges for predictable phase updates
+- Touch handling now guards against empty touch lists
+
 ## v0.0.2 (2023-02-20)
 
 ### Added
@@ -44,8 +63,6 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 ### Deprecated
 
 - `setPhase()` instance method, `phase` now public
-
-The changelog summarizes the key changes, additions, fixes, and removals in the 0.0.2 release for users upgrading from 0.0.1. I ---
 
 ## v0.0.1 (2023-02-21)
 

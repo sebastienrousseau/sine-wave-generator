@@ -1,105 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sine Wave Generator | Examples</title>
+    <meta
+      name="description"
+      content="Live examples for Sine Wave Generator: layered waves, performance tuning, custom easing, and more."
+    />
+    <meta name="theme-color" content="#0ea5e9" />
+    <link rel="canonical" href="https://sine-wave-generator.com" />
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="icon" href="favicon.ico" />
+    <script defer src="../src/sine-wave-generator.js"></script>
+    <script defer src="example.js"></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="site-header">
+        <div class="brand">
+          <img
+            src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
+            alt="Sine Wave Generator logo"
+          />
+          <span>Sine Wave Generator</span>
+        </div>
+        <nav class="nav">
+          <a href="#examples">Examples</a>
+          <a href="#get-started">Get started</a>
+          <a href="#performance">Performance</a>
+        </nav>
+        <a class="cta" href="#examples">View demos</a>
+      </header>
 
-<head>
-	<meta charset="UTF-8">
-	<meta content="2024-02-17T21:21:21+01:00" id="date" itemprop="datePublished">
-	<meta content="2024-02-17T21:21:21+01:00" id="last-modified" itemprop="dateModified">
+      <section class="hero" id="get-started">
+        <div>
+          <h1>Examples that scale from playful to production.</h1>
+          <p>Clone patterns for product backdrops, audio visualizers, or UI accents.</p>
+          <div class="hero-actions">
+            <a class="cta" href="#examples">Explore demos</a>
+            <a class="btn-secondary" href="../README.md">Read documentation</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>Performance tuned</h3>
+          <p>Each sample ships with recommended settings for smooth animation.</p>
+        </div>
+        <div class="hero-card">
+          <h3>Interactive by default</h3>
+          <p>Pointer interactions add life without heavy state management.</p>
+        </div>
+      </section>
 
-	<title>Animated Sine Wave Generator for Canvas | JavaScript Library</title>
+      <section class="section" id="examples">
+        <div class="section-header">
+          <h2>Examples</h2>
+          <p>Seven focused demos, ready to lift into your project.</p>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Basic wave</h3>
+            <p>Single wave with default gradient stroke.</p>
+            <canvas class="demo-canvas" id="sineCanvasBasic" aria-label="Basic wave"></canvas>
+          </article>
+          <article class="card">
+            <h3>Layered waves</h3>
+            <p>Stack multiple waves for depth and parallax.</p>
+            <canvas class="demo-canvas" id="sineCanvasMulti" aria-label="Layered waves"></canvas>
+          </article>
+          <article class="card">
+            <h3>Pointer reactive</h3>
+            <p>Pointer movement shapes amplitude and wavelength.</p>
+            <canvas class="demo-canvas" id="sineCanvasPointer" aria-label="Pointer reactive"></canvas>
+          </article>
+          <article class="card">
+            <h3>Dynamic management</h3>
+            <p>Programmatic add/remove of wave layers.</p>
+            <canvas class="demo-canvas" id="sineCanvasDynamic" aria-label="Dynamic waves"></canvas>
+          </article>
+          <article class="card">
+            <h3>Performance mode</h3>
+            <p>Low-memory settings with pixel-ratio caps.</p>
+            <canvas
+              class="demo-canvas"
+              id="sineCanvasPerformance"
+              aria-label="Performance mode"
+            ></canvas>
+          </article>
+          <article class="card">
+            <h3>Custom easing</h3>
+            <p>Swap easing curves for cinematic motion.</p>
+            <canvas class="demo-canvas" id="sineCanvasEasing" aria-label="Custom easing"></canvas>
+          </article>
+          <article class="card">
+            <h3>Pause + resume</h3>
+            <p>Explicit control over the render loop.</p>
+            <canvas class="demo-canvas" id="sineCanvasPause" aria-label="Pause resume"></canvas>
+            <div class="controls">
+              <button class="btn" type="button" data-action="pause">Pause</button>
+              <button class="btn" type="button" data-action="resume">Resume</button>
+            </div>
+          </article>
+        </div>
+      </section>
 
-	<!-- Meta Tags -->
-	<meta content="Sebastien Rousseau" name="author">
-	<meta content="Discover how to create dynamic, animated sine waves on your web projects with the sine-wave-generator.js library." name="description">
-	<meta content="telephone=no" name="format-detection">
-	<meta content="sine wave generator, JavaScript library, canvas animation, wave animation, interactive web design, sine wave JavaScript, easing functions, dynamic web backgrounds, animated sine waves, web development tools" name="keywords">
-	<meta content="en-GB" name="language">
-	<meta content="https://sine-wave-generator.com" name="permalink">
-	<meta content="general" name="rating">
-	<meta content="no-referrer" name="referrer">
-	<meta content="7 days" name="revisit-after">
-	<meta content="index, follow" name="robots">
-	<meta content="40, 202, 245" name="theme-color">
-	<meta content="Animated Sine Wave Generator for Canvas | JavaScript Library" name="title">
-	<meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name="viewport">
-	<meta content="Discover how to create dynamic, animated sine waves on your web projects with the sine-wave-generator.js library." name="og:description">
-	<meta content="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp" name="og:image">
-	<meta content="Logo of Sine Wave Generator" name="og:image:alt">
-	<meta content="161.8" name="og:image:height">
-	<meta content="161.8" name="og:image:width">
-	<meta content="en_GB" name="og:locale">
-	<meta content="Animated Sine Wave Generator for Canvas | JavaScript Library" name="og:title">
-	<meta content="website" name="og:type">
-	<meta content="https://sine-wave-generator.com" name="og:url">
-	<meta content="ARIA, fullKeyboardControl, noFlashingHazard" name="accessibility">
-	<meta content="portrait" name="apple_mobile_web_app_orientations">
-	<meta content="192x192" name="apple_touch_icon_sizes">
-	<meta content="yes" name="apple-mobile-web-app-capable">
-	<meta content="black" name="apple-mobile-web-app-status-bar-inset">
-	<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style">
-	<meta content="Animated Sine Wave Generator for Canvas | JavaScript Library" name="apple-mobile-web-app-title">
-	<meta content="yes" name="apple-touch-fullscreen">
-	<meta content="rgb(40, 202, 245)" name="msapplication-navbutton-color">
-	<meta content="summary" name="twitter:card">
-	<meta content="@wwdseb" name="twitter:creator">
-	<meta content="Discover how to create dynamic, animated sine waves on your web projects with the sine-wave-generator.js library." name="twitter:description">
-	<meta content="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp" name="twitter:image">
-	<meta content="Logo of Sine Wave Generator" name="twitter:image:alt">
-	<meta content="161.8" name="twitter:image:width">
-	<meta content="161.8" name="twitter:image:width">
-	<meta content="https://sine-wave-generator.com" name="twitter:site">
-	<meta content="https://sine-wave-generator.com" name="twitter:url">
-	<meta content="Animated Sine Wave Generator for Canvas | JavaScript Library" name="twitter:title">
-	<!-- End Meta Tags -->
+      <section class="section" id="performance">
+        <div class="section-header">
+          <h2>Performance</h2>
+          <p>Keep animations smooth even on constrained devices.</p>
+        </div>
+        <div class="card-grid">
+          <div class="card">
+            <h3>Cap pixel ratio</h3>
+            <p>Use <strong>maxPixelRatio</strong> to control memory usage on high-DPI screens.</p>
+          </div>
+          <div class="card">
+            <h3>Segment length</h3>
+            <p>Increase <strong>segmentLength</strong> for fewer points per frame.</p>
+          </div>
+          <div class="card">
+            <h3>Reduce wave count</h3>
+            <p>Every additional wave adds a draw pass; keep it tight.</p>
+          </div>
+        </div>
+      </section>
 
-	<!-- Links -->
-	<link href="https://sine-wave-generator.com" hreflang="en" rel="alternate">
-	<link href="https://sine-wave-generator.com" rel="canonical">
-	<link rel="stylesheet" href="reset.css" />
-	<link sizes="16x16 32x32" href="favicon.ico" rel="icon" type="image/x-icon">
-	<link href="https://kura.pro//sinewavegenerator/images/icons/192x192.png" rel="apple-touch-icon" sizes="192x192">
-	<!-- End Links -->
-</head>
-
-<body>
-	<header>
-		<img src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp" alt="Sine Wave Generator Logo" width="50" height="50" />
-		<h1>Sine Wave Generator</h1>
-		<p>sine-wave-generator.js offers a powerful and flexible way to add animated sine waves to web projects, providing a range of configurable parameters for customization.</p>
-	</header>
-
-	<section class="example">
-		<h2>Example 1</h2>
-		<h3>Basic Single Wave</h3>
-		<canvas title="Basic single sine wave" id="sineCanvas1"></canvas>
-	</section>
-
-	<section class="example">
-		<h2>Example 2</h2>
-		<h3>Multiple Waves Config</h3>
-		<canvas title="Multiple Waves Config" id="sineCanvas2"></canvas>
-	</section>
-
-	<section class="example">
-		<h2>Example 3</h2>
-		<h3>Interactive Wave</h3>
-		<canvas title="Interactive Wave" id="sineCanvas3"></canvas>
-	</section>
-
-	<section class="example">
-		<h2>Example 4</h2>
-		<h3>Dynamic Wave Management</h3>
-		<canvas title="Interactive Wave" id="sineCanvas4"></canvas>
-	</section>
-
-	<footer role="contentinfo">
-		© Copyright 2024 Sine Wave Generator. All rights reserved.
-    </footer>
-
-	<!-- Scripts -->
-	<script src="../src/sine-wave-generator.js" defer></script>
-	<script type="module" src="example.js"></script>
-
-</body>
-
+      <footer>© 2026 Sine Wave Generator. All rights reserved.</footer>
+    </main>
+  </body>
 </html>
