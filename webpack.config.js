@@ -11,7 +11,7 @@
  *
  * https://github.com/sebastienrousseau/sine-wave-generator
  *
-*/
+ */
 
 "use strict";
 
@@ -21,10 +21,11 @@ const path = require("path");
 
 module.exports = {
 	plugins: [
-		new HtmlWebpackPlugin({  // Also generate a test.html
-			filename: 'index.html',
+		new HtmlWebpackPlugin({
+			// Also generate a test.html
+			filename: "index.html",
 			favicon: "favicon.ico",
-			template: 'src/template.html',
+			template: "src/template.html",
 		}),
 		new CopyPlugin({
 			patterns: [

@@ -1,19 +1,19 @@
 # Security
 
-We take the security of our software products and services seriously, which includes all source code repositories managed through our GitHub repositories.
+We take security seriously across this project.
 
-If you believe you have found a security vulnerability in any of our repository, please report it to us as described below.
+## Report a security issue
 
-## Reporting Security Issues
+If you find a security issue, report it privately.
 
-Please include the requested information listed below (as much as you can provide) to help us better understand the nature and scope of the possible issue:
+Include as much of the following as you can:
 
-- Type of issue (e.g. buffer overflow, SQL injection, cross-site scripting, etc.)
-- Full paths of source file(s) related to the manifestation of the issue
-- The location of the affected source code (tag/branch/commit or direct URL)
-- Any special configuration required to reproduce the issue
-- Step-by-step instructions to reproduce the issue
-- Proof-of-concept or exploit code (if possible)
-- Impact of the issue, including how an attacker might exploit the issue
+- The type of issue (for example, buffer overflow or cross-site scripting)
+- The files involved
+- The affected tag, branch, commit, or URL
+- Any configuration needed to reproduce the issue
+- Step-by-step reproduction instructions
+- Proof-of-concept code, if available
+- Potential impact and how someone could exploit the issue
 
-This information will help us triage your report more quickly.
+We use this information to triage and respond quickly.

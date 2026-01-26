@@ -1,43 +1,41 @@
-# Code of Conduct
+# Code of conduct
 
-## Our Pledge
+## Our pledge
 
-In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+We pledge to make participation in this project respectful, inclusive, and harassment-free for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
-## Our Standards
+## Our standards
 
-Examples of behaviour that contributes to creating a positive environment include:
+Examples of behavior that builds a positive environment include:
 
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
+- Use welcoming and inclusive language
+- Respect differing viewpoints and experiences
+- Accept constructive criticism with grace
+- Focus on what is best for the community
+- Show empathy toward other community members
 
-Examples of unacceptable behaviour by participants include:
+Examples of behavior that does not meet this standard include:
 
-- The use of sexualized language or imagery and unwelcome sexual attention or advances
-- Trolling, insulting/derogatory comments, and personal or political attacks
+- Sexualized language or imagery and unwelcome sexual attention
+- Trolling, insulting or derogatory comments, and personal or political attacks
 - Public or private harassment
-- Publishing others' private information, such as a physical or electronic address, without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a professional setting
+- Publishing other people's private information without permission
+- Other conduct that would be inappropriate in a professional setting
 
-## Our Responsibilities
+## Our responsibilities
 
-Project maintainers are responsible for clarifying the standards of acceptable behaviour and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behaviour.
+Project maintainers clarify the standards of acceptable behavior and take fair corrective action when needed.
 
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
+Project maintainers can remove, edit, or reject contributions that do not align with this code of conduct. They can also ban a contributor temporarily or permanently for other behavior they consider inappropriate, threatening, offensive, or harmful.
 
 ## Scope
 
-This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.
+This code of conduct applies within project spaces and in public spaces when you represent the project or its community. Examples include using an official project email address, posting from an official social media account, or acting as an appointed representative at an online or offline event.
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behaviour may be reported by contacting the project team. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
-
-Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
+Report abusive, harassing, or otherwise unacceptable behavior to the project team. The team reviews and investigates all complaints and responds based on the circumstances. The team keeps the reporter's information confidential.
 
 ## Attribution
 
-This Code of Conduct is adapted from the Contributor Covenant homepage, version 1.4, available at [version](http://contributor-covenant.org/version/1/4)
+We adapted this code of conduct from the Contributor Covenant, version 1.4. See `http://contributor-covenant.org/version/1/4`.

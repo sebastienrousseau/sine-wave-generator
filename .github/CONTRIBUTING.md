@@ -1,52 +1,40 @@
 # Contributing
 
-Thank you so much for wanting to contribute to the `sine-wave-generator`! There are a couple ways to help out.
+Thank you for contributing to `sine-wave-generator`. You can help by reporting issues, improving documentation, or shipping code.
 
-## Evangelize
+## Share the project
 
-Just tell people about the `sine-wave-generator`. We believe that a bigger, more involved community makes for a better framework, and that better frameworks make the world a better place. We can always use more feedback.
+If you like the project, tell people about it and share feedback. Your input helps us build a better library.
 
-## How to Contribute
+## Report a bug
 
-Here are guides for submitting issues and pull requests.
+If you find a bug that is not filed yet, open an issue.
 
-### Bug Reports
+1. Go to `https://github.com/sebastienrousseau/sine-wave-generator/issues/new`.
+2. Add a short, direct title.
+3. Describe what happened and what you expected.
+4. Add steps to reproduce the issue.
 
-If you encounter a bug that hasn't already been filed, please file a bug report. Let us know of things we should fix, things we should add, questions, etc.
+Note: The more detail you include, the faster we can reproduce and fix the issue.
 
-Warning us of a bug is possibly the single most valuable contribution you can make to the `sine-wave-generator`.
+## Request a feature
 
-- Head [here](https://github.com/sebastienrousseau/sine-wave-generator/issues/new) to submit a new issue.
-- Include a descriptive title that is straight to the point.
-- Write a detailed description on what the issue is all about.
-- Wait for someone to get to the issue and add labels.
-- The issue will be fixed soon!
+If you want a new feature, open an issue and describe the use case. If you plan to implement the feature, say so in the issue.
 
-### Code Contributions
+## Contribute code
 
-Contributing code is one of the more difficult ways to contribute to the `sine-wave-generator`.
+1. Fork the repository.
+2. Clone your fork.
+3. Install dependencies with `npm install`.
+4. Make changes in `src/`.
+5. Run `npm run build`.
 
-#### Feature Requests
+Important: Do not edit `dist/`. The build pipeline generates those files.
 
-Filing feature requests is one of the most popular ways to contribute to the `sine-wave-generator`.
+## Open a pull request
 
-Is there some feature request that you'd like to code up yourself? Is there a feature you asked for yourself that you'd like to code?
+1. Push your branch to your fork.
+2. Open a pull request from your fork to `main`.
+3. Use a clear, direct title.
 
-Here's how to contribute code for a new feature to the `sine-wave-generator`. Pull Requests allow you to share your own code with us, and we can merge it into the main repo.
-
-#### Adding Code
-
-- Fork the repo.
-- Clone the `sine-wave-generator` repo by running: `git clone https://github.com/sebastienrousseau/sine-wave-generator.git`
-- Install Node.js if you haven't already, and run `npm install`. This installs the required dependencies for building `sine-wave-generator`.
-- Edit files in the `src/` folder. Don't edit any files in the `dist/` folder, this is only for distribution builds, which are automated.
-- Run `npm run build` to trigger builds, and the new distribution files will be in the `dist/` folder ready to go.
-
-#### Fixing an Issue
-
-Have you found a solution to an issue? Here is how you can submit your code to the `sine-wave-generator`.
-
-- Fork the repo, and refer above for how to change up code.
-- Head to your local fork of the repo, and click the "New Pull Request" button.
-- Include a title that is straight to the point.
-- Wait for someone to review the pull request, and then merge your pull request!
+We review pull requests as quickly as possible.

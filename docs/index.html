@@ -39,7 +39,7 @@
           <h1>Elegant sine waves, engineered for speed.</h1>
           <p>
             A canvas-first animation engine with responsive rendering, configurable wave layers, and
-            low-memory defaults. Built to feel smooth at 60fps.
+            low-memory defaults. Built for smooth 60fps motion.
           </p>
           <div class="hero-actions">
             <a class="cta" href="#get-started">Start building</a>
@@ -59,7 +59,7 @@
       <section class="section" id="get-started">
         <div class="section-header">
           <h2>Get started</h2>
-          <p>Install, wire a canvas, and launch in under a minute.</p>
+          <p>Install, connect a canvas, and start in under a minute.</p>
         </div>
         <div class="card-grid">
           <div class="card">
@@ -82,7 +82,7 @@ generator.start();</code></pre>
       <section class="section" id="examples">
         <div class="section-header">
           <h2>Examples</h2>
-          <p>Practical patterns you can lift into your own UI.</p>
+          <p>Practical patterns you can reuse in your UI.</p>
         </div>
         <div class="card-grid">
           <article class="card">
@@ -120,7 +120,7 @@ generator.start();</code></pre>
             <canvas class="demo-canvas" id="sineCanvasEasing" aria-label="Custom easing"></canvas>
           </article>
           <article class="card">
-            <h3>Pause + resume</h3>
+            <h3>Pause and resume</h3>
             <p>Explicit control over the render loop.</p>
             <canvas class="demo-canvas" id="sineCanvasPause" aria-label="Pause resume"></canvas>
             <div class="controls">
@@ -134,7 +134,7 @@ generator.start();</code></pre>
       <section class="section" id="api">
         <div class="section-header">
           <h2>API reference</h2>
-          <p>Minimal surface area, designed to be predictable.</p>
+          <p>Minimal surface area, designed to stay predictable.</p>
         </div>
         <div class="card-grid">
           <div class="card">
@@ -177,7 +177,7 @@ generator.resize();</code></pre>
       <section class="section" id="performance">
         <div class="section-header">
           <h2>Performance</h2>
-          <p>Defaults are tuned for smoothness, with knobs for heavy scenes.</p>
+          <p>We tune defaults for smoothness, with knobs for heavy scenes.</p>
         </div>
         <div class="card-grid">
           <div class="card">
@@ -193,6 +193,7 @@ generator.resize();</code></pre>
             <p>More waves increases draw cost; balance layering with frame budget.</p>
           </div>
         </div>
+        <p><strong>Important:</strong> If you set a high <code>maxPixelRatio</code>, memory use grows quickly on large canvases.</p>
       </section>
 
       <footer>© 2026 Sine Wave Generator. All rights reserved.</footer>
