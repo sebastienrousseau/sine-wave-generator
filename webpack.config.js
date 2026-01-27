@@ -17,12 +17,12 @@
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const path = require("path");
 
 module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
-			// Also generate a test.html
 			filename: "index.html",
 			favicon: "favicon.ico",
 			template: "src/template.html",
@@ -44,7 +44,32 @@ module.exports = {
 		path: path.resolve(__dirname, "dist"),
 		filename: "main.js",
 	},
-	mode: "production", // or 'production' for production builds
+	mode: "production",
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new TerserPlugin({
+				terserOptions: {
+					compress: {
+						passes: 2,
+						drop_console: true,
+						pure_getters: true,
+						unsafe_math: true,
+					},
+					mangle: {
+						properties: false,
+					},
+					output: {
+						comments: false,
+					},
+				},
+				extractComments: false,
+			}),
+		],
+		usedExports: true,
+		concatenateModules: true,
+		moduleIds: "deterministic",
+	},
 	module: {
 		rules: [
 			{

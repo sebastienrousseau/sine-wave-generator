@@ -100,6 +100,10 @@ describe("Wave", () => {
 		const result = wave.update({ amplitude: 20 });
 		expect(result).toBe(wave);
 		expect(wave.amplitude).toBe(20);
+		wave.update({ wavelength: 200, speed: 0.8, rotate: 90 });
+		expect(wave.wavelength).toBe(200);
+		expect(wave.speed).toBe(0.8);
+		expect(wave.rotate).toBe(90);
 		expect(() => wave.update({ segmentLength: 0 })).toThrow(
 			"Wave configuration values must be positive.",
 		);

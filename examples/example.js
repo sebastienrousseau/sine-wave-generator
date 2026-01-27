@@ -785,6 +785,142 @@
 		});
 	};
 
+	const drawVerticalWave = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerX = width * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.03;
+		for (let layer = 0; layer < 3; layer++) {
+			ctx.beginPath();
+			for (let y = 0; y <= height; y += 4) {
+				const value = Math.sin(y * freq + time + layer * 0.8);
+				const x = centerX + value * amplitude * (1 - layer * 0.25);
+				if (y === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			const hue = hueFromValue(layer / 3, 200);
+			ctx.strokeStyle = `hsla(${hue}deg 75% 55% / ${0.8 - layer * 0.2})`;
+			ctx.lineWidth = 2 - layer * 0.4;
+			ctx.stroke();
+		}
+	};
+
+	const drawDashArray = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.03;
+		const dashPatterns = [[12, 6], [4, 8], [20, 4, 4, 4]];
+		dashPatterns.forEach((pattern, i) => {
+			ctx.beginPath();
+			ctx.setLineDash(pattern);
+			for (let x = 0; x <= width; x += 4) {
+				const value = Math.sin(x * freq + time + i * 1.2);
+				const y = centerY + value * amplitude * (1 - i * 0.2) + (i - 1) * 20;
+				if (x === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			const hue = hueFromValue(i / 3, 210);
+			ctx.strokeStyle = `hsla(${hue}deg 70% 55% / 0.8)`;
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		});
+		ctx.setLineDash([]);
+	};
+
+	const drawVariableWidth = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.025;
+		const step = 6;
+		for (let x = 0; x < width - step; x += step) {
+			const v1 = Math.sin(x * freq + time);
+			const v2 = Math.sin((x + step) * freq + time);
+			const y1 = centerY + v1 * amplitude;
+			const y2 = centerY + v2 * amplitude;
+			const thickness = 1 + Math.abs(Math.sin(x * 0.01 + time * 2)) * 4;
+			const hue = hueFromValue(v1, 220);
+			ctx.beginPath();
+			ctx.moveTo(x, y1);
+			ctx.lineTo(x + step, y2);
+			ctx.strokeStyle = `hsla(${hue}deg 75% 55% / 0.85)`;
+			ctx.lineWidth = thickness;
+			ctx.stroke();
+		}
+	};
+
+	const drawCompositingGlow = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.025;
+		ctx.save();
+		ctx.globalCompositeOperation = "screen";
+		const colors = [
+			{ hue: 200, offset: 0 },
+			{ hue: 260, offset: 1.2 },
+			{ hue: 320, offset: 2.4 },
+		];
+		colors.forEach((cfg) => {
+			ctx.beginPath();
+			for (let x = 0; x <= width; x += 4) {
+				const value = Math.sin(x * freq + time + cfg.offset);
+				const y = centerY + value * amplitude;
+				if (x === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			ctx.strokeStyle = `hsla(${cfg.hue}deg 90% 60% / 0.6)`;
+			ctx.lineWidth = 3;
+			ctx.shadowBlur = 20;
+			ctx.shadowColor = `hsla(${cfg.hue}deg 90% 60% / 0.5)`;
+			ctx.stroke();
+		});
+		ctx.restore();
+	};
+
+	const drawZenMode = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.015;
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 6) {
+			const value = Math.sin(x * freq + time * 0.15);
+			const y = centerY + value * amplitude;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		ctx.strokeStyle = "rgba(14, 165, 233, 0.5)";
+		ctx.lineWidth = 2;
+		ctx.stroke();
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 6) {
+			const value = Math.sin(x * freq * 0.7 + time * 0.1 + 1.5);
+			const y = centerY + value * amplitude * 0.6;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		ctx.strokeStyle = "rgba(14, 165, 233, 0.25)";
+		ctx.lineWidth = 1.5;
+		ctx.stroke();
+	};
+
 	/* --- String physics --- */
 
 	const startStringPhysics = () => {
@@ -971,6 +1107,35 @@
 			linear: (percent, amp) => amp * percent,
 		};
 
+		const PRESETS = {
+			ocean: { waveCount: 3, amplitude: 20, wavelength: 280, speed: 0.4, segmentLength: 10, easing: "sineInOut" },
+			heartbeat: { waveCount: 1, amplitude: 60, wavelength: 80, speed: 2.0, segmentLength: 6, easing: "sineIn" },
+			highfreq: { waveCount: 4, amplitude: 15, wavelength: 40, speed: 1.5, segmentLength: 4, easing: "linear" },
+			stormy: { waveCount: 5, amplitude: 50, wavelength: 120, speed: 2.5, segmentLength: 8, easing: "sineOut" },
+		};
+
+		const presetSelect = document.getElementById("playgroundPreset");
+		if (presetSelect) {
+			presetSelect.addEventListener("change", () => {
+				const preset = PRESETS[presetSelect.value];
+				if (!preset) return;
+				const sliders = card.querySelectorAll("[data-control]");
+				sliders.forEach((input) => {
+					const key = input.dataset.control;
+					if (key === "preset" || key === "strokeColor") return;
+					if (preset[key] !== undefined) {
+						input.value = preset[key];
+						input.dispatchEvent(new Event("input", { bubbles: true }));
+					}
+				});
+				const easingSel = card.querySelector('[data-control="easing"]');
+				if (easingSel && preset.easing) {
+					easingSel.value = preset.easing;
+					easingSel.dispatchEvent(new Event("change", { bubbles: true }));
+				}
+			});
+		}
+
 		const syncWaves = () => {
 			const desiredCount = Number(controls.waveCount) || 2;
 			const amp = Number(controls.amplitude) || 30;
@@ -1022,6 +1187,15 @@
 				}
 				const snippet = `const generator = new SineWaveGenerator({\n  el: "#myCanvas",\n  waves: [\n${waves.join(",\n")}\n  ]\n});\ngenerator.start();`;
 				copyToClipboard(snippet, copyBtn);
+			});
+		}
+
+		const fullscreenBtn = document.getElementById("playgroundFullscreen");
+		if (fullscreenBtn) {
+			fullscreenBtn.addEventListener("click", () => {
+				card.classList.toggle("is-fullscreen");
+				fullscreenBtn.textContent = card.classList.contains("is-fullscreen") ? "Exit Fullscreen" : "Fullscreen";
+				generator.resize();
 			});
 		}
 
@@ -1128,6 +1302,11 @@
 			return;
 		}
 		setupThemeToggle();
+		const overlay = document.getElementById("loadingOverlay");
+		if (overlay) {
+			overlay.classList.add("is-hidden");
+			setTimeout(() => overlay.remove(), 300);
+		}
 		setupNavToggle();
 		startFundamentals();
 		startExample("pulseMatrix", 4, drawPulseMatrix);
@@ -1149,6 +1328,11 @@
 		startExample("kineticTypography", 4, drawKineticTypography);
 		startExample("dampedSine", 4, drawDampedSine);
 		startExample("recursiveSine", 4, drawRecursiveSine);
+		startExample("verticalWave", 4, drawVerticalWave);
+		startExample("dashArray", 4, drawDashArray);
+		startExample("variableWidth", 4, drawVariableWidth);
+		startExample("compositingGlow", 4, drawCompositingGlow);
+		startExample("zenMode", 8, drawZenMode);
 		startStringPhysics();
 		startAudioSpectrogram();
 		startResponsiveResize();

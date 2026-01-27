@@ -52,18 +52,10 @@ const Ease = {
 	 * @returns {number} - The eased value.
 	 */
 	easedSine: (percent, amplitude) => {
-		let value;
-		const goldenSection = (1 - 1 / 1.618033988749895) / 2;
-		if (percent < goldenSection) {
-			value = 0;
-		} else if (percent > 1 - goldenSection) {
-			value = 0;
-		} else {
-			const adjustedPercent =
-				(percent - goldenSection) / (1 - 2 * goldenSection);
-			value = Math.sin(adjustedPercent * Math.PI) * amplitude;
+		if (percent < GOLDEN_SECTION || percent > 1 - GOLDEN_SECTION) {
+			return 0;
 		}
-		return value;
+		return Math.sin((percent - GOLDEN_SECTION) * GOLDEN_SECTION_INV * Math.PI) * amplitude;
 	},
 };
 
@@ -74,6 +66,9 @@ const DEFAULT_STROKE_STYLE = null;
 const DEFAULT_SEGMENT_LENGTH = 10;
 const LINE_WIDTH = 2;
 const DEFAULT_MAX_PIXEL_RATIO = 2;
+const TWO_PI = Math.PI * 2;
+const GOLDEN_SECTION = (1 - 1 / 1.618033988749895) / 2;
+const GOLDEN_SECTION_INV = 1 / (1 - 2 * GOLDEN_SECTION);
 
 /**
  * Represents a wave for the sine wave generator.
@@ -86,7 +81,7 @@ class Wave {
 	 * @throws {Error} Throws an error if any configuration value is invalid.
 	 */
 	constructor({
-		phase = Math.random() * Math.PI * 2,
+		phase = Math.random() * TWO_PI,
 		speed = Math.random() * 0.5 + 0.5,
 		amplitude = DEFAULT_AMPLITUDE,
 		wavelength = DEFAULT_WAVELENGTH,
@@ -148,12 +143,16 @@ class Wave {
 	 * @returns {WaveConfig} - The random configuration object.
 	 */
 	static generateRandomConfig() {
+		const r = (Math.random() * 255) | 0;
+		const g = (Math.random() * 255) | 0;
+		const b = (Math.random() * 255) | 0;
+		const a = Math.random().toFixed(1);
 		return {
-			phase: Math.random() * Math.PI * 2,
+			phase: Math.random() * TWO_PI,
 			speed: Math.random() * 0.5 + 0.5,
 			amplitude: Math.random() * 20 + 5,
 			wavelength: Math.random() * 200 + 50,
-			strokeStyle: `rgba(${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.random().toFixed(1)})`,
+			strokeStyle: `rgba(${r},${g},${b},${a})`,
 			segmentLength: Math.random() * 20 + 5,
 			easing: Ease.sineInOut,
 			rotate: Math.random() * 360,
@@ -166,13 +165,12 @@ class Wave {
 	 * @returns {this} - The updated Wave instance.
 	 */
 	update(config) {
-		const next = { ...this, ...config };
 		this.validateConfig({
-			amplitude: next.amplitude,
-			wavelength: next.wavelength,
-			segmentLength: next.segmentLength,
-			speed: next.speed,
-			rotate: next.rotate,
+			amplitude: config.amplitude !== undefined ? config.amplitude : this.amplitude,
+			wavelength: config.wavelength !== undefined ? config.wavelength : this.wavelength,
+			segmentLength: config.segmentLength !== undefined ? config.segmentLength : this.segmentLength,
+			speed: config.speed !== undefined ? config.speed : this.speed,
+			rotate: config.rotate !== undefined ? config.rotate : this.rotate,
 		});
 		Object.assign(this, config);
 		return this;
@@ -289,10 +287,11 @@ class SineWaveGenerator {
 			return;
 		}
 		const mouseY = event.clientY / this.displayHeight;
-		const clamped = Math.min(1, Math.max(0, mouseY));
-		this.waves.forEach((wave) => {
-			wave.phase = clamped * Math.PI * 2;
-		});
+		const phase = Math.min(1, Math.max(0, mouseY)) * TWO_PI;
+		const waves = this.waves;
+		for (let i = 0, len = waves.length; i < len; i++) {
+			waves[i].phase = phase;
+		}
 	}
 
 	/**
@@ -307,10 +306,11 @@ class SineWaveGenerator {
 			return;
 		}
 		const touchY = event.touches[0].clientY / this.displayHeight;
-		const clamped = Math.min(1, Math.max(0, touchY));
-		this.waves.forEach((wave) => {
-			wave.phase = clamped * Math.PI * 2;
-		});
+		const phase = Math.min(1, Math.max(0, touchY)) * TWO_PI;
+		const waves = this.waves;
+		for (let i = 0, len = waves.length; i < len; i++) {
+			waves[i].phase = phase;
+		}
 	}
 
 	/**
@@ -342,7 +342,10 @@ class SineWaveGenerator {
 					: Math.min(5, Math.max(0, frameDeltaSeconds * 60));
 			this.lastFrameTime = isNumberTime ? time : 0;
 			this.ctx.clearRect(0, 0, this.displayWidth, this.displayHeight);
-			this.waves.forEach((wave) => this.drawWave(wave, deltaScale));
+			const waves = this.waves;
+			for (let i = 0, len = waves.length; i < len; i++) {
+				this.drawWave(waves[i], deltaScale);
+			}
 			this.animationFrameId = requestAnimationFrame(draw);
 		};
 		this.animationFrameId = requestAnimationFrame(draw);
@@ -396,44 +399,46 @@ class SineWaveGenerator {
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
 	 */
 	drawWave(wave, deltaScale = 1) {
-		// Method implementation
-		this.ctx.save();
+		const ctx = this.ctx;
+		const width = this.displayWidth;
+		const height = this.displayHeight;
+
+		ctx.save();
 		if (wave.rotate) {
-			this.ctx.translate(this.displayWidth / 2, this.displayHeight / 2);
-			this.ctx.rotate((wave.rotate * Math.PI) / 180);
-			this.ctx.translate(-this.displayWidth / 2, -this.displayHeight / 2);
+			const halfW = width * 0.5;
+			const halfH = height * 0.5;
+			ctx.translate(halfW, halfH);
+			ctx.rotate((wave.rotate * Math.PI) / 180);
+			ctx.translate(-halfW, -halfH);
 		}
 
 		const easing = wave.easing || Ease.sineInOut;
-		const width = this.displayWidth;
-		const height = this.displayHeight;
-		const step = Math.max(1, Math.floor(wave.segmentLength));
-		const twoPi = Math.PI * 2;
-		const baseY = height / 2;
+		const step = Math.max(1, wave.segmentLength | 0);
+		const baseY = height * 0.5;
+		const invWidth = 1 / width;
+		const wavePhase = wave.phase;
+		const waveAmplitude = wave.amplitude;
 
-		this.ctx.beginPath();
-		this.ctx.moveTo(0, baseY);
+		ctx.beginPath();
+		ctx.moveTo(0, baseY);
 
 		for (let xPos = 0; xPos < width; xPos += step) {
-			const percent = xPos / width;
-			const amp = easing(percent, wave.amplitude);
-
-			const time = (xPos / width) * twoPi + wave.phase;
-			const y = Math.sin(time) * amp + baseY;
-
-			this.ctx.lineTo(xPos, y);
+			const percent = xPos * invWidth;
+			const amp = easing(percent, waveAmplitude);
+			const y = Math.sin(percent * TWO_PI + wavePhase) * amp + baseY;
+			ctx.lineTo(xPos, y);
 		}
-		const endAmp = easing(1, wave.amplitude);
-		const endY = Math.sin(twoPi + wave.phase) * endAmp + baseY;
-		this.ctx.lineTo(width, endY);
+		const endAmp = easing(1, waveAmplitude);
+		const endY = Math.sin(TWO_PI + wavePhase) * endAmp + baseY;
+		ctx.lineTo(width, endY);
 
-		this.ctx.strokeStyle = wave.strokeStyle ?? this.gradient;
-		this.ctx.lineWidth = LINE_WIDTH;
-		this.ctx.stroke();
+		ctx.strokeStyle = wave.strokeStyle ?? this.gradient;
+		ctx.lineWidth = LINE_WIDTH;
+		ctx.stroke();
 
-		wave.phase += wave.speed * Math.PI * 2 * deltaScale;
+		wave.phase += wave.speed * TWO_PI * deltaScale;
 
-		this.ctx.restore();
+		ctx.restore();
 
 		return this;
 	}
