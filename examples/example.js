@@ -92,7 +92,7 @@
 			generator.addWave({
 				amplitude: 26,
 				wavelength: 140,
-				speed: 0.18,
+				speed: 0.04,
 				segmentLength: 10,
 			});
 			generator.start();
@@ -101,18 +101,18 @@
 		const multi = document.getElementById("sineCanvasMulti");
 		if (multi) {
 			const generator = createGenerator(multi);
-			generator.addWave({ amplitude: 18, wavelength: 140, speed: 0.16, segmentLength: 10 });
+			generator.addWave({ amplitude: 18, wavelength: 140, speed: 0.04, segmentLength: 10 });
 			generator.addWave({
 				amplitude: 28,
 				wavelength: 200,
-				speed: 0.14,
+				speed: 0.035,
 				segmentLength: 12,
 				strokeStyle: "rgba(14,165,233,0.5)",
 			});
 			generator.addWave({
 				amplitude: 12,
 				wavelength: 90,
-				speed: 0.2,
+				speed: 0.05,
 				segmentLength: 8,
 				strokeStyle: "rgba(15,23,42,0.35)",
 			});
@@ -125,7 +125,7 @@
 			generator.addWave({
 				amplitude: 32,
 				wavelength: 180,
-				speed: 0.16,
+				speed: 0.045,
 				segmentLength: 8,
 			});
 			const pointerState = { x: 0.5, y: 0.5, rafId: null };
@@ -154,11 +154,11 @@
 		if (dynamic) {
 			const generator = createGenerator(dynamic);
 			const waveStack = [
-				{ amplitude: 12, wavelength: 100, speed: 0.14, segmentLength: 10 },
-				{ amplitude: 20, wavelength: 140, speed: 0.16, segmentLength: 10 },
-				{ amplitude: 28, wavelength: 180, speed: 0.18, segmentLength: 10 },
-				{ amplitude: 36, wavelength: 220, speed: 0.2, segmentLength: 12 },
-				{ amplitude: 18, wavelength: 120, speed: 0.15, segmentLength: 8 },
+				{ amplitude: 12, wavelength: 100, speed: 0.035, segmentLength: 10 },
+				{ amplitude: 20, wavelength: 140, speed: 0.04, segmentLength: 10 },
+				{ amplitude: 28, wavelength: 180, speed: 0.045, segmentLength: 10 },
+				{ amplitude: 36, wavelength: 220, speed: 0.05, segmentLength: 12 },
+				{ amplitude: 18, wavelength: 120, speed: 0.038, segmentLength: 8 },
 			];
 			let currentIndex = 0;
 			let removing = false;
@@ -188,9 +188,9 @@
 		const performance = document.getElementById("sineCanvasPerformance");
 		if (performance) {
 			const generator = createGenerator(performance, { maxPixelRatio: 1 });
-			generator.addWave({ amplitude: 18, wavelength: 160, speed: 0.12, segmentLength: 14 });
-			generator.addWave({ amplitude: 10, wavelength: 120, speed: 0.14, segmentLength: 16 });
-			generator.addWave({ amplitude: 6, wavelength: 90, speed: 0.16, segmentLength: 18 });
+			generator.addWave({ amplitude: 18, wavelength: 160, speed: 0.035, segmentLength: 14 });
+			generator.addWave({ amplitude: 10, wavelength: 120, speed: 0.04, segmentLength: 16 });
+			generator.addWave({ amplitude: 6, wavelength: 90, speed: 0.045, segmentLength: 18 });
 			generator.start();
 		}
 
@@ -200,7 +200,7 @@
 			generator.addWave({
 				amplitude: 30,
 				wavelength: 160,
-				speed: 0.18,
+				speed: 0.04,
 				segmentLength: 10,
 				easing: easedSine,
 			});
@@ -213,7 +213,7 @@
 			generator.addWave({
 				amplitude: 24,
 				wavelength: 150,
-				speed: 0.18,
+				speed: 0.04,
 				segmentLength: 10,
 			});
 			const pauseButton = document.querySelector('[data-action="pause"]');
@@ -371,6 +371,60 @@
 		ctx.beginPath();
 		ctx.arc(orbX, orbY, 6, 0, TWO_PI);
 		ctx.fill();
+	};
+
+	const drawLissajousExplorer = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerX = width * 0.5;
+		const centerY = height * 0.5;
+		const amplitudeX = controls.amplitude;
+		const amplitudeY = controls.amplitude * 0.8;
+		const a = Math.max(1, Math.round(controls.frequency));
+		const b = Math.max(1, Math.round(controls.frequency + 2));
+		const delta = (controls.phase * Math.PI) / 180;
+		ctx.lineWidth = 1.5 + Math.abs(Math.sin(time)) * 1.8;
+		ctx.shadowBlur = 10;
+		ctx.shadowColor = getBPMColor(time, 128, 220);
+		ctx.beginPath();
+		for (let i = 0; i <= 320; i += 1) {
+			const t = (i / 320) * TWO_PI;
+			const x = centerX + amplitudeX * Math.sin(a * t + delta + time);
+			const y = centerY + amplitudeY * Math.sin(b * t + time);
+			if (i === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		ctx.strokeStyle = getBPMColor(time, 128, 220);
+		ctx.stroke();
+		ctx.shadowBlur = 0;
+	};
+
+	const drawFeedbackLoop = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const baseAmp = controls.amplitude;
+		const carrierFreq = controls.frequency * 0.04;
+		const modulator = (Math.sin(time * 0.8) + 1) * 0.5;
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 4) {
+			const mod = Math.sin(x * 0.006 + time) * baseAmp * (0.2 + modulator);
+			const carrier = Math.sin(x * carrierFreq + time * 1.6) * mod;
+			const y = centerY + carrier;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		const hue = hueFromValue(modulator, 260);
+		ctx.lineWidth = 1.5 + modulator * 2.2;
+		ctx.shadowBlur = 10;
+		ctx.shadowColor = getBPMColor(time, 128, 260);
+		ctx.strokeStyle = `hsla(${hue}deg 70% 55% / 0.85)`;
+		ctx.stroke();
+		ctx.shadowBlur = 0;
 	};
 
 	const drawWaveformTerrain = ({ ctx, canvas, controls, time, generator }) => {
@@ -531,6 +585,109 @@
 		ctx.shadowBlur = 0;
 	};
 
+	const startStringPhysics = () => {
+		const card = document.querySelector('[data-example="stringPhysics"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		if (!canvas) {
+			return;
+		}
+		const generator = createGenerator(canvas);
+		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.08 });
+		const state = { amplitude: 0, decay: 0.95 };
+		canvas.addEventListener("pointerdown", () => {
+			state.amplitude = 100;
+		});
+		const ctx = generator.ctx;
+		generator.drawWave = (wave, deltaScale = 1) => {
+			state.amplitude *= state.decay;
+			const { width, height } = getSize(generator, canvas);
+			const centerY = height * 0.5;
+			ctx.beginPath();
+			for (let x = 0; x <= width; x += 6) {
+				const offset = Math.sin(x * 0.02 + wave.phase) * state.amplitude * 0.02;
+				const y = centerY + offset;
+				if (x === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			ctx.lineWidth = 1 + Math.abs(state.amplitude) * 0.02;
+			ctx.shadowBlur = 10;
+			ctx.shadowColor = getBPMColor(wave.phase, 128, 210);
+			ctx.strokeStyle = getBPMColor(wave.phase, 128, 210);
+			ctx.stroke();
+			ctx.shadowBlur = 0;
+			wave.phase += 0.02 * deltaScale;
+		};
+		generator.start();
+	};
+
+	const startAudioSpectrogram = () => {
+		const card = document.querySelector('[data-example="audioSpectrogram"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		const button = card.querySelector("[data-action=audio-start]");
+		const status = card.querySelector("[data-audio-status]");
+		if (!canvas || !button || !status) {
+			return;
+		}
+		const generator = createGenerator(canvas);
+		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.05 });
+		const ctx = generator.ctx;
+		let analyser = null;
+		let data = null;
+		const setupAudio = async () => {
+			try {
+				const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+				const source = audioCtx.createMediaStreamSource(stream);
+				analyser = audioCtx.createAnalyser();
+				analyser.fftSize = 128;
+				data = new Uint8Array(analyser.frequencyBinCount);
+				source.connect(analyser);
+				status.textContent = "Live";
+			} catch (error) {
+				status.textContent = "Blocked";
+			}
+		};
+		button.addEventListener("click", () => {
+			if (!analyser) {
+				status.textContent = "Listening";
+				setupAudio();
+			}
+		});
+		generator.drawWave = (wave, deltaScale = 1) => {
+			const { width, height } = getSize(generator, canvas);
+			if (analyser && data) {
+				analyser.getByteFrequencyData(data);
+			}
+			const count = 64;
+			const barWidth = width / count;
+			ctx.lineWidth = 1.5;
+			for (let i = 0; i < count; i += 1) {
+				const idx = Math.floor((i / count) * (data ? data.length : count));
+				const amp = data ? data[idx] / 255 : (Math.sin(wave.phase + i * 0.2) + 1) * 0.5;
+				const amplitude = amp * (height * 0.3);
+				const x = i * barWidth + barWidth * 0.5;
+				const base = height * 0.5;
+				ctx.beginPath();
+				ctx.moveTo(x, base - amplitude);
+				ctx.lineTo(x, base + amplitude);
+				const hue = hueFromValue(amp, 180 + i);
+				ctx.strokeStyle = `hsla(${hue}deg 80% 55% / 0.7)`;
+				ctx.stroke();
+			}
+			wave.phase += 0.02 * deltaScale;
+		};
+		generator.start();
+	};
+
 	const boot = () => {
 		if (typeof window.SineWaveGenerator !== "function") {
 			setTimeout(boot, 50);
@@ -542,6 +699,8 @@
 		startExample("fluidColumn", 4, drawFluidColumn);
 		startExample("diagonalRain", 4, drawDiagonalRain);
 		startExample("lissajousOrbit", 3, drawLissajousOrbit);
+		startExample("lissajousExplorer", 4, drawLissajousExplorer);
+		startExample("feedbackLoop", 4, drawFeedbackLoop);
 		startExample("waveformTerrain", 6, drawWaveformTerrain);
 		startExample("radialBloom", 4, drawRadialBloom);
 		startExample("labOcean", 6, drawWaveformTerrain);
@@ -552,6 +711,8 @@
 		startExample("kineticTypography", 4, drawKineticTypography);
 		startExample("dampedSine", 4, drawDampedSine);
 		startExample("recursiveSine", 4, drawRecursiveSine);
+		startStringPhysics();
+		startAudioSpectrogram();
 	};
 
 	document.addEventListener("DOMContentLoaded", () => {

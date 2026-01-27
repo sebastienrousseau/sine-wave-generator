@@ -27,8 +27,10 @@
 					<a href="#overview">Overview</a>
 					<a href="#fundamentals">Fundamentals</a>
 					<a href="#examples">Examples</a>
+					<a href="#motion-lab">Motion lab</a>
 					<a href="#lab">Lab</a>
 					<a href="#advanced-modes">Advanced modes</a>
+					<a href="#cheat-sheet">Cheat sheet</a>
 					<a href="#api">API</a>
 					<a href="#performance">Performance</a>
 				</nav>
@@ -649,6 +651,174 @@ generator.start();</code></pre>
 				</div>
 			</section>
 
+			<section class="section" id="motion-lab">
+				<div class="section-header">
+					<h2>Motion lab</h2>
+					<p>High-end motion studies that feel tactile and musical.</p>
+				</div>
+				<div class="card-grid">
+					<article class="card" data-example="stringPhysics">
+						<h3>String physics</h3>
+						<p>Tap to pluck. Damped amplitude returns to rest.</p>
+						<canvas
+							class="demo-canvas"
+							id="stringPhysicsCanvas"
+							aria-label="String physics"
+						></canvas>
+						<p class="demo-note">Tip: click the line to excite it.</p>
+					</article>
+					<article class="card" data-example="audioSpectrogram">
+						<h3>Audio spectrogram</h3>
+						<p>64 wave forest mapped across bass → treble.</p>
+						<canvas
+							class="demo-canvas"
+							id="audioSpectrogramCanvas"
+							aria-label="Audio spectrogram"
+						></canvas>
+						<div class="controls">
+							<button class="btn" type="button" data-action="audio-start">
+								Enable mic
+							</button>
+							<span class="status" data-audio-status>Idle</span>
+						</div>
+					</article>
+					<article class="card" data-example="lissajousExplorer">
+						<h3>Lissajous explorer</h3>
+						<p>Orbit knots with adjustable a:b ratios.</p>
+						<canvas
+							class="demo-canvas"
+							id="lissajousExplorerCanvas"
+							aria-label="Lissajous explorer"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="20"
+										max="120"
+										step="1"
+										value="70"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="1"
+										max="12"
+										step="1"
+										value="4"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="60"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+					<article class="card" data-example="feedbackLoop">
+						<h3>Feedback loops</h3>
+						<p>Slow modulator controls a fast carrier.</p>
+						<canvas
+							class="demo-canvas"
+							id="feedbackLoopCanvas"
+							aria-label="Feedback loops"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="88"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="28"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+				</div>
+			</section>
+
 			<section class="section" id="lab">
 				<div class="section-header">
 					<h2>Lab presets</h2>
@@ -935,7 +1105,7 @@ generator.start();</code></pre>
 										value="20"
 										data-control="amplitude"
 									/>
-									<span data-value></span>
+								<span data-value></span>
 								</div>
 							</label>
 							<label class="control-group">
@@ -968,6 +1138,46 @@ generator.start();</code></pre>
 							</label>
 						</div>
 					</article>
+				</div>
+			</section>
+
+			<section class="section" id="cheat-sheet">
+				<div class="section-header">
+					<h2>Cheat sheet</h2>
+					<p>Quick formulas that map to a visual mood.</p>
+				</div>
+				<div class="card">
+					<table class="cheat-table">
+						<thead>
+							<tr>
+								<th>Effect</th>
+								<th>Math logic</th>
+								<th>Visual feeling</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Breathe</td>
+								<td>sin(t) * 0.5 + 0.5</td>
+								<td>Smooth pulsing (0 to 1)</td>
+							</tr>
+							<tr>
+								<td>Glitch</td>
+								<td>sin(t) + sin(t * 10) * 0.1</td>
+								<td>Electric vibration</td>
+							</tr>
+							<tr>
+								<td>Orbit</td>
+								<td>x: sin(t), y: cos(t)</td>
+								<td>Perfect circular motion</td>
+							</tr>
+							<tr>
+								<td>Chaos</td>
+								<td>sin(t + sin(t))</td>
+								<td>Organic drift</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</section>
 
@@ -1051,29 +1261,27 @@ generator.resize();</code></pre>
 
 			<footer>© 2026 Sine Wave Generator. All rights reserved.</footer>
 		</main>
-		<script defer src="example.js"></script>
+		<script defer src="example.js" data-template-script="example"></script>
 		<script>
 			(() => {
 				const isTemplate = /\/src\/template\.html$/.test(window.location.pathname);
 				if (!isTemplate) {
 					return;
 				}
-				const head = document.head;
-				const resetLink = document.createElement("link");
-				resetLink.rel = "stylesheet";
-				resetLink.href = "../dist/reset.css";
-				resetLink.dataset.templateFallback = "true";
-				head.appendChild(resetLink);
-				const mainScript = document.createElement("script");
-				mainScript.defer = true;
-				mainScript.src = "../dist/main.js";
-				mainScript.dataset.templateFallback = "true";
-				head.appendChild(mainScript);
-				const exampleScript = document.createElement("script");
-				exampleScript.defer = true;
-				exampleScript.src = "../dist/example.js";
-				exampleScript.dataset.templateFallback = "true";
-				head.appendChild(exampleScript);
+				const resetLink = document.querySelector('link[rel="stylesheet"]');
+				if (resetLink) {
+					resetLink.href = "../examples/reset.css";
+				}
+				const exampleScript = document.querySelector(
+					'script[data-template-script="example"]',
+				);
+				if (exampleScript) {
+					exampleScript.src = "../examples/example.js";
+					const mainScript = document.createElement("script");
+					mainScript.defer = true;
+					mainScript.src = "../examples/main.js";
+					exampleScript.parentNode.insertBefore(mainScript, exampleScript);
+				}
 			})();
 		</script>
 	</body>
