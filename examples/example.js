@@ -3,6 +3,11 @@
 (() => {
 	const TWO_PI = Math.PI * 2;
 
+	const prefersReducedMotion = window.matchMedia(
+		"(prefers-reduced-motion: reduce)",
+	).matches;
+	const motionScale = prefersReducedMotion ? 0 : 1;
+
 	const clamp01 = (value) => Math.min(1, Math.max(0, value));
 
 	const bpmToSpeed = (bpm, beatsPerCycle) =>
@@ -82,10 +87,25 @@
 			amplitude: 16,
 			frequency: 8,
 			phase: 0,
+			volume: 60,
 		};
 		const inputs = Array.from(card.querySelectorAll("[data-control]"));
 		inputs.forEach((input) => {
 			const key = input.dataset.control;
+			if (input.tagName === "SELECT") {
+				controls[key] = input.value;
+				input.addEventListener("change", () => {
+					controls[key] = input.value;
+				});
+				return;
+			}
+			if (input.type === "color") {
+				controls[key] = input.value;
+				input.addEventListener("input", () => {
+					controls[key] = input.value;
+				});
+				return;
+			}
 			controls[key] = Number(input.value);
 			const valueEl = input
 				.closest(".control-row")
@@ -124,7 +144,7 @@
 		const ctx = generator.ctx;
 		generator.drawWave = (wave, deltaScale = 1) => {
 			try {
-				const speed = bpmToSpeed(controls.bpm, beatsPerCycle);
+				const speed = bpmToSpeed(controls.bpm, beatsPerCycle) * motionScale;
 				const time = wave.phase + (controls.phase * Math.PI) / 180;
 				draw({ ctx, canvas, generator, controls, time });
 				wave.phase += speed * TWO_PI * deltaScale;
@@ -133,7 +153,14 @@
 				generator.stop();
 			}
 		};
-		observeStart(canvas, () => generator.start());
+		if (prefersReducedMotion) {
+			observeStart(canvas, () => {
+				generator.start();
+				requestAnimationFrame(() => generator.stop());
+			});
+		} else {
+			observeStart(canvas, () => generator.start());
+		}
 	};
 
 	const easedSine = (percent, amplitude) => {
@@ -146,37 +173,48 @@
 	};
 
 	const startFundamentals = () => {
+		const lazyStart = (canvas, generator) => {
+			if (prefersReducedMotion) {
+				observeStart(canvas, () => {
+					generator.start();
+					requestAnimationFrame(() => generator.stop());
+				});
+			} else {
+				observeStart(canvas, () => generator.start());
+			}
+		};
+
 		const basic = document.getElementById("sineCanvasBasic");
 		if (basic) {
 			const generator = createGenerator(basic);
 			generator.addWave({
 				amplitude: 26,
 				wavelength: 140,
-				speed: 0.04,
+				speed: 0.04 * motionScale,
 				segmentLength: 10,
 			});
-			observeStart(basic, () => generator.start());
+			lazyStart(basic, generator);
 		}
 
 		const multi = document.getElementById("sineCanvasMulti");
 		if (multi) {
 			const generator = createGenerator(multi);
-			generator.addWave({ amplitude: 18, wavelength: 140, speed: 0.04, segmentLength: 10 });
+			generator.addWave({ amplitude: 18, wavelength: 140, speed: 0.04 * motionScale, segmentLength: 10 });
 			generator.addWave({
 				amplitude: 28,
 				wavelength: 200,
-				speed: 0.035,
+				speed: 0.035 * motionScale,
 				segmentLength: 12,
 				strokeStyle: "rgba(14,165,233,0.5)",
 			});
 			generator.addWave({
 				amplitude: 12,
 				wavelength: 90,
-				speed: 0.05,
+				speed: 0.05 * motionScale,
 				segmentLength: 8,
 				strokeStyle: "rgba(15,23,42,0.35)",
 			});
-			observeStart(multi, () => generator.start());
+			lazyStart(multi, generator);
 		}
 
 		const pointer = document.getElementById("sineCanvasPointer");
@@ -185,7 +223,7 @@
 			generator.addWave({
 				amplitude: 32,
 				wavelength: 180,
-				speed: 0.045,
+				speed: 0.045 * motionScale,
 				segmentLength: 8,
 			});
 			const pointerState = { x: 0.5, y: 0.5, rafId: null };
@@ -207,18 +245,18 @@
 					pointerState.rafId = requestAnimationFrame(applyPointer);
 				}
 			});
-			observeStart(pointer, () => generator.start());
+			lazyStart(pointer, generator);
 		}
 
 		const dynamic = document.getElementById("sineCanvasDynamic");
 		if (dynamic) {
 			const generator = createGenerator(dynamic);
 			const waveStack = [
-				{ amplitude: 12, wavelength: 100, speed: 0.035, segmentLength: 10 },
-				{ amplitude: 20, wavelength: 140, speed: 0.04, segmentLength: 10 },
-				{ amplitude: 28, wavelength: 180, speed: 0.045, segmentLength: 10 },
-				{ amplitude: 36, wavelength: 220, speed: 0.05, segmentLength: 12 },
-				{ amplitude: 18, wavelength: 120, speed: 0.038, segmentLength: 8 },
+				{ amplitude: 12, wavelength: 100, speed: 0.035 * motionScale, segmentLength: 10 },
+				{ amplitude: 20, wavelength: 140, speed: 0.04 * motionScale, segmentLength: 10 },
+				{ amplitude: 28, wavelength: 180, speed: 0.045 * motionScale, segmentLength: 10 },
+				{ amplitude: 36, wavelength: 220, speed: 0.05 * motionScale, segmentLength: 12 },
+				{ amplitude: 18, wavelength: 120, speed: 0.038 * motionScale, segmentLength: 8 },
 			];
 			let currentIndex = 0;
 			let removing = false;
@@ -241,19 +279,28 @@
 					setTimeout(addWave, 600);
 				}
 			};
-			observeStart(dynamic, () => {
-				addWave();
-				generator.start();
-			});
+			if (prefersReducedMotion) {
+				observeStart(dynamic, () => {
+					generator.addWave(waveStack[0]);
+					generator.addWave(waveStack[1]);
+					generator.start();
+					requestAnimationFrame(() => generator.stop());
+				});
+			} else {
+				observeStart(dynamic, () => {
+					addWave();
+					generator.start();
+				});
+			}
 		}
 
 		const performance = document.getElementById("sineCanvasPerformance");
 		if (performance) {
 			const generator = createGenerator(performance, { maxPixelRatio: 1 });
-			generator.addWave({ amplitude: 18, wavelength: 160, speed: 0.035, segmentLength: 14 });
-			generator.addWave({ amplitude: 10, wavelength: 120, speed: 0.04, segmentLength: 16 });
-			generator.addWave({ amplitude: 6, wavelength: 90, speed: 0.045, segmentLength: 18 });
-			observeStart(performance, () => generator.start());
+			generator.addWave({ amplitude: 18, wavelength: 160, speed: 0.035 * motionScale, segmentLength: 14 });
+			generator.addWave({ amplitude: 10, wavelength: 120, speed: 0.04 * motionScale, segmentLength: 16 });
+			generator.addWave({ amplitude: 6, wavelength: 90, speed: 0.045 * motionScale, segmentLength: 18 });
+			lazyStart(performance, generator);
 		}
 
 		const easing = document.getElementById("sineCanvasEasing");
@@ -262,11 +309,11 @@
 			generator.addWave({
 				amplitude: 30,
 				wavelength: 160,
-				speed: 0.04,
+				speed: 0.04 * motionScale,
 				segmentLength: 10,
 				easing: easedSine,
 			});
-			observeStart(easing, () => generator.start());
+			lazyStart(easing, generator);
 		}
 
 		const pause = document.getElementById("sineCanvasPause");
@@ -275,7 +322,7 @@
 			generator.addWave({
 				amplitude: 24,
 				wavelength: 150,
-				speed: 0.04,
+				speed: 0.04 * motionScale,
 				segmentLength: 10,
 			});
 			const pauseButton = document.querySelector('[data-action="pause"]');
@@ -286,7 +333,7 @@
 			if (resumeButton) {
 				resumeButton.addEventListener("click", () => generator.start());
 			}
-			observeStart(pause, () => generator.start());
+			lazyStart(pause, generator);
 		}
 	};
 
@@ -648,6 +695,98 @@
 		ctx.shadowBlur = 0;
 	};
 
+	/* --- New demos --- */
+
+	const drawGradientFill = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.03;
+		const gradient = ctx.createLinearGradient(0, centerY - amplitude, 0, height);
+		gradient.addColorStop(0, "rgba(14, 165, 233, 0.6)");
+		gradient.addColorStop(0.5, "rgba(14, 165, 233, 0.2)");
+		gradient.addColorStop(1, "rgba(14, 165, 233, 0)");
+		ctx.beginPath();
+		ctx.moveTo(0, height);
+		for (let x = 0; x <= width; x += 4) {
+			const value = Math.sin(x * freq + time);
+			const y = centerY + value * amplitude;
+			ctx.lineTo(x, y);
+		}
+		ctx.lineTo(width, height);
+		ctx.closePath();
+		ctx.fillStyle = gradient;
+		ctx.fill();
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 4) {
+			const value = Math.sin(x * freq + time);
+			const y = centerY + value * amplitude;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		ctx.strokeStyle = "rgba(14, 165, 233, 0.8)";
+		ctx.lineWidth = 2;
+		ctx.stroke();
+	};
+
+	const drawAudioVisualizerSim = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const volumeFactor = (controls.volume || 60) / 100;
+		const amplitude = controls.amplitude * volumeFactor;
+		const waveConfigs = [
+			{ freq: 0.02, speed: 1.0, hue: 200, alpha: 0.7 },
+			{ freq: 0.035, speed: 1.4, hue: 240, alpha: 0.5 },
+			{ freq: 0.05, speed: 0.8, hue: 280, alpha: 0.4 },
+			{ freq: 0.015, speed: 1.8, hue: 320, alpha: 0.3 },
+		];
+		waveConfigs.forEach((cfg) => {
+			ctx.beginPath();
+			for (let x = 0; x <= width; x += 4) {
+				const value = Math.sin(x * cfg.freq + time * cfg.speed);
+				const y = centerY + value * amplitude;
+				if (x === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			ctx.strokeStyle = `hsla(${cfg.hue}deg 75% 55% / ${cfg.alpha})`;
+			ctx.lineWidth = 1.5 + volumeFactor;
+			ctx.stroke();
+		});
+	};
+
+	const drawHeroBackground = ({ ctx, canvas, generator, time }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const waveConfigs = [
+			{ amplitude: 15, freq: 0.008, speed: 0.3, alpha: 0.12 },
+			{ amplitude: 10, freq: 0.012, speed: 0.2, alpha: 0.08 },
+			{ amplitude: 8, freq: 0.006, speed: 0.4, alpha: 0.1 },
+		];
+		waveConfigs.forEach((cfg) => {
+			ctx.beginPath();
+			for (let x = 0; x <= width; x += 8) {
+				const value = Math.sin(x * cfg.freq + time * cfg.speed);
+				const y = centerY + value * cfg.amplitude;
+				if (x === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			ctx.strokeStyle = `rgba(14, 165, 233, ${cfg.alpha})`;
+			ctx.lineWidth = 1.5;
+			ctx.stroke();
+		});
+	};
+
+	/* --- String physics --- */
+
 	const startStringPhysics = () => {
 		const card = document.querySelector('[data-example="stringPhysics"]');
 		if (!card) {
@@ -658,7 +797,7 @@
 			return;
 		}
 		const generator = createGenerator(canvas);
-		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.08 });
+		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.08 * motionScale });
 		const state = { amplitude: 0, decay: 0.95 };
 		canvas.addEventListener("pointerdown", () => {
 			state.amplitude = 100;
@@ -684,10 +823,12 @@
 			ctx.strokeStyle = getBPMColor(wave.phase, 128, 210);
 			ctx.stroke();
 			ctx.shadowBlur = 0;
-			wave.phase += 0.02 * deltaScale;
+			wave.phase += 0.02 * deltaScale * motionScale;
 		};
 		observeStart(canvas, () => generator.start());
 	};
+
+	/* --- Audio spectrogram --- */
 
 	const startAudioSpectrogram = () => {
 		const card = document.querySelector('[data-example="audioSpectrogram"]');
@@ -701,7 +842,7 @@
 			return;
 		}
 		const generator = createGenerator(canvas);
-		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.05 });
+		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.05 * motionScale });
 		const ctx = generator.ctx;
 		let analyser = null;
 		let data = null;
@@ -746,16 +887,247 @@
 				ctx.strokeStyle = `hsla(${hue}deg 80% 55% / 0.7)`;
 				ctx.stroke();
 			}
-			wave.phase += 0.02 * deltaScale;
+			wave.phase += 0.02 * deltaScale * motionScale;
 		};
 		observeStart(canvas, () => generator.start());
 	};
+
+	/* --- Responsive resize demo --- */
+
+	const startResponsiveResize = () => {
+		const canvas = document.getElementById("responsiveResizeCanvas");
+		if (!canvas) {
+			return;
+		}
+		const generator = createGenerator(canvas, { autoResize: true });
+		generator.addWave({
+			amplitude: 24,
+			wavelength: 140,
+			speed: 0.04 * motionScale,
+			segmentLength: 10,
+		});
+		generator.addWave({
+			amplitude: 16,
+			wavelength: 200,
+			speed: 0.03 * motionScale,
+			segmentLength: 12,
+			strokeStyle: "rgba(14,165,233,0.4)",
+		});
+		const container = canvas.parentElement;
+		if (container) {
+			const ro = new ResizeObserver(() => {
+				generator.resize();
+			});
+			ro.observe(container);
+		}
+		if (prefersReducedMotion) {
+			generator.start();
+			requestAnimationFrame(() => generator.stop());
+		} else {
+			observeStart(canvas, () => generator.start());
+		}
+	};
+
+	/* --- Hero background --- */
+
+	const startHeroBackground = () => {
+		const canvas = document.getElementById("heroBackgroundCanvas");
+		if (!canvas) {
+			return;
+		}
+		if (prefersReducedMotion) {
+			return;
+		}
+		const generator = createGenerator(canvas, { autoResize: true });
+		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.02 });
+		const ctx = generator.ctx;
+		generator.drawWave = (wave, deltaScale = 1) => {
+			const time = wave.phase;
+			drawHeroBackground({ ctx, canvas, generator, time });
+			wave.phase += 0.01 * deltaScale;
+		};
+		generator.start();
+	};
+
+	/* --- Playground --- */
+
+	const startPlayground = () => {
+		const canvas = document.getElementById("playgroundCanvas");
+		if (!canvas) {
+			return;
+		}
+		const card = canvas.closest(".playground-card");
+		if (!card) {
+			return;
+		}
+		const controls = setupControls(card);
+		const generator = createGenerator(canvas);
+		let currentWaveCount = 0;
+
+		const easingFunctions = {
+			sineInOut: (percent, amp) => (amp * (Math.sin(percent * Math.PI) + 1)) / 2,
+			sineIn: (percent, amp) => amp * (1 - Math.cos(percent * Math.PI / 2)),
+			sineOut: (percent, amp) => amp * Math.sin(percent * Math.PI / 2),
+			linear: (percent, amp) => amp * percent,
+		};
+
+		const syncWaves = () => {
+			const desiredCount = Number(controls.waveCount) || 2;
+			const amp = Number(controls.amplitude) || 30;
+			const wl = Number(controls.wavelength) || 140;
+			const spd = Number(controls.speed) || 0.8;
+			const seg = Number(controls.segmentLength) || 10;
+			const easingKey = controls.easing || "sineInOut";
+			const easingFn = easingFunctions[easingKey] || easingFunctions.sineInOut;
+			const color = controls.strokeColor || null;
+
+			while (generator.waves.length > desiredCount) {
+				generator.removeWave(generator.waves.length - 1);
+			}
+			while (generator.waves.length < desiredCount) {
+				generator.addWave({
+					amplitude: amp,
+					wavelength: wl,
+					speed: spd * 0.05,
+					segmentLength: seg,
+					easing: easingFn,
+					strokeStyle: color,
+				});
+			}
+			generator.waves.forEach((wave, i) => {
+				wave.amplitude = amp;
+				wave.wavelength = wl + i * 30;
+				wave.speed = spd * 0.05 * motionScale;
+				wave.segmentLength = seg;
+				wave.easing = easingFn;
+				wave.strokeStyle = color;
+			});
+			currentWaveCount = desiredCount;
+		};
+
+		card.addEventListener("input", syncWaves);
+		card.addEventListener("change", syncWaves);
+		syncWaves();
+
+		const copyBtn = document.getElementById("playgroundCopyConfig");
+		if (copyBtn) {
+			copyBtn.addEventListener("click", () => {
+				const easingKey = controls.easing || "sineInOut";
+				const waves = [];
+				const count = Number(controls.waveCount) || 2;
+				for (let i = 0; i < count; i++) {
+					waves.push(
+						`    { amplitude: ${controls.amplitude}, wavelength: ${Number(controls.wavelength) + i * 30}, speed: ${controls.speed}, segmentLength: ${controls.segmentLength}, easing: Ease.${easingKey}${controls.strokeColor ? `, strokeStyle: "${controls.strokeColor}"` : ""} }`,
+					);
+				}
+				const snippet = `const generator = new SineWaveGenerator({\n  el: "#myCanvas",\n  waves: [\n${waves.join(",\n")}\n  ]\n});\ngenerator.start();`;
+				copyToClipboard(snippet, copyBtn);
+			});
+		}
+
+		if (prefersReducedMotion) {
+			generator.start();
+			requestAnimationFrame(() => generator.stop());
+		} else {
+			generator.start();
+		}
+	};
+
+	/* --- Dark/light mode toggle --- */
+
+	const setupThemeToggle = () => {
+		const toggle = document.getElementById("themeToggle");
+		if (!toggle) {
+			return;
+		}
+		const stored = localStorage.getItem("theme");
+		if (stored) {
+			document.documentElement.setAttribute("data-theme", stored);
+		} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+			document.documentElement.setAttribute("data-theme", "dark");
+		}
+		toggle.addEventListener("click", () => {
+			const current = document.documentElement.getAttribute("data-theme");
+			const next = current === "dark" ? "light" : "dark";
+			document.documentElement.setAttribute("data-theme", next);
+			localStorage.setItem("theme", next);
+		});
+	};
+
+	/* --- Copy to clipboard --- */
+
+	const copyToClipboard = (text, button) => {
+		const doCopy = () => {
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				return navigator.clipboard.writeText(text);
+			}
+			const textarea = document.createElement("textarea");
+			textarea.value = text;
+			textarea.style.position = "fixed";
+			textarea.style.opacity = "0";
+			document.body.appendChild(textarea);
+			textarea.select();
+			document.execCommand("copy");
+			document.body.removeChild(textarea);
+			return Promise.resolve();
+		};
+		doCopy().then(() => {
+			if (button) {
+				const original = button.textContent;
+				button.textContent = "Copied!";
+				button.classList.add("copied");
+				setTimeout(() => {
+					button.textContent = original;
+					button.classList.remove("copied");
+				}, 2000);
+			}
+		});
+	};
+
+	const setupCopyButtons = () => {
+		const codeBlocks = document.querySelectorAll(".code-block");
+		codeBlocks.forEach((block) => {
+			if (block.querySelector(".copy-btn")) {
+				return;
+			}
+			block.style.position = "relative";
+			const btn = document.createElement("button");
+			btn.className = "copy-btn";
+			btn.type = "button";
+			btn.textContent = "Copy";
+			btn.addEventListener("click", (e) => {
+				e.stopPropagation();
+				const code = block.querySelector("code");
+				const text = code ? code.textContent : block.textContent;
+				copyToClipboard(text, btn);
+			});
+			block.appendChild(btn);
+		});
+	};
+
+	/* --- View code toggles --- */
+
+	const setupViewCodeToggles = () => {
+		const toggles = document.querySelectorAll(".view-code-toggle");
+		toggles.forEach((btn) => {
+			btn.addEventListener("click", () => {
+				const reveal = btn.nextElementSibling;
+				if (reveal && reveal.classList.contains("code-reveal")) {
+					const isVisible = reveal.classList.toggle("is-visible");
+					btn.textContent = isVisible ? "Hide Code" : "View Code";
+				}
+			});
+		});
+	};
+
+	/* --- Boot --- */
 
 	const boot = () => {
 		if (typeof window.SineWaveGenerator !== "function") {
 			setTimeout(boot, 50);
 			return;
 		}
+		setupThemeToggle();
 		setupNavToggle();
 		startFundamentals();
 		startExample("pulseMatrix", 4, drawPulseMatrix);
@@ -767,6 +1139,8 @@
 		startExample("feedbackLoop", 4, drawFeedbackLoop);
 		startExample("waveformTerrain", 6, drawWaveformTerrain);
 		startExample("radialBloom", 4, drawRadialBloom);
+		startExample("gradientFill", 4, drawGradientFill);
+		startExample("audioVisualizerSim", 4, drawAudioVisualizerSim);
 		startExample("labOcean", 6, drawWaveformTerrain);
 		startExample("labHelix", 4, drawDNAHelix);
 		startExample("labPulse", 4, drawRadialBloom);
@@ -777,6 +1151,11 @@
 		startExample("recursiveSine", 4, drawRecursiveSine);
 		startStringPhysics();
 		startAudioSpectrogram();
+		startResponsiveResize();
+		startHeroBackground();
+		startPlayground();
+		setupCopyButtons();
+		setupViewCodeToggles();
 	};
 
 	document.addEventListener("DOMContentLoaded", () => {
