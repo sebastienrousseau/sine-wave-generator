@@ -41,54 +41,68 @@
 			class="hero-bg-canvas"
 			aria-hidden="true"
 		></canvas>
+		<header class="site-header">
+			<div class="brand">
+				<img
+					src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
+					alt="Sine Wave Generator logo"
+				/>
+				<span>Sine Wave Generator</span>
+			</div>
+			<nav class="nav" id="site-nav">
+				<a href="#overview">Overview</a>
+				<a href="#get-started">Install</a>
+				<a href="#examples">Examples</a>
+				<a href="#playground">Playground</a>
+				<a href="#api">API</a>
+				<a href="#frameworks">Frameworks</a>
+				<a href="#faq">FAQ</a>
+			</nav>
+			<div class="header-actions">
+				<a
+					class="gh-star-btn"
+					href="https://github.com/sebastienrousseau/sine-wave-generator"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Star on GitHub"
+				>GitHub</a>
+				<button
+					class="theme-toggle"
+					type="button"
+					id="themeToggle"
+					aria-label="Toggle dark mode"
+					title="Toggle dark mode"
+				>
+					<svg class="theme-icon theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle cx="12" cy="12" r="5"></circle>
+						<line x1="12" y1="1" x2="12" y2="3"></line>
+						<line x1="12" y1="21" x2="12" y2="23"></line>
+						<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+						<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+						<line x1="1" y1="12" x2="3" y2="12"></line>
+						<line x1="21" y1="12" x2="23" y2="12"></line>
+						<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+						<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+					</svg>
+					<svg class="theme-icon theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+					</svg>
+				</button>
+				<button
+					class="nav-toggle"
+					type="button"
+					aria-label="Toggle navigation"
+					aria-controls="site-nav"
+					aria-expanded="false"
+				>
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+			</div>
+			<a class="cta" href="#get-started">Get started</a>
+		</header>
 		<main class="page">
-			<header class="site-header">
-				<div class="brand">
-					<img
-						src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
-						alt="Sine Wave Generator logo"
-					/>
-					<span>Sine Wave Generator</span>
-				</div>
-				<nav class="nav" id="site-nav">
-					<a href="#get-started">Install</a>
-					<a href="#examples">Examples</a>
-					<a href="#playground">Playground</a>
-					<a href="#api">API</a>
-					<a href="#frameworks">Frameworks</a>
-					<a href="#faq">FAQ</a>
-				</nav>
-				<div class="header-actions">
-					<a
-						class="gh-star-btn"
-						href="https://github.com/sebastienrousseau/sine-wave-generator"
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="Star on GitHub"
-					>GitHub</a>
-					<button
-						class="theme-toggle"
-						type="button"
-						id="themeToggle"
-						aria-label="Toggle dark mode"
-						title="Toggle dark mode"
-					>
-						<span class="theme-toggle-icon"></span>
-					</button>
-					<button
-						class="nav-toggle"
-						type="button"
-						aria-label="Toggle navigation"
-						aria-controls="site-nav"
-						aria-expanded="false"
-					>
-						<span></span>
-						<span></span>
-						<span></span>
-					</button>
-				</div>
-				<a class="cta" href="#get-started">Get started</a>
-			</header>
 
 			<section class="hero" id="overview">
 				<div>
@@ -121,13 +135,77 @@ gen.start();</code></pre>
 			</section>
 
 			<div class="badges">
-				<img src="https://img.shields.io/npm/v/@sebastienrousseau/sine-wave-generator?style=flat-square&amp;color=0ea5e9" alt="NPM version" width="auto" height="20" />
-				<img src="https://img.shields.io/npm/l/@sebastienrousseau/sine-wave-generator?style=flat-square" alt="License" width="auto" height="20" />
-				<img src="https://img.shields.io/badge/build-passing-brightgreen?style=flat-square" alt="Build passing" width="auto" height="20" />
-				<img src="https://img.shields.io/badge/canvas-API-0ea5e9?style=flat-square" alt="Canvas API" width="auto" height="20" />
+				<img src="https://img.shields.io/badge/Version-v0.0.3-blue?style=for-the-badge" alt="Version v0.0.3" width="auto" height="28" />
+				<a href="https://github.com/sebastienrousseau/sine-wave-generator">
+					<img src="https://img.shields.io/badge/License-Apache--2.0-green.svg?style=for-the-badge" alt="License Apache-2.0" width="auto" height="28" />
+				</a>
+				<a href="https://github.com/sebastienrousseau/sine-wave-generator">
+					<img src="https://img.shields.io/badge/github-sine--wave--generator-8da0cb?style=for-the-badge&amp;labelColor=555555&amp;logo=github" alt="GitHub" width="auto" height="28" />
+				</a>
+				<a href="https://github.com/sebastienrousseau/sine-wave-generator/commits/main">
+					<img src="https://img.shields.io/github/last-commit/sebastienrousseau/sine-wave-generator?style=for-the-badge" alt="Last Commit" width="auto" height="28" />
+				</a>
 			</div>
 
-			<section class="section alt-section" id="get-started">
+			<section class="section" id="overview-section">
+				<div class="section-header">
+					<h2>Overview</h2>
+					<p>What makes Sine Wave Generator different.</p>
+				</div>
+				<div class="card-grid">
+					<div class="card">
+						<h3>Smooth animation</h3>
+						<p>Canvas-first rendering with low overhead, using <code>requestAnimationFrame</code> for battery-efficient 60fps motion.</p>
+					</div>
+					<div class="card">
+						<h3>Multi-wave layers</h3>
+						<p>Configurable multi-wave layers for depth and parallax. Stack as many waves as you need.</p>
+					</div>
+					<div class="card">
+						<h3>Responsive sizing</h3>
+						<p>Automatic element-bound sizing with device pixel ratio support and caps for memory control.</p>
+					</div>
+					<div class="card">
+						<h3>Pointer interactions</h3>
+						<p>Built-in mouse and touch tracking for pointer-ready interactive experiences.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="section alt-section" id="key-features">
+				<div class="section-header">
+					<h2>Key features</h2>
+					<p>Core capabilities and performance features.</p>
+				</div>
+				<div class="card-grid">
+					<div class="card">
+						<h3>Fast rendering</h3>
+						<p>Segment-based drawing with capped pixel ratios for efficient canvas operations.</p>
+					</div>
+					<div class="card">
+						<h3>Flexible configuration</h3>
+						<p>Tune amplitude, wavelength, speed, and easing to match any visual style.</p>
+					</div>
+					<div class="card">
+						<h3>Memory control</h3>
+						<p><code>maxPixelRatio</code> limits offscreen buffer size on high-DPI screens.</p>
+					</div>
+					<div class="card">
+						<h3>Adjustable detail</h3>
+						<p><code>segmentLength</code> controls point density for smooth or fast rendering.</p>
+					</div>
+					<div class="card">
+						<h3>Efficient redraws</h3>
+						<p>Single animation loop with cached gradients for minimal per-frame overhead.</p>
+					</div>
+					<div class="card">
+						<h3>Layered waves</h3>
+						<p>Stack multiple waves with independent configs for depth and parallax effects.</p>
+					</div>
+				</div>
+			</section>
+
+			<section class="section" id="get-started">
 				<div class="section-header">
 					<h2>Get started</h2>
 					<p>Install, connect a canvas, and start in under a minute.</p>
@@ -324,6 +402,16 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="16" step="1" value="8" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Grid interference with tempo-driven color
+for (let y = 0; y &lt;= rows; y++) {
+  for (let x = 0; x &lt;= columns; x++) {
+    const value = Math.sin(x * freq + t) * Math.cos(y * freq + t);
+    ctx.arc(x * spacingX, y * spacingY, radius * value, 0, TWO_PI);
+  }
+}</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="dnaHelix">
 						<h3>DNA helix</h3>
@@ -334,6 +422,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="12" max="80" step="1" value="46" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="12" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="30" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Counterphase strands with diagonal drift
+for (let y = 0; y &lt;= height; y += 6) {
+  const xOffset = Math.sin(y * freq + time) * amplitude;
+  ctx.moveTo(centerX + xOffset, y);
+  ctx.lineTo(centerX - xOffset, y);
+}</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="fluidColumn">
@@ -346,6 +443,14 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Vertical flow with volumetric thickness
+for (let y = 0; y &lt;= height; y += 6) {
+  const offset = Math.sin(y * freq + time + col * 0.6) * amp;
+  ctx.lineTo(columnX + offset, y);
+}</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="diagonalRain">
 						<h3>Diagonal rain</h3>
@@ -356,6 +461,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="6" max="40" step="1" value="20" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="16" step="1" value="9" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Angled strokes with tempo-locked shimmer
+for (let i = 0; i &lt; count; i++) {
+  const drift = Math.sin(time + i * freq) * amplitude;
+  ctx.moveTo(baseX + drift, baseY);
+  ctx.lineTo(baseX + drift + 24, baseY + 38);
+}</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="lissajousOrbit">
@@ -368,6 +482,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="9" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="90" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Parametric loops synced to time
+for (let i = 0; i &lt;= 240; i++) {
+  const t = (i / 240) * TWO_PI;
+  const x = cx + Math.sin(t * freq + time) * amp;
+  const y = cy + Math.sin(t * (freq + 1) + phase) * amp;
+}</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="waveformTerrain">
 						<h3>Waveform terrain</h3>
@@ -378,6 +501,16 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="28" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="7" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="20" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Layered horizons with depth-shifted phases
+for (let layer = 0; layer &lt; 8; layer++) {
+  for (let x = 0; x &lt;= width; x += 6) {
+    const y = baseY + Math.sin(x * freq + phase) * amp;
+    ctx.lineTo(x, y);
+  }
+}</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="radialBloom">
@@ -390,6 +523,14 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="18" step="1" value="9" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Outward pulses on the downbeat
+for (let r = 18; r &lt; radiusMax; r += 12) {
+  const offset = Math.sin(r * freq + time) * pulse;
+  ctx.arc(cx, cy, r + offset, 0, TWO_PI);
+}</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="gradientFill">
 						<h3>Gradient fill</h3>
@@ -400,6 +541,16 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Area fill with linear gradient
+const grad = ctx.createLinearGradient(0, top, 0, height);
+for (let x = 0; x &lt;= width; x += 4) {
+  ctx.lineTo(x, centerY + Math.sin(x * freq + t) * amp);
+}
+ctx.fillStyle = grad;
+ctx.fill();</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="audioVisualizerSim">
@@ -412,6 +563,16 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Volume-driven multi-wave display
+waveConfigs.forEach((cfg) =&gt; {
+  for (let x = 0; x &lt;= width; x += 4) {
+    const y = centerY + Math.sin(x * cfg.freq + t * cfg.speed) * amp;
+    ctx.lineTo(x, y);
+  }
+});</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="verticalWave">
 						<h3>Vertical wave</h3>
@@ -422,6 +583,14 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Rotated orientation for liquid-rising effects
+for (let y = 0; y &lt;= height; y += 4) {
+  const x = centerX + Math.sin(y * freq + time) * amp;
+  ctx.lineTo(x, y);
+}</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="dashArray">
@@ -434,6 +603,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Dotted and dashed wave lines
+ctx.setLineDash([12, 6]);
+for (let x = 0; x &lt;= width; x += 4) {
+  const y = centerY + Math.sin(x * freq + time) * amp;
+  ctx.lineTo(x, y);
+}</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="variableWidth">
 						<h3>Variable width</h3>
@@ -444,6 +622,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="26" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="5" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Pulsing line thickness per segment
+for (let x = 0; x &lt; width; x += 6) {
+  const thickness = 1 + Math.abs(Math.sin(x * 0.01 + t * 2)) * 4;
+  ctx.lineWidth = thickness;
+  ctx.lineTo(x, centerY + Math.sin(x * freq + t) * amp);
+}</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="compositingGlow">
@@ -456,6 +643,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Screen blending for neon glow
+ctx.globalCompositeOperation = "screen";
+colors.forEach((cfg) =&gt; {
+  ctx.shadowBlur = 20;
+  ctx.lineTo(x, centerY + Math.sin(x * freq + t + cfg.offset) * amp);
+});</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="zenMode">
 						<h3>Zen mode</h3>
@@ -465,6 +661,14 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="20" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Ultra-slow motion sine
+for (let x = 0; x &lt;= width; x += 6) {
+  const y = centerY + Math.sin(x * freq + time * 0.15) * amp;
+  ctx.lineTo(x, y);
+}</code></pre>
 						</div>
 					</article>
 				</div>
@@ -533,6 +737,13 @@ generator.start();  // resume</code></pre>
 						<p>Tap to pluck. Damped amplitude returns to rest.</p>
 						<canvas class="demo-canvas" id="stringPhysicsCanvas" aria-label="String physics"></canvas>
 						<p class="demo-note">Tip: click the line to excite it.</p>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Tap to pluck, damped amplitude returns to rest
+canvas.addEventListener("pointerdown", () =&gt; { state.amplitude = 100; });
+state.amplitude *= 0.95; // decay each frame
+const y = centerY + Math.sin(x * 0.02 + phase) * state.amplitude * 0.02;</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="audioSpectrogram">
 						<h3>Audio spectrogram</h3>
@@ -541,6 +752,16 @@ generator.start();  // resume</code></pre>
 						<div class="controls">
 							<button class="btn" type="button" data-action="audio-start">Enable mic</button>
 							<span class="status" data-audio-status>Idle</span>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// 64-band frequency display
+analyser.getByteFrequencyData(data);
+for (let i = 0; i &lt; 64; i++) {
+  const amp = data[i] / 255;
+  ctx.moveTo(x, base - amp * height * 0.3);
+  ctx.lineTo(x, base + amp * height * 0.3);
+}</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="lissajousExplorer">
@@ -553,6 +774,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="12" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="60" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Orbit knots with adjustable a:b ratios
+for (let i = 0; i &lt;= 320; i++) {
+  const t = (i / 320) * TWO_PI;
+  const x = cx + ampX * Math.sin(a * t + delta + time);
+  const y = cy + ampY * Math.sin(b * t + time);
+}</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="feedbackLoop">
 						<h3>Feedback loops</h3>
@@ -564,6 +794,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Slow modulator controls a fast carrier
+const mod = Math.sin(time * 0.8);
+for (let x = 0; x &lt;= width; x += 4) {
+  const carrier = Math.sin(x * carrierFreq + time * 1.6);
+  const y = centerY + carrier * baseAmp * mod;
+}</code></pre>
+						</div>
 					</article>
 				</div>
 			</section>
@@ -574,10 +813,46 @@ generator.start();  // resume</code></pre>
 					<p>Curated scenes you can drop into a hero section.</p>
 				</div>
 				<div class="card-grid">
-					<article class="card" data-example="labOcean"><h3>The Ocean</h3><p>Horizontal layering with slow tides.</p><canvas class="demo-canvas" id="labOceanCanvas" aria-label="The Ocean"></canvas></article>
-					<article class="card" data-example="labHelix"><h3>The Helix</h3><p>Vertical strands with parallax depth.</p><canvas class="demo-canvas" id="labHelixCanvas" aria-label="The Helix"></canvas></article>
-					<article class="card" data-example="labPulse"><h3>The Pulse</h3><p>BPM-reactive ripples with color sync.</p><canvas class="demo-canvas" id="labPulseCanvas" aria-label="The Pulse"></canvas></article>
-					<article class="card" data-example="labOrbit"><h3>The Orbit</h3><p>Lissajous curves with orbital drift.</p><canvas class="demo-canvas" id="labOrbitCanvas" aria-label="The Orbit"></canvas></article>
+					<article class="card" data-example="labOcean">
+						<h3>The Ocean</h3>
+						<p>Horizontal layering with slow tides.</p>
+						<canvas class="demo-canvas" id="labOceanCanvas" aria-label="The Ocean"></canvas>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Horizontal layering with slow tides
+// Uses drawWaveformTerrain with 8 depth layers</code></pre>
+						</div>
+					</article>
+					<article class="card" data-example="labHelix">
+						<h3>The Helix</h3>
+						<p>Vertical strands with parallax depth.</p>
+						<canvas class="demo-canvas" id="labHelixCanvas" aria-label="The Helix"></canvas>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Vertical strands with parallax depth
+// Uses drawDNAHelix with counterphase strands</code></pre>
+						</div>
+					</article>
+					<article class="card" data-example="labPulse">
+						<h3>The Pulse</h3>
+						<p>BPM-reactive ripples with color sync.</p>
+						<canvas class="demo-canvas" id="labPulseCanvas" aria-label="The Pulse"></canvas>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// BPM-reactive ripples with color sync
+// Uses drawRadialBloom with downbeat emphasis</code></pre>
+						</div>
+					</article>
+					<article class="card" data-example="labOrbit">
+						<h3>The Orbit</h3>
+						<p>Lissajous curves with orbital drift.</p>
+						<canvas class="demo-canvas" id="labOrbitCanvas" aria-label="The Orbit"></canvas>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Lissajous curves with orbital drift
+// Uses drawLissajousOrbit with phase shift</code></pre>
+						</div>
+					</article>
 				</div>
 			</section>
 
@@ -597,6 +872,17 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="16" step="1" value="8" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Two angled lattices creating shimmer
+const drawGrid = (rotation) =&gt; {
+  ctx.rotate(rotation);
+  for (let x = -max; x &lt;= width + max; x += spacing) {
+    ctx.moveTo(x, -max);
+    ctx.lineTo(x, height + max);
+  }
+};</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="kineticTypography">
 						<h3>Kinetic typography</h3>
@@ -607,6 +893,14 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="6" max="30" step="1" value="16" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="10" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="10" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Letterforms that breathe with the beat
+"SINE WAVE".split("").forEach((char, i) =&gt; {
+  const wave = Math.sin(time + i * freq) * amplitude;
+  ctx.fillText(char, cx + i * 18, cy + wave);
+});</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="dampedSine">
@@ -619,6 +913,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="10" step="1" value="5" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
 						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Exponential decay envelope
+const envelope = Math.exp(-3.2 * progress);
+for (let x = 0; x &lt;= width; x += 4) {
+  const y = centerY + Math.sin(x * freq + time) * amp * envelope;
+  ctx.lineTo(x, y);
+}</code></pre>
+						</div>
 					</article>
 					<article class="card" data-example="recursiveSine">
 						<h3>Recursive sine</h3>
@@ -629,6 +932,15 @@ generator.start();  // resume</code></pre>
 							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="6" max="40" step="1" value="20" data-control="amplitude" /><span data-value></span></div></label>
 							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="7" data-control="frequency" /><span data-value></span></div></label>
 							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">View Code</button>
+						<div class="code-reveal">
+							<pre class="code-block"><code>// Nested oscillators for organic drift
+for (let x = 0; x &lt;= width; x += 4) {
+  const nested = Math.sin(time + x * baseFreq * 0.4) * 0.6 + 1;
+  const y = centerY + Math.sin(x * (freq + mod * nested) + time) * amp;
+  ctx.lineTo(x, y);
+}</code></pre>
 						</div>
 					</article>
 				</div>

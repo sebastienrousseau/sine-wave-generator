@@ -36,6 +36,7 @@
 	"files": [
 		"dist",
 		"src",
+		"index.d.ts",
 		"LICENSE",
 		"README.md"
 	],
@@ -49,6 +50,7 @@
 	],
 	"license": "Apache-2.0",
 	"main": "./src/sine-wave-generator.js",
+	"types": "./index.d.ts",
 	"name": "@sebastienrousseau/sine-wave-generator",
 	"repository": {
 		"type": "git",

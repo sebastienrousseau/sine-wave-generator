@@ -184,17 +184,18 @@ button {
 	align-items: center;
 	justify-content: space-between;
 	gap: 24px;
-	padding: 12px 0 40px;
+	padding: 12px 6vw;
 	position: sticky;
 	top: 0;
 	z-index: 100;
-	background: inherit;
+	background: rgba(255, 255, 255, 0.92);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
+	border-bottom: 1px solid var(--card-border);
 }
 
 [data-theme="dark"] .site-header {
-	background: rgba(2, 6, 23, 0.85);
+	background: rgba(2, 6, 23, 0.92);
 }
 
 .header-actions {
@@ -283,58 +284,27 @@ button {
 	background: var(--card-bg);
 	box-shadow: var(--shadow);
 	transition: background 0.2s;
+	color: var(--text-primary);
 }
 
 .theme-toggle:hover {
 	background: var(--btn-bg);
 }
 
-.theme-toggle-icon {
+.theme-icon {
+	transition: opacity 0.2s ease;
+}
+
+.theme-icon-moon {
+	display: none;
+}
+
+[data-theme="dark"] .theme-icon-sun {
+	display: none;
+}
+
+[data-theme="dark"] .theme-icon-moon {
 	display: block;
-	width: 20px;
-	height: 20px;
-	position: relative;
-}
-
-.theme-toggle-icon::before {
-	content: "";
-	display: block;
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
-	border: 2px solid var(--text-primary);
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.theme-toggle-icon::after {
-	content: "";
-	display: block;
-	width: 20px;
-	height: 20px;
-	position: absolute;
-	top: 0;
-	left: 0;
-	background:
-		radial-gradient(circle, transparent 8px, transparent 8px),
-		linear-gradient(var(--text-primary), var(--text-primary)) center top / 2px 4px no-repeat,
-		linear-gradient(var(--text-primary), var(--text-primary)) center bottom / 2px 4px no-repeat,
-		linear-gradient(var(--text-primary), var(--text-primary)) left center / 4px 2px no-repeat,
-		linear-gradient(var(--text-primary), var(--text-primary)) right center / 4px 2px no-repeat;
-}
-
-[data-theme="dark"] .theme-toggle-icon::before {
-	width: 14px;
-	height: 14px;
-	border: 2px solid #e2e8f0;
-	background: transparent;
-	box-shadow: inset -5px -2px 0 0 #e2e8f0;
-}
-
-[data-theme="dark"] .theme-toggle-icon::after {
-	background: none;
 }
 
 .cta {
@@ -497,10 +467,12 @@ button {
 	padding: 16px;
 	border-radius: 14px;
 	font-family: "Fira Code", "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
-	font-size: 0.85rem;
+	font-size: 0.8rem;
 	overflow-x: auto;
 	position: relative;
 	line-height: 1.5;
+	white-space: pre-wrap;
+	word-break: break-word;
 }
 
 .code-block .kw { color: #c084fc; }
@@ -849,8 +821,7 @@ button {
 	.site-header {
 		flex-direction: column;
 		align-items: flex-start;
-		position: relative;
-		backdrop-filter: none;
+		position: sticky;
 	}
 
 	.nav {
