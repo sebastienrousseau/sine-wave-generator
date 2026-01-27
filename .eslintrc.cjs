@@ -3,6 +3,7 @@ module.exports = {
 	env: {
 		browser: true,
 		node: true,
+		jest: true,
 		es2021: true,
 	},
 	globals: {
@@ -13,7 +14,7 @@ module.exports = {
 		sourceType: "script",
 	},
 	extends: ["eslint:recommended", "prettier"],
-	ignorePatterns: ["dist/"],
+  ignorePatterns: ["dist/", "docs/"],
 	rules: {
 		"array-callback-return": "error",
 		"consistent-return": "error",

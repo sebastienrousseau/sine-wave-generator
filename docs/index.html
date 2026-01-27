@@ -1,157 +1,16 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sine Wave Generator for Canvas | Documentation</title>
-    <meta
-      name="description"
-      content="Sine Wave Generator is a fast, configurable canvas engine for silky animated sine waves."
-    />
-    <meta name="theme-color" content="#0ea5e9" />
-    <link rel="canonical" href="https://sine-wave-generator.com" />
-    <link rel="stylesheet" href="reset.css" />
-    <link rel="icon" href="favicon.ico" />
-    <script defer src="main.js"></script>
-    <script defer src="example.js"></script>
-  </head>
-  <body>
-    <main class="page">
-      <header class="site-header">
-        <div class="brand">
-          <img
-            src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
-            alt="Sine Wave Generator logo"
-          />
-          <span>Sine Wave Generator</span>
-        </div>
-        <nav class="nav">
-          <a href="#overview">Overview</a>
-          <a href="#examples">Examples</a>
-          <a href="#api">API</a>
-          <a href="#performance">Performance</a>
-        </nav>
-        <a class="cta" href="#get-started">Get started</a>
-      </header>
-
-      <section class="hero" id="overview">
-        <div>
-          <h1>Elegant sine waves, engineered for speed.</h1>
-          <p>
-            A canvas-first animation engine with responsive rendering, configurable wave layers, and
-            low-memory defaults. Built for smooth 60fps motion.
-          </p>
-          <div class="hero-actions">
-            <a class="cta" href="#get-started">Start building</a>
-            <a class="btn-secondary" href="#api">API reference</a>
-          </div>
-        </div>
-        <div class="hero-card">
-          <h3>Performance-led rendering</h3>
-          <p>Segment-based drawing, pixel-ratio caps, and reusable gradients keep frames light.</p>
-        </div>
-        <div class="hero-card">
-          <h3>Designed for touch + pointer</h3>
-          <p>Pointer-friendly defaults with passive touch listeners and smooth interactivity.</p>
-        </div>
-      </section>
-
-      <section class="section" id="get-started">
-        <div class="section-header">
-          <h2>Get started</h2>
-          <p>Install, connect a canvas, and start in under a minute.</p>
-        </div>
-        <div class="card-grid">
-          <div class="card">
-            <h3>Install</h3>
-            <pre class="code-block"><code>npm install @sebastienrousseau/sine-wave-generator</code></pre>
-          </div>
-          <div class="card">
-            <h3>Use</h3>
-            <pre class="code-block"><code>const generator = new SineWaveGenerator({
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Sine Wave Generator for Canvas | Documentation</title><meta name="description" content="Sine Wave Generator is a fast, configurable canvas engine for silky animated sine waves."/><meta name="theme-color" content="#0ea5e9"/><link rel="canonical" href="https://sine-wave-generator.com"/><link rel="stylesheet" href="reset.css"/><link rel="icon" href="favicon.ico"/><link rel="icon" href="favicon.ico"><script defer="defer" src="main.js"></script></head><body><main class="page"><header class="site-header"><div class="brand"><img src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp" alt="Sine Wave Generator logo"/> <span>Sine Wave Generator</span></div><nav class="nav"><a href="#overview">Overview</a> <a href="#examples">Examples</a> <a href="#api">API</a> <a href="#performance">Performance</a></nav><a class="cta" href="#get-started">Get started</a></header><section class="hero" id="overview"><div><h1>Elegant sine waves, engineered for speed.</h1><p>A canvas-first animation engine with responsive rendering, configurable wave layers, and low-memory defaults. Built for smooth 60fps motion.</p><div class="hero-actions"><a class="cta" href="#get-started">Start building</a> <a class="btn-secondary" href="#api">API reference</a></div></div><div class="hero-card"><h3>Performance-led rendering</h3><p>Segment-based drawing, pixel-ratio caps, and reusable gradients keep frames light.</p></div><div class="hero-card"><h3>Designed for touch + pointer</h3><p>Pointer-friendly defaults with passive touch listeners and smooth interactivity.</p></div></section><section class="section" id="get-started"><div class="section-header"><h2>Get started</h2><p>Install, connect a canvas, and start in under a minute.</p></div><div class="card-grid"><div class="card"><h3>Install</h3><pre class="code-block"><code>npm install @sebastienrousseau/sine-wave-generator</code></pre></div><div class="card"><h3>Use</h3><pre class="code-block"><code>const generator = new SineWaveGenerator({
   el: "#sine",
   maxPixelRatio: 2,
   waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }]
 });
 
-generator.start();</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="examples">
-        <div class="section-header">
-          <h2>Examples</h2>
-          <p>Practical patterns you can reuse in your UI.</p>
-        </div>
-        <div class="card-grid">
-          <article class="card">
-            <h3>Basic wave</h3>
-            <p>Single wave with default gradient stroke.</p>
-            <canvas class="demo-canvas" id="sineCanvasBasic" aria-label="Basic wave"></canvas>
-          </article>
-          <article class="card">
-            <h3>Layered waves</h3>
-            <p>Stack multiple waves for depth and parallax.</p>
-            <canvas class="demo-canvas" id="sineCanvasMulti" aria-label="Layered waves"></canvas>
-          </article>
-          <article class="card">
-            <h3>Pointer reactive</h3>
-            <p>Pointer movement shapes amplitude and wavelength.</p>
-            <canvas class="demo-canvas" id="sineCanvasPointer" aria-label="Pointer reactive"></canvas>
-          </article>
-          <article class="card">
-            <h3>Dynamic management</h3>
-            <p>Programmatic add/remove of wave layers.</p>
-            <canvas class="demo-canvas" id="sineCanvasDynamic" aria-label="Dynamic waves"></canvas>
-          </article>
-          <article class="card">
-            <h3>Performance mode</h3>
-            <p>Low-memory settings with pixel-ratio caps.</p>
-            <canvas
-              class="demo-canvas"
-              id="sineCanvasPerformance"
-              aria-label="Performance mode"
-            ></canvas>
-          </article>
-          <article class="card">
-            <h3>Custom easing</h3>
-            <p>Swap easing curves for cinematic motion.</p>
-            <canvas class="demo-canvas" id="sineCanvasEasing" aria-label="Custom easing"></canvas>
-          </article>
-          <article class="card">
-            <h3>Pause and resume</h3>
-            <p>Explicit control over the render loop.</p>
-            <canvas class="demo-canvas" id="sineCanvasPause" aria-label="Pause resume"></canvas>
-            <div class="controls">
-              <button class="btn" type="button" data-action="pause">Pause</button>
-              <button class="btn" type="button" data-action="resume">Resume</button>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" id="api">
-        <div class="section-header">
-          <h2>API reference</h2>
-          <p>Minimal surface area, designed to stay predictable.</p>
-        </div>
-        <div class="card-grid">
-          <div class="card">
-            <h3>SineWaveGenerator(options)</h3>
-            <p>Creates a generator bound to a canvas element.</p>
-            <pre class="code-block"><code>{
+generator.start();</code></pre></div></div></section><section class="section" id="examples"><div class="section-header"><h2>Examples</h2><p>Practical patterns you can reuse in your UI.</p></div><div class="card-grid"><article class="card"><h3>Basic wave</h3><p>Single wave with default gradient stroke.</p><canvas class="demo-canvas" id="sineCanvasBasic" aria-label="Basic wave"></canvas></article><article class="card"><h3>Layered waves</h3><p>Stack multiple waves for depth and parallax.</p><canvas class="demo-canvas" id="sineCanvasMulti" aria-label="Layered waves"></canvas></article><article class="card"><h3>Pointer reactive</h3><p>Pointer movement shapes amplitude and wavelength.</p><canvas class="demo-canvas" id="sineCanvasPointer" aria-label="Pointer reactive"></canvas></article><article class="card"><h3>Dynamic management</h3><p>Programmatic add/remove of wave layers.</p><canvas class="demo-canvas" id="sineCanvasDynamic" aria-label="Dynamic waves"></canvas></article><article class="card"><h3>Performance mode</h3><p>Low-memory settings with pixel-ratio caps.</p><canvas class="demo-canvas" id="sineCanvasPerformance" aria-label="Performance mode"></canvas></article><article class="card"><h3>Custom easing</h3><p>Swap easing curves for cinematic motion.</p><canvas class="demo-canvas" id="sineCanvasEasing" aria-label="Custom easing"></canvas></article><article class="card"><h3>Pause and resume</h3><p>Explicit control over the render loop.</p><canvas class="demo-canvas" id="sineCanvasPause" aria-label="Pause resume"></canvas><div class="controls"><button class="btn" type="button" data-action="pause">Pause</button> <button class="btn" type="button" data-action="resume">Resume</button></div></article></div></section><section class="section" id="api"><div class="section-header"><h2>API reference</h2><p>Minimal surface area, designed to stay predictable.</p></div><div class="card-grid"><div class="card"><h3>SineWaveGenerator(options)</h3><p>Creates a generator bound to a canvas element.</p><pre class="code-block"><code>{
   el: HTMLCanvasElement | string,
   waves?: WaveConfig[],
   pixelRatio?: number,
   maxPixelRatio?: number,
   autoResize?: boolean
-}</code></pre>
-          </div>
-          <div class="card">
-            <h3>WaveConfig</h3>
-            <p>Configure amplitude, speed, and easing.</p>
-            <pre class="code-block"><code>{
+}</code></pre></div><div class="card"><h3>WaveConfig</h3><p>Configure amplitude, speed, and easing.</p><pre class="code-block"><code>{
   amplitude?: number,
   wavelength?: number,
   segmentLength?: number,
@@ -160,43 +19,8 @@ generator.start();</code></pre>
   rotate?: number,
   easing?: (percent, amplitude) => number,
   strokeStyle?: string | null
-}</code></pre>
-          </div>
-          <div class="card">
-            <h3>Instance methods</h3>
-            <p>Start/stop and manage waves.</p>
-            <pre class="code-block"><code>generator.start();
+}</code></pre></div><div class="card"><h3>Instance methods</h3><p>Start/stop and manage waves.</p><pre class="code-block"><code>generator.start();
 generator.stop();
 generator.addWave(config);
 generator.removeWave(index);
-generator.resize();</code></pre>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="performance">
-        <div class="section-header">
-          <h2>Performance</h2>
-          <p>We tune defaults for smoothness, with knobs for heavy scenes.</p>
-        </div>
-        <div class="card-grid">
-          <div class="card">
-            <h3>Cap pixel ratio</h3>
-            <p>Use <strong>maxPixelRatio</strong> to avoid oversized buffers on high-DPI screens.</p>
-          </div>
-          <div class="card">
-            <h3>Increase segment length</h3>
-            <p>Larger segments reduce per-frame points while preserving visual flow.</p>
-          </div>
-          <div class="card">
-            <h3>Reduce wave count</h3>
-            <p>More waves increases draw cost; balance layering with frame budget.</p>
-          </div>
-        </div>
-        <p><strong>Important:</strong> If you set a high <code>maxPixelRatio</code>, memory use grows quickly on large canvases.</p>
-      </section>
-
-      <footer>© 2026 Sine Wave Generator. All rights reserved.</footer>
-    </main>
-  </body>
-</html>
+generator.resize();</code></pre></div></div></section><section class="section" id="performance"><div class="section-header"><h2>Performance</h2><p>We tune defaults for smoothness, with knobs for heavy scenes.</p></div><div class="card-grid"><div class="card"><h3>Cap pixel ratio</h3><p>Use <strong>maxPixelRatio</strong> to avoid oversized buffers on high-DPI screens.</p></div><div class="card"><h3>Increase segment length</h3><p>Larger segments reduce per-frame points while preserving visual flow.</p></div><div class="card"><h3>Reduce wave count</h3><p>More waves increases draw cost; balance layering with frame budget.</p></div></div><p><strong>Important:</strong> If you set a high <code>maxPixelRatio</code>, memory use grows quickly on large canvases.</p></section><footer>© 2026 Sine Wave Generator. All rights reserved.</footer></main><script defer="defer" src="example.js"></script></body></html>

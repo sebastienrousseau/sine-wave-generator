@@ -447,4 +447,12 @@ class SineWaveGenerator {
 	}
 }
 
-window.SineWaveGenerator = SineWaveGenerator;
+/* istanbul ignore next */
+if (typeof window !== "undefined") {
+	window.SineWaveGenerator = SineWaveGenerator;
+}
+
+/* istanbul ignore next */
+if (typeof module !== "undefined" && module.exports) {
+	module.exports = { SineWaveGenerator, Wave, Ease };
+}
