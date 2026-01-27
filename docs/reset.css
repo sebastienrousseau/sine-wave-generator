@@ -80,7 +80,8 @@ button {
 	--nav-toggle-bg: #ffffff;
 	--nav-toggle-bar: #0f172a;
 	--canvas-border: rgba(15, 23, 42, 0.08);
-	--canvas-bg: radial-gradient(
+	--canvas-bg:
+		radial-gradient(
 			circle at 20% 20%,
 			rgba(14, 165, 233, 0.08),
 			transparent 45%
@@ -109,19 +110,29 @@ button {
 	--nav-toggle-bg: #1e293b;
 	--nav-toggle-bar: #e2e8f0;
 	--canvas-border: rgba(255, 255, 255, 0.08);
-	--canvas-bg: radial-gradient(
+	--canvas-bg:
+		radial-gradient(
 			circle at 20% 20%,
 			rgba(14, 165, 233, 0.12),
 			transparent 45%
 		),
-		linear-gradient(120deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.005));
+		linear-gradient(
+			120deg,
+			rgba(255, 255, 255, 0.02),
+			rgba(255, 255, 255, 0.005)
+		);
 	--grid-overlay-opacity: 0.3;
 	--alt-section-bg: rgba(14, 165, 233, 0.04);
 }
 
 [data-theme="dark"] body {
 	color: var(--text-primary);
-	background: radial-gradient(circle at 10% 10%, #0f172a 0%, #0c1322 40%, #020617 100%);
+	background: radial-gradient(
+		circle at 10% 10%,
+		#0f172a 0%,
+		#0c1322 40%,
+		#020617 100%
+	);
 }
 
 [data-theme="dark"] body::before {
@@ -167,7 +178,9 @@ button {
 }
 
 @keyframes spin {
-	to { transform: rotate(360deg); }
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 .page {
@@ -466,7 +479,8 @@ button {
 	color: var(--code-color);
 	padding: 16px;
 	border-radius: 14px;
-	font-family: "Fira Code", "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
+	font-family:
+		"Fira Code", "SF Mono", "Menlo", "Consolas", "Liberation Mono", monospace;
 	font-size: 0.8rem;
 	overflow-x: auto;
 	position: relative;
@@ -475,11 +489,22 @@ button {
 	word-break: break-word;
 }
 
-.code-block .kw { color: #c084fc; }
-.code-block .fn { color: #67e8f9; }
-.code-block .str { color: #86efac; }
-.code-block .num { color: #fbbf24; }
-.code-block .cmt { color: #64748b; font-style: italic; }
+.code-block .kw {
+	color: #c084fc;
+}
+.code-block .fn {
+	color: #67e8f9;
+}
+.code-block .str {
+	color: #86efac;
+}
+.code-block .num {
+	color: #fbbf24;
+}
+.code-block .cmt {
+	color: #64748b;
+	font-style: italic;
+}
 
 /* Copy button on code blocks */
 .copy-btn {
@@ -494,7 +519,9 @@ button {
 	font-weight: 600;
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	cursor: pointer;
-	transition: background 0.15s, color 0.15s;
+	transition:
+		background 0.15s,
+		color 0.15s;
 	z-index: 2;
 	font-family: inherit;
 }

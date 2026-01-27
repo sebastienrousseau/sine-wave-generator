@@ -55,7 +55,10 @@ const Ease = {
 		if (percent < GOLDEN_SECTION || percent > 1 - GOLDEN_SECTION) {
 			return 0;
 		}
-		return Math.sin((percent - GOLDEN_SECTION) * GOLDEN_SECTION_INV * Math.PI) * amplitude;
+		return (
+			Math.sin((percent - GOLDEN_SECTION) * GOLDEN_SECTION_INV * Math.PI) *
+			amplitude
+		);
 	},
 };
 
@@ -166,9 +169,14 @@ class Wave {
 	 */
 	update(config) {
 		this.validateConfig({
-			amplitude: config.amplitude !== undefined ? config.amplitude : this.amplitude,
-			wavelength: config.wavelength !== undefined ? config.wavelength : this.wavelength,
-			segmentLength: config.segmentLength !== undefined ? config.segmentLength : this.segmentLength,
+			amplitude:
+				config.amplitude !== undefined ? config.amplitude : this.amplitude,
+			wavelength:
+				config.wavelength !== undefined ? config.wavelength : this.wavelength,
+			segmentLength:
+				config.segmentLength !== undefined
+					? config.segmentLength
+					: this.segmentLength,
 			speed: config.speed !== undefined ? config.speed : this.speed,
 			rotate: config.rotate !== undefined ? config.rotate : this.rotate,
 		});
@@ -373,9 +381,15 @@ class SineWaveGenerator {
 	resize() {
 		const rect = this.el.getBoundingClientRect();
 		const nextWidth =
-			rect.width || this.el.clientWidth || this.el.offsetWidth || window.innerWidth;
+			rect.width ||
+			this.el.clientWidth ||
+			this.el.offsetWidth ||
+			window.innerWidth;
 		const nextHeight =
-			rect.height || this.el.clientHeight || this.el.offsetHeight || window.innerHeight;
+			rect.height ||
+			this.el.clientHeight ||
+			this.el.offsetHeight ||
+			window.innerHeight;
 		this.displayWidth = Math.max(1, Math.floor(nextWidth));
 		this.displayHeight = Math.max(1, Math.floor(nextHeight));
 		const ratio = Math.min(this.pixelRatio, this.maxPixelRatio);

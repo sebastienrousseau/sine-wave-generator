@@ -65,13 +65,13 @@ npm install @sebastienrousseau/sine-wave-generator
 <canvas id="sine"></canvas>
 <script src="./node_modules/@sebastienrousseau/sine-wave-generator/src/sine-wave-generator.js"></script>
 <script>
-  const generator = new SineWaveGenerator({
-    el: "#sine",
-    maxPixelRatio: 2,
-    waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
-  });
+	const generator = new SineWaveGenerator({
+		el: "#sine",
+		maxPixelRatio: 2,
+		waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
+	});
 
-  generator.start();
+	generator.start();
 </script>
 ```
 
@@ -79,13 +79,13 @@ npm install @sebastienrousseau/sine-wave-generator
 
 ```js
 const {
-  SineWaveGenerator,
+	SineWaveGenerator,
 } = require("@sebastienrousseau/sine-wave-generator/src/sine-wave-generator.js");
 
 const generator = new SineWaveGenerator({
-  el: "#sine",
-  maxPixelRatio: 2,
-  waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
+	el: "#sine",
+	maxPixelRatio: 2,
+	waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
 });
 
 generator.start();
@@ -103,38 +103,38 @@ Set `strokeStyle` to `null` to use the built-in gradient stroke.
 
 `new SineWaveGenerator(options)`
 
-| Option | Type | Description | Required |
-|---|---|---|---|
-| `el` | `HTMLCanvasElement \| string` | Canvas element or CSS selector | Yes |
-| `waves` | `WaveConfig[]` | Initial wave configurations | No |
-| `pixelRatio` | `number` | Override device pixel ratio | No |
-| `maxPixelRatio` | `number` | Cap pixel ratio for memory control | No |
-| `autoResize` | `boolean` | Bind a resize handler automatically | No |
+| Option          | Type                          | Description                         | Required |
+| --------------- | ----------------------------- | ----------------------------------- | -------- |
+| `el`            | `HTMLCanvasElement \| string` | Canvas element or CSS selector      | Yes      |
+| `waves`         | `WaveConfig[]`                | Initial wave configurations         | No       |
+| `pixelRatio`    | `number`                      | Override device pixel ratio         | No       |
+| `maxPixelRatio` | `number`                      | Cap pixel ratio for memory control  | No       |
+| `autoResize`    | `boolean`                     | Bind a resize handler automatically | No       |
 
 ### WaveConfig
 
-| Property | Type | Default | Description |
-|---|---|---|---|
-| `phase` | `number` | Random | Phase offset in radians |
-| `speed` | `number` | Random 0.5 -- 1.0 | Animation speed multiplier |
-| `amplitude` | `number` | `10` | Wave height in pixels |
-| `wavelength` | `number` | `100` | Peak-to-peak distance in pixels |
-| `strokeStyle` | `string \| null` | `null` | CSS colour or `null` for gradient |
-| `segmentLength` | `number` | `10` | Point density (lower is smoother) |
-| `easing` | `function` | `Ease.sineInOut` | Easing curve for wave shape |
-| `rotate` | `number` | `0` | Rotation angle in degrees (0 -- 359) |
+| Property        | Type             | Default           | Description                          |
+| --------------- | ---------------- | ----------------- | ------------------------------------ |
+| `phase`         | `number`         | Random            | Phase offset in radians              |
+| `speed`         | `number`         | Random 0.5 -- 1.0 | Animation speed multiplier           |
+| `amplitude`     | `number`         | `10`              | Wave height in pixels                |
+| `wavelength`    | `number`         | `100`             | Peak-to-peak distance in pixels      |
+| `strokeStyle`   | `string \| null` | `null`            | CSS colour or `null` for gradient    |
+| `segmentLength` | `number`         | `10`              | Point density (lower is smoother)    |
+| `easing`        | `function`       | `Ease.sineInOut`  | Easing curve for wave shape          |
+| `rotate`        | `number`         | `0`               | Rotation angle in degrees (0 -- 359) |
 
 ### Instance methods
 
-| Method | Description |
-|---|---|
-| `start()` | Start the animation loop |
-| `stop()` | Stop the animation loop and unbind events |
-| `resize()` | Recalculate canvas size and rebuild gradients |
-| `addWave(config)` | Add a new wave at runtime |
-| `removeWave(index)` | Remove a wave by index |
-| `bindEvents()` | Bind resize, mouse, and touch events |
-| `unbindEvents()` | Unbind all events |
+| Method              | Description                                   |
+| ------------------- | --------------------------------------------- |
+| `start()`           | Start the animation loop                      |
+| `stop()`            | Stop the animation loop and unbind events     |
+| `resize()`          | Recalculate canvas size and rebuild gradients |
+| `addWave(config)`   | Add a new wave at runtime                     |
+| `removeWave(index)` | Remove a wave by index                        |
+| `bindEvents()`      | Bind resize, mouse, and touch events          |
+| `unbindEvents()`    | Unbind all events                             |
 
 A high `maxPixelRatio` on large canvases will increase memory use proportionally.
 
@@ -159,11 +159,11 @@ Type definitions ship with the package.
 
 ```ts
 import {
-  SineWaveGenerator,
-  Wave,
-  Ease,
-  WaveConfig,
-  SineWaveGeneratorOptions,
+	SineWaveGenerator,
+	Wave,
+	Ease,
+	WaveConfig,
+	SineWaveGeneratorOptions,
 } from "@sebastienrousseau/sine-wave-generator";
 ```
 

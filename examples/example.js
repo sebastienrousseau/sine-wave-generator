@@ -13,8 +13,7 @@
 	const bpmToSpeed = (bpm, beatsPerCycle) =>
 		bpm / (3600 * Math.max(1, beatsPerCycle));
 
-	const hueFromValue = (value, base = 210) =>
-		(base + value * 140 + 360) % 360;
+	const hueFromValue = (value, base = 210) => (base + value * 140 + 360) % 360;
 
 	const getBPMColor = (time, bpm = 128, baseHue = 210) => {
 		const beatPhase = time * (bpm / 128);
@@ -24,7 +23,8 @@
 
 	const getSize = (generator, canvas) => ({
 		width: generator.displayWidth || canvas.clientWidth || canvas.width || 1,
-		height: generator.displayHeight || canvas.clientHeight || canvas.height || 1,
+		height:
+			generator.displayHeight || canvas.clientHeight || canvas.height || 1,
 	});
 
 	const createErrorGuard = (label, card) => {
@@ -199,7 +199,12 @@
 		const multi = document.getElementById("sineCanvasMulti");
 		if (multi) {
 			const generator = createGenerator(multi);
-			generator.addWave({ amplitude: 18, wavelength: 140, speed: 0.04 * motionScale, segmentLength: 10 });
+			generator.addWave({
+				amplitude: 18,
+				wavelength: 140,
+				speed: 0.04 * motionScale,
+				segmentLength: 10,
+			});
 			generator.addWave({
 				amplitude: 28,
 				wavelength: 200,
@@ -229,8 +234,10 @@
 			const pointerState = { x: 0.5, y: 0.5, rafId: null };
 			const applyPointer = () => {
 				pointerState.rafId = null;
-				const amplitudeTarget = 40 + 120 * (1 - Math.abs(pointerState.y - 0.5) * 2);
-				const wavelengthTarget = 120 + 240 * (1 - Math.abs(pointerState.x - 0.5) * 2);
+				const amplitudeTarget =
+					40 + 120 * (1 - Math.abs(pointerState.y - 0.5) * 2);
+				const wavelengthTarget =
+					120 + 240 * (1 - Math.abs(pointerState.x - 0.5) * 2);
 				generator.waves.forEach((wave) => {
 					wave.amplitude = amplitudeTarget;
 					wave.wavelength = wavelengthTarget;
@@ -252,11 +259,36 @@
 		if (dynamic) {
 			const generator = createGenerator(dynamic);
 			const waveStack = [
-				{ amplitude: 12, wavelength: 100, speed: 0.035 * motionScale, segmentLength: 10 },
-				{ amplitude: 20, wavelength: 140, speed: 0.04 * motionScale, segmentLength: 10 },
-				{ amplitude: 28, wavelength: 180, speed: 0.045 * motionScale, segmentLength: 10 },
-				{ amplitude: 36, wavelength: 220, speed: 0.05 * motionScale, segmentLength: 12 },
-				{ amplitude: 18, wavelength: 120, speed: 0.038 * motionScale, segmentLength: 8 },
+				{
+					amplitude: 12,
+					wavelength: 100,
+					speed: 0.035 * motionScale,
+					segmentLength: 10,
+				},
+				{
+					amplitude: 20,
+					wavelength: 140,
+					speed: 0.04 * motionScale,
+					segmentLength: 10,
+				},
+				{
+					amplitude: 28,
+					wavelength: 180,
+					speed: 0.045 * motionScale,
+					segmentLength: 10,
+				},
+				{
+					amplitude: 36,
+					wavelength: 220,
+					speed: 0.05 * motionScale,
+					segmentLength: 12,
+				},
+				{
+					amplitude: 18,
+					wavelength: 120,
+					speed: 0.038 * motionScale,
+					segmentLength: 8,
+				},
 			];
 			let currentIndex = 0;
 			let removing = false;
@@ -297,9 +329,24 @@
 		const performance = document.getElementById("sineCanvasPerformance");
 		if (performance) {
 			const generator = createGenerator(performance, { maxPixelRatio: 1 });
-			generator.addWave({ amplitude: 18, wavelength: 160, speed: 0.035 * motionScale, segmentLength: 14 });
-			generator.addWave({ amplitude: 10, wavelength: 120, speed: 0.04 * motionScale, segmentLength: 16 });
-			generator.addWave({ amplitude: 6, wavelength: 90, speed: 0.045 * motionScale, segmentLength: 18 });
+			generator.addWave({
+				amplitude: 18,
+				wavelength: 160,
+				speed: 0.035 * motionScale,
+				segmentLength: 14,
+			});
+			generator.addWave({
+				amplitude: 10,
+				wavelength: 120,
+				speed: 0.04 * motionScale,
+				segmentLength: 16,
+			});
+			generator.addWave({
+				amplitude: 6,
+				wavelength: 90,
+				speed: 0.045 * motionScale,
+				segmentLength: 18,
+			});
 			lazyStart(performance, generator);
 		}
 
@@ -460,8 +507,7 @@
 		ctx.beginPath();
 		for (let i = 0; i <= 240; i += 1) {
 			const t = (i / 240) * TWO_PI;
-			const x =
-				centerX + Math.sin(t * freq + time) * amplitude * 0.9;
+			const x = centerX + Math.sin(t * freq + time) * amplitude * 0.9;
 			const y =
 				centerY + Math.sin(t * (freq + 1) + phaseShift + time) * amplitude;
 			if (i === 0) {
@@ -482,7 +528,13 @@
 		ctx.fill();
 	};
 
-	const drawLissajousExplorer = ({ ctx, canvas, controls, time, generator }) => {
+	const drawLissajousExplorer = ({
+		ctx,
+		canvas,
+		controls,
+		time,
+		generator,
+	}) => {
 		const { width, height } = getSize(generator, canvas);
 		const centerX = width * 0.5;
 		const centerY = height * 0.5;
@@ -589,7 +641,13 @@
 		ctx.shadowBlur = 0;
 	};
 
-	const drawMoireInterference = ({ ctx, canvas, controls, time, generator }) => {
+	const drawMoireInterference = ({
+		ctx,
+		canvas,
+		controls,
+		time,
+		generator,
+	}) => {
 		const { width, height } = getSize(generator, canvas);
 		const spacing = 10 + controls.frequency * 2;
 		const angle = Math.sin(time) * 0.25 + (controls.phase * Math.PI) / 360;
@@ -616,7 +674,13 @@
 		drawGrid(-angle * 1.3, 240);
 	};
 
-	const drawKineticTypography = ({ ctx, canvas, controls, time, generator }) => {
+	const drawKineticTypography = ({
+		ctx,
+		canvas,
+		controls,
+		time,
+		generator,
+	}) => {
 		const { width, height } = getSize(generator, canvas);
 		const text = "SINE WAVE";
 		const amplitude = controls.amplitude;
@@ -631,11 +695,7 @@
 			const wave = Math.sin(time + offset * freq) * amplitude;
 			const hue = hueFromValue(wave / amplitude, 210);
 			ctx.fillStyle = `hsl(${hue}deg 80% 55%)`;
-			ctx.fillText(
-				char,
-				width * 0.5 + offset * 18,
-				height * 0.5 + wave,
-			);
+			ctx.fillText(char, width * 0.5 + offset * 18, height * 0.5 + wave);
 		});
 		ctx.strokeStyle = "rgba(15, 23, 42, 0.1)";
 		ctx.strokeRect(
@@ -702,7 +762,12 @@
 		const centerY = height * 0.5;
 		const amplitude = controls.amplitude;
 		const freq = controls.frequency * 0.03;
-		const gradient = ctx.createLinearGradient(0, centerY - amplitude, 0, height);
+		const gradient = ctx.createLinearGradient(
+			0,
+			centerY - amplitude,
+			0,
+			height,
+		);
 		gradient.addColorStop(0, "rgba(14, 165, 233, 0.6)");
 		gradient.addColorStop(0.5, "rgba(14, 165, 233, 0.2)");
 		gradient.addColorStop(1, "rgba(14, 165, 233, 0)");
@@ -732,7 +797,13 @@
 		ctx.stroke();
 	};
 
-	const drawAudioVisualizerSim = ({ ctx, canvas, controls, time, generator }) => {
+	const drawAudioVisualizerSim = ({
+		ctx,
+		canvas,
+		controls,
+		time,
+		generator,
+	}) => {
 		const { width, height } = getSize(generator, canvas);
 		const centerY = height * 0.5;
 		const volumeFactor = (controls.volume || 60) / 100;
@@ -813,7 +884,11 @@
 		const centerY = height * 0.5;
 		const amplitude = controls.amplitude;
 		const freq = controls.frequency * 0.03;
-		const dashPatterns = [[12, 6], [4, 8], [20, 4, 4, 4]];
+		const dashPatterns = [
+			[12, 6],
+			[4, 8],
+			[20, 4, 4, 4],
+		];
 		dashPatterns.forEach((pattern, i) => {
 			ctx.beginPath();
 			ctx.setLineDash(pattern);
@@ -933,7 +1008,11 @@
 			return;
 		}
 		const generator = createGenerator(canvas);
-		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.08 * motionScale });
+		generator.addWave({
+			amplitude: 1,
+			wavelength: 1,
+			speed: 0.08 * motionScale,
+		});
 		const state = { amplitude: 0, decay: 0.95 };
 		canvas.addEventListener("pointerdown", () => {
 			state.amplitude = 100;
@@ -978,14 +1057,22 @@
 			return;
 		}
 		const generator = createGenerator(canvas);
-		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.05 * motionScale });
+		generator.addWave({
+			amplitude: 1,
+			wavelength: 1,
+			speed: 0.05 * motionScale,
+		});
 		const ctx = generator.ctx;
 		let analyser = null;
 		let data = null;
 		const setupAudio = async () => {
 			try {
-				const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-				const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+				const audioCtx = new (
+					window.AudioContext || window.webkitAudioContext
+				)();
+				const stream = await navigator.mediaDevices.getUserMedia({
+					audio: true,
+				});
 				const source = audioCtx.createMediaStreamSource(stream);
 				analyser = audioCtx.createAnalyser();
 				analyser.fftSize = 128;
@@ -1012,7 +1099,9 @@
 			ctx.lineWidth = 1.5;
 			for (let i = 0; i < count; i += 1) {
 				const idx = Math.floor((i / count) * (data ? data.length : count));
-				const amp = data ? data[idx] / 255 : (Math.sin(wave.phase + i * 0.2) + 1) * 0.5;
+				const amp = data
+					? data[idx] / 255
+					: (Math.sin(wave.phase + i * 0.2) + 1) * 0.5;
 				const amplitude = amp * (height * 0.3);
 				const x = i * barWidth + barWidth * 0.5;
 				const base = height * 0.5;
@@ -1101,17 +1190,46 @@
 		let currentWaveCount = 0;
 
 		const easingFunctions = {
-			sineInOut: (percent, amp) => (amp * (Math.sin(percent * Math.PI) + 1)) / 2,
-			sineIn: (percent, amp) => amp * (1 - Math.cos(percent * Math.PI / 2)),
-			sineOut: (percent, amp) => amp * Math.sin(percent * Math.PI / 2),
+			sineInOut: (percent, amp) =>
+				(amp * (Math.sin(percent * Math.PI) + 1)) / 2,
+			sineIn: (percent, amp) => amp * (1 - Math.cos((percent * Math.PI) / 2)),
+			sineOut: (percent, amp) => amp * Math.sin((percent * Math.PI) / 2),
 			linear: (percent, amp) => amp * percent,
 		};
 
 		const PRESETS = {
-			ocean: { waveCount: 3, amplitude: 20, wavelength: 280, speed: 0.4, segmentLength: 10, easing: "sineInOut" },
-			heartbeat: { waveCount: 1, amplitude: 60, wavelength: 80, speed: 2.0, segmentLength: 6, easing: "sineIn" },
-			highfreq: { waveCount: 4, amplitude: 15, wavelength: 40, speed: 1.5, segmentLength: 4, easing: "linear" },
-			stormy: { waveCount: 5, amplitude: 50, wavelength: 120, speed: 2.5, segmentLength: 8, easing: "sineOut" },
+			ocean: {
+				waveCount: 3,
+				amplitude: 20,
+				wavelength: 280,
+				speed: 0.4,
+				segmentLength: 10,
+				easing: "sineInOut",
+			},
+			heartbeat: {
+				waveCount: 1,
+				amplitude: 60,
+				wavelength: 80,
+				speed: 2.0,
+				segmentLength: 6,
+				easing: "sineIn",
+			},
+			highfreq: {
+				waveCount: 4,
+				amplitude: 15,
+				wavelength: 40,
+				speed: 1.5,
+				segmentLength: 4,
+				easing: "linear",
+			},
+			stormy: {
+				waveCount: 5,
+				amplitude: 50,
+				wavelength: 120,
+				speed: 2.5,
+				segmentLength: 8,
+				easing: "sineOut",
+			},
 		};
 
 		const presetSelect = document.getElementById("playgroundPreset");
@@ -1194,7 +1312,9 @@
 		if (fullscreenBtn) {
 			fullscreenBtn.addEventListener("click", () => {
 				card.classList.toggle("is-fullscreen");
-				fullscreenBtn.textContent = card.classList.contains("is-fullscreen") ? "Exit Fullscreen" : "Fullscreen";
+				fullscreenBtn.textContent = card.classList.contains("is-fullscreen")
+					? "Exit Fullscreen"
+					: "Fullscreen";
 				generator.resize();
 			});
 		}
@@ -1308,7 +1428,13 @@
 			setTimeout(() => overlay.remove(), 300);
 		}
 		setupNavToggle();
-		const safeCall = (fn) => { try { fn(); } catch (e) { console.error("[boot]", e); } };
+		const safeCall = (fn) => {
+			try {
+				fn();
+			} catch (e) {
+				console.error("[boot]", e);
+			}
+		};
 		safeCall(() => startFundamentals());
 		safeCall(() => startExample("pulseMatrix", 4, drawPulseMatrix));
 		safeCall(() => startExample("dnaHelix", 4, drawDNAHelix));
@@ -1320,7 +1446,9 @@
 		safeCall(() => startExample("waveformTerrain", 6, drawWaveformTerrain));
 		safeCall(() => startExample("radialBloom", 4, drawRadialBloom));
 		safeCall(() => startExample("gradientFill", 4, drawGradientFill));
-		safeCall(() => startExample("audioVisualizerSim", 4, drawAudioVisualizerSim));
+		safeCall(() =>
+			startExample("audioVisualizerSim", 4, drawAudioVisualizerSim),
+		);
 		safeCall(() => startExample("labOcean", 6, drawWaveformTerrain));
 		safeCall(() => startExample("labHelix", 4, drawDNAHelix));
 		safeCall(() => startExample("labPulse", 4, drawRadialBloom));

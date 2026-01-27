@@ -14,7 +14,10 @@
 		/>
 		<link rel="preconnect" href="https://kura.pro" />
 		<meta property="og:type" content="website" />
-		<meta property="og:title" content="Sine Wave Generator - JS Canvas Animation Library" />
+		<meta
+			property="og:title"
+			content="Sine Wave Generator - JS Canvas Animation Library"
+		/>
 		<meta
 			property="og:description"
 			content="Lightweight JavaScript library for animated sine wave visualizations on HTML5 Canvas. Interactive playground, API reference, and 25+ examples."
@@ -25,8 +28,14 @@
 			content="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
 		/>
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Sine Wave Generator - JS Canvas Animation Library" />
-		<meta name="twitter:description" content="Lightweight JS library for animated sine waves on HTML5 Canvas." />
+		<meta
+			name="twitter:title"
+			content="Sine Wave Generator - JS Canvas Animation Library"
+		/>
+		<meta
+			name="twitter:description"
+			content="Lightweight JS library for animated sine waves on HTML5 Canvas."
+		/>
 		<meta name="theme-color" content="#0ea5e9" />
 		<link rel="canonical" href="https://sine-wave-generator.com" />
 		<link rel="stylesheet" href="reset.css" />
@@ -65,7 +74,8 @@
 					target="_blank"
 					rel="noopener noreferrer"
 					aria-label="Star on GitHub"
-				>GitHub</a>
+					>GitHub</a
+				>
 				<button
 					class="theme-toggle"
 					type="button"
@@ -73,7 +83,17 @@
 					aria-label="Toggle dark mode"
 					title="Toggle dark mode"
 				>
-					<svg class="theme-icon theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<svg
+						class="theme-icon theme-icon-sun"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
 						<circle cx="12" cy="12" r="5"></circle>
 						<line x1="12" y1="1" x2="12" y2="3"></line>
 						<line x1="12" y1="21" x2="12" y2="23"></line>
@@ -84,7 +104,17 @@
 						<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
 						<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
 					</svg>
-					<svg class="theme-icon theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<svg
+						class="theme-icon theme-icon-moon"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
 						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
 					</svg>
 				</button>
@@ -103,7 +133,6 @@
 			<a class="cta" href="#get-started">Get started</a>
 		</header>
 		<main class="page">
-
 			<section class="hero" id="overview">
 				<div>
 					<h1>Elegant sine waves, engineered for speed.</h1>
@@ -112,7 +141,9 @@
 						layers, and low-memory defaults. Designed for steady 60fps motion.
 					</p>
 					<div class="hero-install">
-						<pre class="code-block hero-code"><code>npm install @sebastienrousseau/sine-wave-generator</code></pre>
+						<pre
+							class="code-block hero-code"
+						><code>npm install @sebastienrousseau/sine-wave-generator</code></pre>
 					</div>
 					<div class="hero-actions">
 						<a class="cta" href="#get-started">Start building</a>
@@ -121,7 +152,9 @@
 				</div>
 				<div class="hero-card">
 					<h3>Hello World</h3>
-					<pre class="code-block"><code>const gen = new SineWaveGenerator({ el: "#canvas" });
+					<pre
+						class="code-block"
+					><code>const gen = new SineWaveGenerator({ el: "#canvas" });
 gen.addWave({ amplitude: 30, wavelength: 120 });
 gen.start();</code></pre>
 				</div>
@@ -135,15 +168,37 @@ gen.start();</code></pre>
 			</section>
 
 			<div class="badges">
-				<img src="https://img.shields.io/badge/Version-v0.0.3-blue?style=for-the-badge" alt="Version v0.0.3" width="auto" height="28" />
+				<img
+					src="https://img.shields.io/badge/Version-v0.0.3-blue?style=for-the-badge"
+					alt="Version v0.0.3"
+					width="auto"
+					height="28"
+				/>
 				<a href="https://github.com/sebastienrousseau/sine-wave-generator">
-					<img src="https://img.shields.io/badge/License-Apache--2.0-green.svg?style=for-the-badge" alt="License Apache-2.0" width="auto" height="28" />
+					<img
+						src="https://img.shields.io/badge/License-Apache--2.0-green.svg?style=for-the-badge"
+						alt="License Apache-2.0"
+						width="auto"
+						height="28"
+					/>
 				</a>
 				<a href="https://github.com/sebastienrousseau/sine-wave-generator">
-					<img src="https://img.shields.io/badge/github-sine--wave--generator-8da0cb?style=for-the-badge&amp;labelColor=555555&amp;logo=github" alt="GitHub" width="auto" height="28" />
+					<img
+						src="https://img.shields.io/badge/github-sine--wave--generator-8da0cb?style=for-the-badge&amp;labelColor=555555&amp;logo=github"
+						alt="GitHub"
+						width="auto"
+						height="28"
+					/>
 				</a>
-				<a href="https://github.com/sebastienrousseau/sine-wave-generator/commits/main">
-					<img src="https://img.shields.io/github/last-commit/sebastienrousseau/sine-wave-generator?style=for-the-badge" alt="Last Commit" width="auto" height="28" />
+				<a
+					href="https://github.com/sebastienrousseau/sine-wave-generator/commits/main"
+				>
+					<img
+						src="https://img.shields.io/github/last-commit/sebastienrousseau/sine-wave-generator?style=for-the-badge"
+						alt="Last Commit"
+						width="auto"
+						height="28"
+					/>
 				</a>
 			</div>
 
@@ -155,19 +210,32 @@ gen.start();</code></pre>
 				<div class="card-grid">
 					<div class="card">
 						<h3>Smooth animation</h3>
-						<p>Canvas-first rendering with low overhead, using <code>requestAnimationFrame</code> for battery-efficient 60fps motion.</p>
+						<p>
+							Canvas-first rendering with low overhead, using
+							<code>requestAnimationFrame</code> for battery-efficient 60fps
+							motion.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Multi-wave layers</h3>
-						<p>Configurable multi-wave layers for depth and parallax. Stack as many waves as you need.</p>
+						<p>
+							Configurable multi-wave layers for depth and parallax. Stack as
+							many waves as you need.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Responsive sizing</h3>
-						<p>Automatic element-bound sizing with device pixel ratio support and caps for memory control.</p>
+						<p>
+							Automatic element-bound sizing with device pixel ratio support and
+							caps for memory control.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Pointer interactions</h3>
-						<p>Built-in mouse and touch tracking for pointer-ready interactive experiences.</p>
+						<p>
+							Built-in mouse and touch tracking for pointer-ready interactive
+							experiences.
+						</p>
 					</div>
 				</div>
 			</section>
@@ -180,27 +248,45 @@ gen.start();</code></pre>
 				<div class="card-grid">
 					<div class="card">
 						<h3>Fast rendering</h3>
-						<p>Segment-based drawing with capped pixel ratios for efficient canvas operations.</p>
+						<p>
+							Segment-based drawing with capped pixel ratios for efficient
+							canvas operations.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Flexible configuration</h3>
-						<p>Tune amplitude, wavelength, speed, and easing to match any visual style.</p>
+						<p>
+							Tune amplitude, wavelength, speed, and easing to match any visual
+							style.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Memory control</h3>
-						<p><code>maxPixelRatio</code> limits offscreen buffer size on high-DPI screens.</p>
+						<p>
+							<code>maxPixelRatio</code> limits offscreen buffer size on
+							high-DPI screens.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Adjustable detail</h3>
-						<p><code>segmentLength</code> controls point density for smooth or fast rendering.</p>
+						<p>
+							<code>segmentLength</code> controls point density for smooth or
+							fast rendering.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Efficient redraws</h3>
-						<p>Single animation loop with cached gradients for minimal per-frame overhead.</p>
+						<p>
+							Single animation loop with cached gradients for minimal per-frame
+							overhead.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Layered waves</h3>
-						<p>Stack multiple waves with independent configs for depth and parallax effects.</p>
+						<p>
+							Stack multiple waves with independent configs for depth and
+							parallax effects.
+						</p>
 					</div>
 				</div>
 			</section>
@@ -237,7 +323,9 @@ gen.start();</code></pre>
 				<div class="card-grid">
 					<div class="card">
 						<h3>Browser (script tag)</h3>
-						<pre class="code-block"><code>&lt;canvas id="sine"&gt;&lt;/canvas&gt;
+						<pre
+							class="code-block"
+						><code>&lt;canvas id="sine"&gt;&lt;/canvas&gt;
 &lt;script src="https://unpkg.com/@sebastienrousseau/sine-wave-generator"&gt;&lt;/script&gt;
 &lt;script&gt;
   const generator = new SineWaveGenerator({
@@ -265,15 +353,23 @@ generator.start();</code></pre>
 
 				<h3>TypeScript</h3>
 				<div class="card">
-					<p>Types are bundled with the package. Import the interfaces directly:</p>
-					<pre class="code-block"><code>import { SineWaveGenerator, Wave, Ease } from "@sebastienrousseau/sine-wave-generator";
+					<p>
+						Types are bundled with the package. Import the interfaces directly:
+					</p>
+					<pre
+						class="code-block"
+					><code>import { SineWaveGenerator, Wave, Ease } from "@sebastienrousseau/sine-wave-generator";
 
 const gen = new SineWaveGenerator({
   el: "#canvas",
   waves: [{ amplitude: 30, wavelength: 140, speed: 0.8 }],
 });
 gen.start();</code></pre>
-					<p>The package exports <code>SineWaveGenerator</code>, <code>Wave</code>, and <code>Ease</code> with full JSDoc annotations for editor autocompletion.</p>
+					<p>
+						The package exports <code>SineWaveGenerator</code>,
+						<code>Wave</code>, and <code>Ease</code> with full JSDoc annotations
+						for editor autocompletion.
+					</p>
 				</div>
 			</section>
 
@@ -286,10 +382,18 @@ gen.start();</code></pre>
 					<article class="card" id="card-basic">
 						<h3>Basic wave</h3>
 						<p>Single wave with default gradient stroke.</p>
-						<canvas class="demo-canvas" id="sineCanvasBasic" aria-label="Basic wave"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasBasic"
+							aria-label="Basic wave"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>const generator = new SineWaveGenerator({ el: canvas });
+							<pre
+								class="code-block"
+							><code>const generator = new SineWaveGenerator({ el: canvas });
 generator.addWave({
   amplitude: 26, wavelength: 140,
   speed: 0.04, segmentLength: 10,
@@ -300,10 +404,18 @@ generator.start();</code></pre>
 					<article class="card" id="card-multi">
 						<h3>Layered waves</h3>
 						<p>Stack multiple waves for depth and parallax.</p>
-						<canvas class="demo-canvas" id="sineCanvasMulti" aria-label="Layered waves"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasMulti"
+							aria-label="Layered waves"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>generator.addWave({ amplitude: 18, wavelength: 140, speed: 0.04 });
+							<pre
+								class="code-block"
+							><code>generator.addWave({ amplitude: 18, wavelength: 140, speed: 0.04 });
 generator.addWave({
   amplitude: 28, wavelength: 200, speed: 0.035,
   strokeStyle: "rgba(14,165,233,0.5)",
@@ -317,10 +429,18 @@ generator.addWave({
 					<article class="card" id="card-pointer">
 						<h3>Pointer reactive</h3>
 						<p>Pointer movement shapes amplitude and wavelength.</p>
-						<canvas class="demo-canvas" id="sineCanvasPointer" aria-label="Pointer reactive"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPointer"
+							aria-label="Pointer reactive"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>canvas.addEventListener("pointermove", (e) =&gt; {
+							<pre
+								class="code-block"
+							><code>canvas.addEventListener("pointermove", (e) =&gt; {
   const rect = canvas.getBoundingClientRect();
   generator.waves.forEach((wave) =&gt; {
     wave.amplitude = 40 + 120 * pointerY;
@@ -332,10 +452,18 @@ generator.addWave({
 					<article class="card" id="card-dynamic">
 						<h3>Dynamic management</h3>
 						<p>Programmatic add/remove of wave layers.</p>
-						<canvas class="demo-canvas" id="sineCanvasDynamic" aria-label="Dynamic waves"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasDynamic"
+							aria-label="Dynamic waves"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>generator.addWave({ amplitude: 12, wavelength: 100 });
+							<pre
+								class="code-block"
+							><code>generator.addWave({ amplitude: 12, wavelength: 100 });
 generator.addWave({ amplitude: 20, wavelength: 140 });
 setTimeout(() =&gt; generator.removeWave(0), 2000);</code></pre>
 						</div>
@@ -343,8 +471,14 @@ setTimeout(() =&gt; generator.removeWave(0), 2000);</code></pre>
 					<article class="card" id="card-performance">
 						<h3>Performance mode</h3>
 						<p>Low-memory settings with pixel-ratio caps.</p>
-						<canvas class="demo-canvas" id="sineCanvasPerformance" aria-label="Performance mode"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPerformance"
+							aria-label="Performance mode"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>const gen = new SineWaveGenerator({
   el: canvas, maxPixelRatio: 1,
@@ -356,10 +490,18 @@ gen.start();</code></pre>
 					<article class="card" id="card-easing">
 						<h3>Custom easing</h3>
 						<p>Swap easing curves for cinematic motion.</p>
-						<canvas class="demo-canvas" id="sineCanvasEasing" aria-label="Custom easing"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasEasing"
+							aria-label="Custom easing"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>const goldenEase = (pct, amp) =&gt; {
+							<pre
+								class="code-block"
+							><code>const goldenEase = (pct, amp) =&gt; {
   const g = (1 - 1 / 1.618) / 2;
   if (pct &lt; g || pct &gt; 1 - g) return 0;
   const a = (pct - g) / (1 - 2 * g);
@@ -371,12 +513,22 @@ gen.addWave({ easing: goldenEase });</code></pre>
 					<article class="card" id="card-pause">
 						<h3>Pause and resume</h3>
 						<p>Explicit control over the render loop.</p>
-						<canvas class="demo-canvas" id="sineCanvasPause" aria-label="Pause resume"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPause"
+							aria-label="Pause resume"
+						></canvas>
 						<div class="controls">
-							<button class="btn" type="button" data-action="pause">Pause</button>
-							<button class="btn" type="button" data-action="resume">Resume</button>
+							<button class="btn" type="button" data-action="pause">
+								Pause
+							</button>
+							<button class="btn" type="button" data-action="resume">
+								Resume
+							</button>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>generator.start();
 generator.stop();   // pause
@@ -395,16 +547,68 @@ generator.start();  // resume</code></pre>
 					<article class="card" data-example="pulseMatrix">
 						<h3>Pulse matrix</h3>
 						<p>Grid-based interference with tempo-driven color.</p>
-						<canvas class="demo-canvas" id="pulseMatrixCanvas" aria-label="Pulse matrix"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="pulseMatrixCanvas"
+							aria-label="Pulse matrix"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="180" step="1" value="96" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="4" max="28" step="1" value="16" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="16" step="1" value="8" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="180"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="4"
+										max="28"
+										step="1"
+										value="16"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="16"
+										step="1"
+										value="8"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Grid interference with tempo-driven color
+							<pre
+								class="code-block"
+							><code>// Grid interference with tempo-driven color
 for (let y = 0; y &lt;= rows; y++) {
   for (let x = 0; x &lt;= columns; x++) {
     const value = Math.sin(x * freq + t) * Math.cos(y * freq + t);
@@ -416,16 +620,68 @@ for (let y = 0; y &lt;= rows; y++) {
 					<article class="card" data-example="dnaHelix">
 						<h3>DNA helix</h3>
 						<p>Two counterphase strands with diagonal drift.</p>
-						<canvas class="demo-canvas" id="dnaHelixCanvas" aria-label="DNA helix"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="dnaHelixCanvas"
+							aria-label="DNA helix"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="180" step="1" value="84" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="12" max="80" step="1" value="46" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="12" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="30" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="180"
+										step="1"
+										value="84"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="12"
+										max="80"
+										step="1"
+										value="46"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="12"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="30"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Counterphase strands with diagonal drift
+							<pre
+								class="code-block"
+							><code>// Counterphase strands with diagonal drift
 for (let y = 0; y &lt;= height; y += 6) {
   const xOffset = Math.sin(y * freq + time) * amplitude;
   ctx.moveTo(centerX + xOffset, y);
@@ -436,16 +692,68 @@ for (let y = 0; y &lt;= height; y += 6) {
 					<article class="card" data-example="fluidColumn">
 						<h3>Fluid column</h3>
 						<p>Vertical flow with volumetric thickness.</p>
-						<canvas class="demo-canvas" id="fluidColumnCanvas" aria-label="Fluid column"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="fluidColumnCanvas"
+							aria-label="Fluid column"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="96" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="28" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="28"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Vertical flow with volumetric thickness
+							<pre
+								class="code-block"
+							><code>// Vertical flow with volumetric thickness
 for (let y = 0; y &lt;= height; y += 6) {
   const offset = Math.sin(y * freq + time + col * 0.6) * amp;
   ctx.lineTo(columnX + offset, y);
@@ -455,16 +763,68 @@ for (let y = 0; y &lt;= height; y += 6) {
 					<article class="card" data-example="diagonalRain">
 						<h3>Diagonal rain</h3>
 						<p>Angled strokes with tempo-locked shimmer.</p>
-						<canvas class="demo-canvas" id="diagonalRainCanvas" aria-label="Diagonal rain"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="diagonalRainCanvas"
+							aria-label="Diagonal rain"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="112" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="6" max="40" step="1" value="20" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="16" step="1" value="9" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="112"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="6"
+										max="40"
+										step="1"
+										value="20"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="16"
+										step="1"
+										value="9"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Angled strokes with tempo-locked shimmer
+							<pre
+								class="code-block"
+							><code>// Angled strokes with tempo-locked shimmer
 for (let i = 0; i &lt; count; i++) {
   const drift = Math.sin(time + i * freq) * amplitude;
   ctx.moveTo(baseX + drift, baseY);
@@ -475,14 +835,64 @@ for (let i = 0; i &lt; count; i++) {
 					<article class="card" data-example="lissajousOrbit">
 						<h3>Lissajous orbit</h3>
 						<p>Parametric loops synced to time signature.</p>
-						<canvas class="demo-canvas" id="lissajousOrbitCanvas" aria-label="Lissajous orbit"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="lissajousOrbitCanvas"
+							aria-label="Lissajous orbit"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="50" max="200" step="1" value="110" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="30" max="100" step="1" value="70" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="9" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="90" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="50"
+										max="200"
+										step="1"
+										value="110"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="30"
+										max="100"
+										step="1"
+										value="70"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="1"
+										max="9"
+										step="1"
+										value="4"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="90"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Parametric loops synced to time
 for (let i = 0; i &lt;= 240; i++) {
@@ -495,16 +905,68 @@ for (let i = 0; i &lt;= 240; i++) {
 					<article class="card" data-example="waveformTerrain">
 						<h3>Waveform terrain</h3>
 						<p>Layered horizons with depth-shifted phases.</p>
-						<canvas class="demo-canvas" id="waveformTerrainCanvas" aria-label="Waveform terrain"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="waveformTerrainCanvas"
+							aria-label="Waveform terrain"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="72" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="28" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="7" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="20" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="72"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="28"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="7"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="20"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Layered horizons with depth-shifted phases
+							<pre
+								class="code-block"
+							><code>// Layered horizons with depth-shifted phases
 for (let layer = 0; layer &lt; 8; layer++) {
   for (let x = 0; x &lt;= width; x += 6) {
     const y = baseY + Math.sin(x * freq + phase) * amp;
@@ -516,14 +978,64 @@ for (let layer = 0; layer &lt; 8; layer++) {
 					<article class="card" data-example="radialBloom">
 						<h3>Radial bloom</h3>
 						<p>Outward pulses that peak on the downbeat.</p>
-						<canvas class="demo-canvas" id="radialBloomCanvas" aria-label="Radial bloom"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="radialBloomCanvas"
+							aria-label="Radial bloom"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="50" max="200" step="1" value="120" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="8" max="40" step="1" value="22" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="18" step="1" value="9" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="50"
+										max="200"
+										step="1"
+										value="120"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="8"
+										max="40"
+										step="1"
+										value="22"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="18"
+										step="1"
+										value="9"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Outward pulses on the downbeat
 for (let r = 18; r &lt; radiusMax; r += 12) {
@@ -535,14 +1047,64 @@ for (let r = 18; r &lt; radiusMax; r += 12) {
 					<article class="card" data-example="gradientFill">
 						<h3>Gradient fill</h3>
 						<p>Area under the wave filled with a linear gradient.</p>
-						<canvas class="demo-canvas" id="gradientFillCanvas" aria-label="Gradient fill"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="gradientFillCanvas"
+							aria-label="Gradient fill"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="80" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="80"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="30"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Area fill with linear gradient
 const grad = ctx.createLinearGradient(0, top, 0, height);
@@ -556,14 +1118,64 @@ ctx.fill();</code></pre>
 					<article class="card" data-example="audioVisualizerSim">
 						<h3>Audio visualizer</h3>
 						<p>Simulated volume-driven multi-wave display.</p>
-						<canvas class="demo-canvas" id="audioVisualizerSimCanvas" aria-label="Audio visualizer simulation"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="audioVisualizerSimCanvas"
+							aria-label="Audio visualizer simulation"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Volume</span><div class="control-row"><input type="range" min="0" max="100" step="1" value="60" data-control="volume" /><span data-value></span></div></label>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="180" step="1" value="120" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Volume</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="100"
+										step="1"
+										value="60"
+										data-control="volume"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="180"
+										step="1"
+										value="120"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="30"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Volume-driven multi-wave display
 waveConfigs.forEach((cfg) =&gt; {
@@ -577,16 +1189,68 @@ waveConfigs.forEach((cfg) =&gt; {
 					<article class="card" data-example="verticalWave">
 						<h3>Vertical wave</h3>
 						<p>Rotated orientation for liquid-rising effects.</p>
-						<canvas class="demo-canvas" id="verticalWaveCanvas" aria-label="Vertical wave"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="verticalWaveCanvas"
+							aria-label="Vertical wave"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="80" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="80"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="30"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Rotated orientation for liquid-rising effects
+							<pre
+								class="code-block"
+							><code>// Rotated orientation for liquid-rising effects
 for (let y = 0; y &lt;= height; y += 4) {
   const x = centerX + Math.sin(y * freq + time) * amp;
   ctx.lineTo(x, y);
@@ -596,14 +1260,64 @@ for (let y = 0; y &lt;= height; y += 4) {
 					<article class="card" data-example="dashArray">
 						<h3>Dash array</h3>
 						<p>Dotted and dashed wave lines via setLineDash.</p>
-						<canvas class="demo-canvas" id="dashArrayCanvas" aria-label="Dash array wave"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="dashArrayCanvas"
+							aria-label="Dash array wave"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="90" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="28" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="90"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="28"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Dotted and dashed wave lines
 ctx.setLineDash([12, 6]);
@@ -616,16 +1330,68 @@ for (let x = 0; x &lt;= width; x += 4) {
 					<article class="card" data-example="variableWidth">
 						<h3>Variable width</h3>
 						<p>Pulsing line thickness synchronized to tempo.</p>
-						<canvas class="demo-canvas" id="variableWidthCanvas" aria-label="Variable width wave"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="variableWidthCanvas"
+							aria-label="Variable width wave"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="96" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="26" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="5" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="26"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="5"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Pulsing line thickness per segment
+							<pre
+								class="code-block"
+							><code>// Pulsing line thickness per segment
 for (let x = 0; x &lt; width; x += 6) {
   const thickness = 1 + Math.abs(Math.sin(x * 0.01 + t * 2)) * 4;
   ctx.lineWidth = thickness;
@@ -636,14 +1402,64 @@ for (let x = 0; x &lt; width; x += 6) {
 					<article class="card" data-example="compositingGlow">
 						<h3>Compositing glow</h3>
 						<p>Screen blending for neon glow effects.</p>
-						<canvas class="demo-canvas" id="compositingGlowCanvas" aria-label="Compositing glow"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="compositingGlowCanvas"
+							aria-label="Compositing glow"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="80" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="80"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="30"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Screen blending for neon glow
 ctx.globalCompositeOperation = "screen";
@@ -656,13 +1472,52 @@ colors.forEach((cfg) =&gt; {
 					<article class="card" data-example="zenMode">
 						<h3>Zen mode</h3>
 						<p>Ultra-slow motion for maximum smoothness.</p>
-						<canvas class="demo-canvas" id="zenModeCanvas" aria-label="Zen mode"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="zenModeCanvas"
+							aria-label="Zen mode"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="20" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="20"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="4"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Ultra-slow motion sine
 for (let x = 0; x &lt;= width; x += 6) {
@@ -680,10 +1535,25 @@ for (let x = 0; x &lt;= width; x += 6) {
 					<p>Drag the corner to resize the container.</p>
 				</div>
 				<div class="card">
-					<div class="resize-container" style="resize:horizontal;overflow:hidden;min-width:200px;max-width:100%">
-						<canvas class="demo-canvas" id="responsiveResizeCanvas" aria-label="Responsive resize demo"></canvas>
+					<div
+						class="resize-container"
+						style="
+							resize: horizontal;
+							overflow: hidden;
+							min-width: 200px;
+							max-width: 100%;
+						"
+					>
+						<canvas
+							class="demo-canvas"
+							id="responsiveResizeCanvas"
+							aria-label="Responsive resize demo"
+						></canvas>
 					</div>
-					<p class="demo-note">Drag the bottom-right corner to resize. Uses <code>autoResize: true</code>.</p>
+					<p class="demo-note">
+						Drag the bottom-right corner to resize. Uses
+						<code>autoResize: true</code>.
+					</p>
 				</div>
 			</section>
 
@@ -693,35 +1563,117 @@ for (let x = 0; x &lt;= width; x += 6) {
 					<p>Experiment with wave parameters in real time.</p>
 				</div>
 				<div class="card playground-card">
-					<canvas class="demo-canvas playground-canvas" id="playgroundCanvas" aria-label="Interactive playground"></canvas>
+					<canvas
+						class="demo-canvas playground-canvas"
+						id="playgroundCanvas"
+						aria-label="Interactive playground"
+					></canvas>
 					<div class="controls control-stack playground-controls" data-controls>
-						<label class="control-group"><span>Preset</span><div class="control-row">
-							<select data-control="preset" class="playground-select" id="playgroundPreset">
-								<option value="custom">Custom</option>
-								<option value="ocean">Calm Ocean</option>
-								<option value="heartbeat">Heartbeat</option>
-								<option value="highfreq">High Frequency</option>
-								<option value="stormy">Stormy</option>
-							</select>
-						</div></label>
-						<label class="control-group"><span>Wave count</span><div class="control-row"><input type="range" min="1" max="5" step="1" value="2" data-control="waveCount" /><span data-value></span></div></label>
-						<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="1" max="100" step="1" value="30" data-control="amplitude" /><span data-value></span></div></label>
-						<label class="control-group"><span>Wavelength</span><div class="control-row"><input type="range" min="20" max="400" step="5" value="140" data-control="wavelength" /><span data-value></span></div></label>
-						<label class="control-group"><span>Speed</span><div class="control-row"><input type="range" min="0.1" max="3.0" step="0.1" value="0.8" data-control="speed" /><span data-value></span></div></label>
-						<label class="control-group"><span>Segment length</span><div class="control-row"><input type="range" min="2" max="50" step="1" value="10" data-control="segmentLength" /><span data-value></span></div></label>
-						<label class="control-group"><span>Easing</span><div class="control-row">
-							<select data-control="easing" class="playground-select">
-								<option value="sineInOut">Ease.sineInOut</option>
-								<option value="sineIn">Ease.sineIn</option>
-								<option value="sineOut">Ease.sineOut</option>
-								<option value="linear">Linear</option>
-							</select>
-						</div></label>
-						<label class="control-group"><span>Stroke color</span><div class="control-row"><input type="color" value="#0ea5e9" data-control="strokeColor" class="playground-color" /></div></label>
+						<label class="control-group"
+							><span>Preset</span>
+							<div class="control-row">
+								<select
+									data-control="preset"
+									class="playground-select"
+									id="playgroundPreset"
+								>
+									<option value="custom">Custom</option>
+									<option value="ocean">Calm Ocean</option>
+									<option value="heartbeat">Heartbeat</option>
+									<option value="highfreq">High Frequency</option>
+									<option value="stormy">Stormy</option>
+								</select>
+							</div></label
+						>
+						<label class="control-group"
+							><span>Wave count</span>
+							<div class="control-row">
+								<input
+									type="range"
+									min="1"
+									max="5"
+									step="1"
+									value="2"
+									data-control="waveCount"
+								/><span data-value></span></div
+						></label>
+						<label class="control-group"
+							><span>Amplitude</span>
+							<div class="control-row">
+								<input
+									type="range"
+									min="1"
+									max="100"
+									step="1"
+									value="30"
+									data-control="amplitude"
+								/><span data-value></span></div
+						></label>
+						<label class="control-group"
+							><span>Wavelength</span>
+							<div class="control-row">
+								<input
+									type="range"
+									min="20"
+									max="400"
+									step="5"
+									value="140"
+									data-control="wavelength"
+								/><span data-value></span></div
+						></label>
+						<label class="control-group"
+							><span>Speed</span>
+							<div class="control-row">
+								<input
+									type="range"
+									min="0.1"
+									max="3.0"
+									step="0.1"
+									value="0.8"
+									data-control="speed"
+								/><span data-value></span></div
+						></label>
+						<label class="control-group"
+							><span>Segment length</span>
+							<div class="control-row">
+								<input
+									type="range"
+									min="2"
+									max="50"
+									step="1"
+									value="10"
+									data-control="segmentLength"
+								/><span data-value></span></div
+						></label>
+						<label class="control-group"
+							><span>Easing</span>
+							<div class="control-row">
+								<select data-control="easing" class="playground-select">
+									<option value="sineInOut">Ease.sineInOut</option>
+									<option value="sineIn">Ease.sineIn</option>
+									<option value="sineOut">Ease.sineOut</option>
+									<option value="linear">Linear</option>
+								</select>
+							</div></label
+						>
+						<label class="control-group"
+							><span>Stroke color</span>
+							<div class="control-row">
+								<input
+									type="color"
+									value="#0ea5e9"
+									data-control="strokeColor"
+									class="playground-color"
+								/></div
+						></label>
 					</div>
 					<div class="playground-actions">
-						<button class="btn" type="button" id="playgroundCopyConfig">Copy Config</button>
-						<button class="btn" type="button" id="playgroundFullscreen">Fullscreen</button>
+						<button class="btn" type="button" id="playgroundCopyConfig">
+							Copy Config
+						</button>
+						<button class="btn" type="button" id="playgroundFullscreen">
+							Fullscreen
+						</button>
 					</div>
 				</div>
 			</section>
@@ -735,11 +1687,19 @@ for (let x = 0; x &lt;= width; x += 6) {
 					<article class="card" data-example="stringPhysics">
 						<h3>String physics</h3>
 						<p>Tap to pluck. Damped amplitude returns to rest.</p>
-						<canvas class="demo-canvas" id="stringPhysicsCanvas" aria-label="String physics"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="stringPhysicsCanvas"
+							aria-label="String physics"
+						></canvas>
 						<p class="demo-note">Tip: click the line to excite it.</p>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Tap to pluck, damped amplitude returns to rest
+							<pre
+								class="code-block"
+							><code>// Tap to pluck, damped amplitude returns to rest
 canvas.addEventListener("pointerdown", () =&gt; { state.amplitude = 100; });
 state.amplitude *= 0.95; // decay each frame
 const y = centerY + Math.sin(x * 0.02 + phase) * state.amplitude * 0.02;</code></pre>
@@ -748,12 +1708,20 @@ const y = centerY + Math.sin(x * 0.02 + phase) * state.amplitude * 0.02;</code><
 					<article class="card" data-example="audioSpectrogram">
 						<h3>Audio spectrogram</h3>
 						<p>64 wave forest mapped across bass to treble.</p>
-						<canvas class="demo-canvas" id="audioSpectrogramCanvas" aria-label="Audio spectrogram"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="audioSpectrogramCanvas"
+							aria-label="Audio spectrogram"
+						></canvas>
 						<div class="controls">
-							<button class="btn" type="button" data-action="audio-start">Enable mic</button>
+							<button class="btn" type="button" data-action="audio-start">
+								Enable mic
+							</button>
 							<span class="status" data-audio-status>Idle</span>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// 64-band frequency display
 analyser.getByteFrequencyData(data);
@@ -767,16 +1735,68 @@ for (let i = 0; i &lt; 64; i++) {
 					<article class="card" data-example="lissajousExplorer">
 						<h3>Lissajous explorer</h3>
 						<p>Orbit knots with adjustable a:b ratios.</p>
-						<canvas class="demo-canvas" id="lissajousExplorerCanvas" aria-label="Lissajous explorer"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="lissajousExplorerCanvas"
+							aria-label="Lissajous explorer"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="96" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="20" max="120" step="1" value="70" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="12" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="60" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="20"
+										max="120"
+										step="1"
+										value="70"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="1"
+										max="12"
+										step="1"
+										value="4"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="60"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Orbit knots with adjustable a:b ratios
+							<pre
+								class="code-block"
+							><code>// Orbit knots with adjustable a:b ratios
 for (let i = 0; i &lt;= 320; i++) {
   const t = (i / 320) * TWO_PI;
   const x = cx + ampX * Math.sin(a * t + delta + time);
@@ -787,16 +1807,68 @@ for (let i = 0; i &lt;= 320; i++) {
 					<article class="card" data-example="feedbackLoop">
 						<h3>Feedback loops</h3>
 						<p>Slow modulator controls a fast carrier.</p>
-						<canvas class="demo-canvas" id="feedbackLoopCanvas" aria-label="Feedback loops"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="feedbackLoopCanvas"
+							aria-label="Feedback loops"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="88" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="10" max="60" step="1" value="28" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="6" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="88"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="28"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Slow modulator controls a fast carrier
+							<pre
+								class="code-block"
+							><code>// Slow modulator controls a fast carrier
 const mod = Math.sin(time * 0.8);
 for (let x = 0; x &lt;= width; x += 4) {
   const carrier = Math.sin(x * carrierFreq + time * 1.6);
@@ -816,40 +1888,72 @@ for (let x = 0; x &lt;= width; x += 4) {
 					<article class="card" data-example="labOcean">
 						<h3>The Ocean</h3>
 						<p>Horizontal layering with slow tides.</p>
-						<canvas class="demo-canvas" id="labOceanCanvas" aria-label="The Ocean"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="labOceanCanvas"
+							aria-label="The Ocean"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Horizontal layering with slow tides
+							<pre
+								class="code-block"
+							><code>// Horizontal layering with slow tides
 // Uses drawWaveformTerrain with 8 depth layers</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="labHelix">
 						<h3>The Helix</h3>
 						<p>Vertical strands with parallax depth.</p>
-						<canvas class="demo-canvas" id="labHelixCanvas" aria-label="The Helix"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="labHelixCanvas"
+							aria-label="The Helix"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Vertical strands with parallax depth
+							<pre
+								class="code-block"
+							><code>// Vertical strands with parallax depth
 // Uses drawDNAHelix with counterphase strands</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="labPulse">
 						<h3>The Pulse</h3>
 						<p>BPM-reactive ripples with color sync.</p>
-						<canvas class="demo-canvas" id="labPulseCanvas" aria-label="The Pulse"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="labPulseCanvas"
+							aria-label="The Pulse"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// BPM-reactive ripples with color sync
+							<pre
+								class="code-block"
+							><code>// BPM-reactive ripples with color sync
 // Uses drawRadialBloom with downbeat emphasis</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="labOrbit">
 						<h3>The Orbit</h3>
 						<p>Lissajous curves with orbital drift.</p>
-						<canvas class="demo-canvas" id="labOrbitCanvas" aria-label="The Orbit"></canvas>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<canvas
+							class="demo-canvas"
+							id="labOrbitCanvas"
+							aria-label="The Orbit"
+						></canvas>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Lissajous curves with orbital drift
+							<pre
+								class="code-block"
+							><code>// Lissajous curves with orbital drift
 // Uses drawLissajousOrbit with phase shift</code></pre>
 						</div>
 					</article>
@@ -865,16 +1969,68 @@ for (let x = 0; x &lt;= width; x += 4) {
 					<article class="card" data-example="moireInterference">
 						<h3>Interference grid</h3>
 						<p>Two angled lattices creating moire shimmer.</p>
-						<canvas class="demo-canvas" id="moireInterferenceCanvas" aria-label="Interference grid"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="moireInterferenceCanvas"
+							aria-label="Interference grid"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="90" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="2" max="20" step="1" value="10" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="16" step="1" value="8" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="90"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="20"
+										step="1"
+										value="10"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="16"
+										step="1"
+										value="8"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Two angled lattices creating shimmer
+							<pre
+								class="code-block"
+							><code>// Two angled lattices creating shimmer
 const drawGrid = (rotation) =&gt; {
   ctx.rotate(rotation);
   for (let x = -max; x &lt;= width + max; x += spacing) {
@@ -887,16 +2043,68 @@ const drawGrid = (rotation) =&gt; {
 					<article class="card" data-example="kineticTypography">
 						<h3>Kinetic typography</h3>
 						<p>Letterforms that breathe with the beat.</p>
-						<canvas class="demo-canvas" id="kineticTypographyCanvas" aria-label="Kinetic typography"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="kineticTypographyCanvas"
+							aria-label="Kinetic typography"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="60" max="180" step="1" value="104" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="6" max="30" step="1" value="16" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="10" step="1" value="4" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="10" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="60"
+										max="180"
+										step="1"
+										value="104"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="6"
+										max="30"
+										step="1"
+										value="16"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="1"
+										max="10"
+										step="1"
+										value="4"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="10"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Letterforms that breathe with the beat
+							<pre
+								class="code-block"
+							><code>// Letterforms that breathe with the beat
 "SINE WAVE".split("").forEach((char, i) =&gt; {
   const wave = Math.sin(time + i * freq) * amplitude;
   ctx.fillText(char, cx + i * 18, cy + wave);
@@ -906,14 +2114,64 @@ const drawGrid = (rotation) =&gt; {
 					<article class="card" data-example="dampedSine">
 						<h3>Damped sine</h3>
 						<p>Organic motion with exponential decay.</p>
-						<canvas class="demo-canvas" id="dampedSineCanvas" aria-label="Damped sine"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="dampedSineCanvas"
+							aria-label="Damped sine"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="40" max="160" step="1" value="78" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="8" max="40" step="1" value="24" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="1" max="10" step="1" value="5" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="78"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="8"
+										max="40"
+										step="1"
+										value="24"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="1"
+										max="10"
+										step="1"
+										value="5"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
 							<pre class="code-block"><code>// Exponential decay envelope
 const envelope = Math.exp(-3.2 * progress);
@@ -926,16 +2184,68 @@ for (let x = 0; x &lt;= width; x += 4) {
 					<article class="card" data-example="recursiveSine">
 						<h3>Recursive sine</h3>
 						<p>Nested oscillators for organic drift.</p>
-						<canvas class="demo-canvas" id="recursiveSineCanvas" aria-label="Recursive sine"></canvas>
+						<canvas
+							class="demo-canvas"
+							id="recursiveSineCanvas"
+							aria-label="Recursive sine"
+						></canvas>
 						<div class="controls control-stack" data-controls>
-							<label class="control-group"><span>Tempo (BPM)</span><div class="control-row"><input type="range" min="50" max="180" step="1" value="112" data-control="bpm" /><span data-value></span></div></label>
-							<label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="6" max="40" step="1" value="20" data-control="amplitude" /><span data-value></span></div></label>
-							<label class="control-group"><span>Frequency</span><div class="control-row"><input type="range" min="2" max="14" step="1" value="7" data-control="frequency" /><span data-value></span></div></label>
-							<label class="control-group"><span>Phase shift</span><div class="control-row"><input type="range" min="0" max="360" step="5" value="0" data-control="phase" /><span data-value></span></div></label>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="50"
+										max="180"
+										step="1"
+										value="112"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="6"
+										max="40"
+										step="1"
+										value="20"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="7"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/><span data-value></span></div
+							></label>
 						</div>
-						<button class="btn view-code-toggle" type="button">View Code</button>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
 						<div class="code-reveal">
-							<pre class="code-block"><code>// Nested oscillators for organic drift
+							<pre
+								class="code-block"
+							><code>// Nested oscillators for organic drift
 for (let x = 0; x &lt;= width; x += 4) {
   const nested = Math.sin(time + x * baseFreq * 0.4) * 0.6 + 1;
   const y = centerY + Math.sin(x * (freq + mod * nested) + time) * amp;
@@ -953,12 +2263,34 @@ for (let x = 0; x &lt;= width; x += 4) {
 				</div>
 				<div class="card">
 					<table class="cheat-table">
-						<thead><tr><th>Effect</th><th>Math logic</th><th>Visual feeling</th></tr></thead>
+						<thead>
+							<tr>
+								<th>Effect</th>
+								<th>Math logic</th>
+								<th>Visual feeling</th>
+							</tr>
+						</thead>
 						<tbody>
-							<tr><td>Breathe</td><td>sin(t) * 0.5 + 0.5</td><td>Smooth pulsing (0 to 1)</td></tr>
-							<tr><td>Glitch</td><td>sin(t) + sin(t * 10) * 0.1</td><td>Electric vibration</td></tr>
-							<tr><td>Orbit</td><td>x: sin(t), y: cos(t)</td><td>Perfect circular motion</td></tr>
-							<tr><td>Chaos</td><td>sin(t + sin(t))</td><td>Organic drift</td></tr>
+							<tr>
+								<td>Breathe</td>
+								<td>sin(t) * 0.5 + 0.5</td>
+								<td>Smooth pulsing (0 to 1)</td>
+							</tr>
+							<tr>
+								<td>Glitch</td>
+								<td>sin(t) + sin(t * 10) * 0.1</td>
+								<td>Electric vibration</td>
+							</tr>
+							<tr>
+								<td>Orbit</td>
+								<td>x: sin(t), y: cos(t)</td>
+								<td>Perfect circular motion</td>
+							</tr>
+							<tr>
+								<td>Chaos</td>
+								<td>sin(t + sin(t))</td>
+								<td>Organic drift</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -972,54 +2304,179 @@ for (let x = 0; x &lt;= width; x += 4) {
 				<div class="card">
 					<h3>SineWaveGenerator Options</h3>
 					<table class="cheat-table">
-						<thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+						<thead>
+							<tr>
+								<th>Option</th>
+								<th>Type</th>
+								<th>Default</th>
+								<th>Description</th>
+							</tr>
+						</thead>
 						<tbody>
-							<tr><td><code>el</code></td><td><code>string | HTMLCanvasElement</code></td><td>required</td><td>Canvas element or CSS selector</td></tr>
-							<tr><td><code>waves</code></td><td><code>Wave[]</code></td><td><code>[]</code></td><td>Array of wave configuration objects</td></tr>
-							<tr><td><code>pixelRatio</code></td><td><code>number</code></td><td><code>devicePixelRatio</code></td><td>Device pixel ratio override</td></tr>
-							<tr><td><code>maxPixelRatio</code></td><td><code>number</code></td><td><code>2</code></td><td>Maximum pixel ratio cap for memory/perf</td></tr>
-							<tr><td><code>autoResize</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Automatically resize canvas on window resize</td></tr>
+							<tr>
+								<td><code>el</code></td>
+								<td><code>string | HTMLCanvasElement</code></td>
+								<td>required</td>
+								<td>Canvas element or CSS selector</td>
+							</tr>
+							<tr>
+								<td><code>waves</code></td>
+								<td><code>Wave[]</code></td>
+								<td><code>[]</code></td>
+								<td>Array of wave configuration objects</td>
+							</tr>
+							<tr>
+								<td><code>pixelRatio</code></td>
+								<td><code>number</code></td>
+								<td><code>devicePixelRatio</code></td>
+								<td>Device pixel ratio override</td>
+							</tr>
+							<tr>
+								<td><code>maxPixelRatio</code></td>
+								<td><code>number</code></td>
+								<td><code>2</code></td>
+								<td>Maximum pixel ratio cap for memory/perf</td>
+							</tr>
+							<tr>
+								<td><code>autoResize</code></td>
+								<td><code>boolean</code></td>
+								<td><code>true</code></td>
+								<td>Automatically resize canvas on window resize</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
-				<div class="card" style="margin-top:20px">
+				<div class="card" style="margin-top: 20px">
 					<h3>Wave Options</h3>
 					<table class="cheat-table">
-						<thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+						<thead>
+							<tr>
+								<th>Option</th>
+								<th>Type</th>
+								<th>Default</th>
+								<th>Description</th>
+							</tr>
+						</thead>
 						<tbody>
-							<tr><td><code>amplitude</code></td><td><code>number</code></td><td><code>10</code></td><td>Wave height in pixels</td></tr>
-							<tr><td><code>wavelength</code></td><td><code>number</code></td><td><code>100</code></td><td>Distance between wave peaks in pixels</td></tr>
-							<tr><td><code>segmentLength</code></td><td><code>number</code></td><td><code>10</code></td><td>Rendering segment length (lower = smoother)</td></tr>
-							<tr><td><code>phase</code></td><td><code>number</code></td><td>random</td><td>Initial phase offset (radians)</td></tr>
-							<tr><td><code>speed</code></td><td><code>number</code></td><td>random 0.5-1.0</td><td>Animation speed multiplier</td></tr>
-							<tr><td><code>easing</code></td><td><code>function</code></td><td><code>Ease.sineInOut</code></td><td>Easing function for wave shape</td></tr>
-							<tr><td><code>rotate</code></td><td><code>number</code></td><td><code>0</code></td><td>Rotation angle in degrees</td></tr>
-							<tr><td><code>strokeStyle</code></td><td><code>string | null</code></td><td><code>null</code></td><td>Custom stroke color (CSS color or CanvasGradient)</td></tr>
+							<tr>
+								<td><code>amplitude</code></td>
+								<td><code>number</code></td>
+								<td><code>10</code></td>
+								<td>Wave height in pixels</td>
+							</tr>
+							<tr>
+								<td><code>wavelength</code></td>
+								<td><code>number</code></td>
+								<td><code>100</code></td>
+								<td>Distance between wave peaks in pixels</td>
+							</tr>
+							<tr>
+								<td><code>segmentLength</code></td>
+								<td><code>number</code></td>
+								<td><code>10</code></td>
+								<td>Rendering segment length (lower = smoother)</td>
+							</tr>
+							<tr>
+								<td><code>phase</code></td>
+								<td><code>number</code></td>
+								<td>random</td>
+								<td>Initial phase offset (radians)</td>
+							</tr>
+							<tr>
+								<td><code>speed</code></td>
+								<td><code>number</code></td>
+								<td>random 0.5-1.0</td>
+								<td>Animation speed multiplier</td>
+							</tr>
+							<tr>
+								<td><code>easing</code></td>
+								<td><code>function</code></td>
+								<td><code>Ease.sineInOut</code></td>
+								<td>Easing function for wave shape</td>
+							</tr>
+							<tr>
+								<td><code>rotate</code></td>
+								<td><code>number</code></td>
+								<td><code>0</code></td>
+								<td>Rotation angle in degrees</td>
+							</tr>
+							<tr>
+								<td><code>strokeStyle</code></td>
+								<td><code>string | null</code></td>
+								<td><code>null</code></td>
+								<td>Custom stroke color (CSS color or CanvasGradient)</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
-				<div class="card" style="margin-top:20px">
+				<div class="card" style="margin-top: 20px">
 					<h3>Methods</h3>
 					<table class="cheat-table">
-						<thead><tr><th>Method</th><th>Returns</th><th>Description</th></tr></thead>
+						<thead>
+							<tr>
+								<th>Method</th>
+								<th>Returns</th>
+								<th>Description</th>
+							</tr>
+						</thead>
 						<tbody>
-							<tr><td><code>start()</code></td><td><code>this</code></td><td>Start the animation loop (uses <code>requestAnimationFrame</code>)</td></tr>
-							<tr><td><code>stop()</code></td><td><code>this</code></td><td>Stop the animation loop and unbind events</td></tr>
-							<tr><td><code>resize()</code></td><td><code>this</code></td><td>Manually trigger canvas resize and gradient rebuild</td></tr>
-							<tr><td><code>addWave(config)</code></td><td><code>this</code></td><td>Add a wave dynamically at runtime</td></tr>
-							<tr><td><code>removeWave(index)</code></td><td><code>this</code></td><td>Remove wave by index</td></tr>
+							<tr>
+								<td><code>start()</code></td>
+								<td><code>this</code></td>
+								<td>
+									Start the animation loop (uses
+									<code>requestAnimationFrame</code>)
+								</td>
+							</tr>
+							<tr>
+								<td><code>stop()</code></td>
+								<td><code>this</code></td>
+								<td>Stop the animation loop and unbind events</td>
+							</tr>
+							<tr>
+								<td><code>resize()</code></td>
+								<td><code>this</code></td>
+								<td>Manually trigger canvas resize and gradient rebuild</td>
+							</tr>
+							<tr>
+								<td><code>addWave(config)</code></td>
+								<td><code>this</code></td>
+								<td>Add a wave dynamically at runtime</td>
+							</tr>
+							<tr>
+								<td><code>removeWave(index)</code></td>
+								<td><code>this</code></td>
+								<td>Remove wave by index</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
-				<div class="card" style="margin-top:20px">
+				<div class="card" style="margin-top: 20px">
 					<h3>Easing Functions</h3>
 					<table class="cheat-table">
-						<thead><tr><th>Function</th><th>Description</th></tr></thead>
+						<thead>
+							<tr>
+								<th>Function</th>
+								<th>Description</th>
+							</tr>
+						</thead>
 						<tbody>
-							<tr><td><code>Ease.sineInOut</code></td><td>Smooth sine curve (default)</td></tr>
-							<tr><td><code>Ease.sineIn</code></td><td>Accelerating sine curve</td></tr>
-							<tr><td><code>Ease.sineOut</code></td><td>Decelerating sine curve</td></tr>
-							<tr><td><code>Ease.linear</code></td><td>Linear (no easing)</td></tr>
+							<tr>
+								<td><code>Ease.sineInOut</code></td>
+								<td>Smooth sine curve (default)</td>
+							</tr>
+							<tr>
+								<td><code>Ease.sineIn</code></td>
+								<td>Accelerating sine curve</td>
+							</tr>
+							<tr>
+								<td><code>Ease.sineOut</code></td>
+								<td>Decelerating sine curve</td>
+							</tr>
+							<tr>
+								<td><code>Ease.linear</code></td>
+								<td>Linear (no easing)</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -1032,16 +2489,45 @@ for (let x = 0; x &lt;= width; x += 4) {
 				</div>
 				<div class="card">
 					<table class="cheat-table">
-						<thead><tr><th>Browser</th><th>Version</th><th>Status</th></tr></thead>
+						<thead>
+							<tr>
+								<th>Browser</th>
+								<th>Version</th>
+								<th>Status</th>
+							</tr>
+						</thead>
 						<tbody>
-							<tr><td>Chrome / Edge</td><td>60+</td><td>Full support</td></tr>
-							<tr><td>Firefox</td><td>55+</td><td>Full support</td></tr>
-							<tr><td>Safari</td><td>11+</td><td>Full support</td></tr>
-							<tr><td>iOS Safari</td><td>11+</td><td>Full support</td></tr>
-							<tr><td>Samsung Internet</td><td>8+</td><td>Full support</td></tr>
+							<tr>
+								<td>Chrome / Edge</td>
+								<td>60+</td>
+								<td>Full support</td>
+							</tr>
+							<tr>
+								<td>Firefox</td>
+								<td>55+</td>
+								<td>Full support</td>
+							</tr>
+							<tr>
+								<td>Safari</td>
+								<td>11+</td>
+								<td>Full support</td>
+							</tr>
+							<tr>
+								<td>iOS Safari</td>
+								<td>11+</td>
+								<td>Full support</td>
+							</tr>
+							<tr>
+								<td>Samsung Internet</td>
+								<td>8+</td>
+								<td>Full support</td>
+							</tr>
 						</tbody>
 					</table>
-					<p class="demo-note">Requires <code>HTMLCanvasElement.getContext("2d")</code> and <code>requestAnimationFrame</code>. No WebGL needed.</p>
+					<p class="demo-note">
+						Requires <code>HTMLCanvasElement.getContext("2d")</code> and
+						<code>requestAnimationFrame</code>. No WebGL needed.
+					</p>
 				</div>
 			</section>
 
@@ -1053,7 +2539,9 @@ for (let x = 0; x &lt;= width; x += 4) {
 				<div class="card-grid">
 					<div class="card">
 						<h3>React</h3>
-						<pre class="code-block"><code>import { useEffect, useRef } from "react";
+						<pre
+							class="code-block"
+						><code>import { useEffect, useRef } from "react";
 
 function Wave() {
   const ref = useRef(null);
@@ -1117,30 +2605,53 @@ export class WaveComponent implements AfterViewInit, OnDestroy {
 				<div class="card-grid">
 					<div class="card">
 						<h3>requestAnimationFrame</h3>
-						<p>All rendering uses <code>requestAnimationFrame</code> for battery-efficient 60fps. The loop auto-pauses when the tab is hidden.</p>
+						<p>
+							All rendering uses <code>requestAnimationFrame</code> for
+							battery-efficient 60fps. The loop auto-pauses when the tab is
+							hidden.
+						</p>
 					</div>
 					<div class="card">
 						<h3>IntersectionObserver</h3>
-						<p>Demos on this page use IntersectionObserver to start animations only when visible, saving CPU and battery.</p>
+						<p>
+							Demos on this page use IntersectionObserver to start animations
+							only when visible, saving CPU and battery.
+						</p>
 					</div>
 					<div class="card">
 						<h3>prefers-reduced-motion</h3>
-						<p>When <code>prefers-reduced-motion: reduce</code> is active, animations render a single static frame instead of looping.</p>
+						<p>
+							When <code>prefers-reduced-motion: reduce</code> is active,
+							animations render a single static frame instead of looping.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Cap pixel ratio</h3>
-						<p>Use <strong>maxPixelRatio</strong> to avoid oversized buffers on high-DPI screens.</p>
+						<p>
+							Use <strong>maxPixelRatio</strong> to avoid oversized buffers on
+							high-DPI screens.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Increase segment length</h3>
-						<p>Larger segments reduce per-frame points while preserving visual flow.</p>
+						<p>
+							Larger segments reduce per-frame points while preserving visual
+							flow.
+						</p>
 					</div>
 					<div class="card">
 						<h3>Reduce wave count</h3>
-						<p>More waves increases draw cost; balance layering with frame budget.</p>
+						<p>
+							More waves increases draw cost; balance layering with frame
+							budget.
+						</p>
 					</div>
 				</div>
-				<p><strong>Important:</strong> If you set a high <code>maxPixelRatio</code>, memory use grows quickly on large canvases.</p>
+				<p>
+					<strong>Important:</strong> If you set a high
+					<code>maxPixelRatio</code>, memory use grows quickly on large
+					canvases.
+				</p>
 			</section>
 
 			<section class="section" id="faq">
@@ -1148,39 +2659,101 @@ export class WaveComponent implements AfterViewInit, OnDestroy {
 					<h2>Troubleshooting</h2>
 					<p>Common questions and solutions.</p>
 				</div>
-				<div class="card-grid" style="grid-template-columns:1fr">
+				<div class="card-grid" style="grid-template-columns: 1fr">
 					<details class="card faq-item">
-						<summary><strong>Why is my canvas blurry on Retina screens?</strong></summary>
-						<p>The library handles DPI scaling automatically. If you see blur, ensure you are <em>not</em> setting <code>width</code>/<code>height</code> attributes on the canvas manually. Let the library manage sizing via <code>resize()</code>. You can also lower <code>maxPixelRatio</code> to trade sharpness for performance.</p>
+						<summary>
+							<strong>Why is my canvas blurry on Retina screens?</strong>
+						</summary>
+						<p>
+							The library handles DPI scaling automatically. If you see blur,
+							ensure you are <em>not</em> setting <code>width</code>/<code
+								>height</code
+							>
+							attributes on the canvas manually. Let the library manage sizing
+							via <code>resize()</code>. You can also lower
+							<code>maxPixelRatio</code> to trade sharpness for performance.
+						</p>
 					</details>
 					<details class="card faq-item">
 						<summary><strong>Why isn't the wave moving?</strong></summary>
-						<p>Make sure you call <code>generator.start()</code> after setup. Also check that <code>speed</code> is a positive number. If <code>prefers-reduced-motion</code> is enabled in your OS, animations will render a single static frame.</p>
+						<p>
+							Make sure you call <code>generator.start()</code> after setup.
+							Also check that <code>speed</code> is a positive number. If
+							<code>prefers-reduced-motion</code> is enabled in your OS,
+							animations will render a single static frame.
+						</p>
 					</details>
 					<details class="card faq-item">
-						<summary><strong>How do I resize the canvas when the window changes?</strong></summary>
-						<p>Set <code>autoResize: true</code> (the default). For containers that resize independently of the window, call <code>generator.resize()</code> manually inside a <code>ResizeObserver</code> callback.</p>
+						<summary>
+							<strong
+								>How do I resize the canvas when the window changes?</strong
+							>
+						</summary>
+						<p>
+							Set <code>autoResize: true</code> (the default). For containers
+							that resize independently of the window, call
+							<code>generator.resize()</code> manually inside a
+							<code>ResizeObserver</code> callback.
+						</p>
 					</details>
 					<details class="card faq-item">
-						<summary><strong>Can I use this with server-side rendering (SSR)?</strong></summary>
-						<p>The library requires the DOM and Canvas API. Guard your import with a <code>typeof window !== "undefined"</code> check or use dynamic imports in Next.js/Nuxt.</p>
+						<summary>
+							<strong>Can I use this with server-side rendering (SSR)?</strong>
+						</summary>
+						<p>
+							The library requires the DOM and Canvas API. Guard your import
+							with a <code>typeof window !== "undefined"</code> check or use
+							dynamic imports in Next.js/Nuxt.
+						</p>
 					</details>
 					<details class="card faq-item">
 						<summary><strong>Does this library support WebGL?</strong></summary>
-						<p>No. The library uses the 2D Canvas API exclusively. This keeps the bundle small and avoids GPU driver issues. For most wave visualizations, 2D Canvas provides sufficient performance.</p>
+						<p>
+							No. The library uses the 2D Canvas API exclusively. This keeps the
+							bundle small and avoids GPU driver issues. For most wave
+							visualizations, 2D Canvas provides sufficient performance.
+						</p>
 					</details>
 				</div>
 			</section>
 
 			<footer class="site-footer">
 				<div class="footer-links">
-					<a href="https://www.npmjs.com/package/@sebastienrousseau/sine-wave-generator" target="_blank" rel="noopener noreferrer">NPM</a>
-					<a href="https://github.com/sebastienrousseau/sine-wave-generator" target="_blank" rel="noopener noreferrer">GitHub</a>
-					<a href="https://github.com/sebastienrousseau/sine-wave-generator/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Apache-2.0 License</a>
-					<a href="https://github.com/sebastienrousseau/sine-wave-generator/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog</a>
-					<a href="https://github.com/sebastienrousseau/sine-wave-generator/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contributing</a>
+					<a
+						href="https://www.npmjs.com/package/@sebastienrousseau/sine-wave-generator"
+						target="_blank"
+						rel="noopener noreferrer"
+						>NPM</a
+					>
+					<a
+						href="https://github.com/sebastienrousseau/sine-wave-generator"
+						target="_blank"
+						rel="noopener noreferrer"
+						>GitHub</a
+					>
+					<a
+						href="https://github.com/sebastienrousseau/sine-wave-generator/blob/main/LICENSE"
+						target="_blank"
+						rel="noopener noreferrer"
+						>Apache-2.0 License</a
+					>
+					<a
+						href="https://github.com/sebastienrousseau/sine-wave-generator/blob/main/CHANGELOG.md"
+						target="_blank"
+						rel="noopener noreferrer"
+						>Changelog</a
+					>
+					<a
+						href="https://github.com/sebastienrousseau/sine-wave-generator/blob/main/CONTRIBUTING.md"
+						target="_blank"
+						rel="noopener noreferrer"
+						>Contributing</a
+					>
 				</div>
-				<p>&copy; 2026 Sine Wave Generator. All rights reserved. Licensed under Apache-2.0.</p>
+				<p>
+					&copy; 2026 Sine Wave Generator. All rights reserved. Licensed under
+					Apache-2.0.
+				</p>
 			</footer>
 		</main>
 		<script type="application/ld+json">
@@ -1201,7 +2774,9 @@ export class WaveComponent implements AfterViewInit, OnDestroy {
 		<script defer src="example.js" data-template-script="example"></script>
 		<script>
 			(() => {
-				const isTemplate = /\/src\/template\.html$/.test(window.location.pathname);
+				const isTemplate = /\/src\/template\.html$/.test(
+					window.location.pathname,
+				);
 				if (!isTemplate) {
 					return;
 				}
