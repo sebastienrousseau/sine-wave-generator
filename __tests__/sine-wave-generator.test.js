@@ -260,11 +260,13 @@ describe("SineWaveGenerator", () => {
 			new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 }),
 		];
 		const resizeSpy = jest.spyOn(generator, "resize");
-		let drawCalled = false;
+		let drawCount = 0;
 		global.requestAnimationFrame = jest.fn((callback) => {
-			if (!drawCalled) {
-				drawCalled = true;
-				callback();
+			drawCount += 1;
+			if (drawCount === 1) {
+				callback(1000);
+			} else if (drawCount === 2) {
+				callback(1016);
 			}
 			return 123;
 		});
@@ -272,8 +274,9 @@ describe("SineWaveGenerator", () => {
 		expect(resizeSpy).toHaveBeenCalled();
 		expect(global.requestAnimationFrame).toHaveBeenCalled();
 		generator.animationFrameId = 99;
+		const callCount = global.requestAnimationFrame.mock.calls.length;
 		generator.start();
-		expect(global.requestAnimationFrame).toHaveBeenCalledTimes(2);
+		expect(global.requestAnimationFrame.mock.calls.length).toBe(callCount);
 		generator.stop();
 		expect(global.cancelAnimationFrame).toHaveBeenCalledWith(99);
 		expect(generator.animationFrameId).toBeNull();
@@ -331,6 +334,25 @@ describe("SineWaveGenerator", () => {
 		generator.start();
 		expect(global.requestAnimationFrame).toHaveBeenCalledTimes(2);
 		expect(ctx.clearRect).not.toHaveBeenCalled();
+	});
+
+	it("sets a fallback frame time when timestamp is missing", () => {
+		const ctx = createMockContext();
+		const canvas = createCanvas(ctx);
+		const generator = new SineWaveGenerator({ el: canvas });
+		generator.waves = [
+			new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 }),
+		];
+		let rafCount = 0;
+		global.requestAnimationFrame = jest.fn((callback) => {
+			rafCount += 1;
+			if (rafCount === 1) {
+				callback(null);
+			}
+			return 777;
+		});
+		generator.start();
+		expect(generator.lastFrameTime).toBe(0);
 	});
 
 	it("schedules another frame when height is still zero after resize", () => {

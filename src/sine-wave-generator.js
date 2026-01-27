@@ -233,6 +233,7 @@ class SineWaveGenerator {
 		this.displayWidth = 0;
 		this.displayHeight = 0;
 		this.gradient = null;
+		this.lastFrameTime = null;
 
 		this.bindEvents();
 	}
@@ -322,7 +323,7 @@ class SineWaveGenerator {
 		if (this.animationFrameId) {
 			return this;
 		}
-		const draw = () => {
+		const draw = (time) => {
 			if (this.displayWidth === 0 || this.displayHeight === 0) {
 				this.resize();
 				if (this.displayWidth === 0 || this.displayHeight === 0) {
@@ -330,8 +331,18 @@ class SineWaveGenerator {
 					return;
 				}
 			}
+			const isNumberTime = typeof time === "number";
+			const frameDeltaSeconds =
+				isNumberTime && this.lastFrameTime !== null
+					? (time - this.lastFrameTime) / 1000
+					: null;
+			const deltaScale =
+				frameDeltaSeconds === null
+					? 1
+					: Math.min(5, Math.max(0, frameDeltaSeconds * 60));
+			this.lastFrameTime = isNumberTime ? time : 0;
 			this.ctx.clearRect(0, 0, this.displayWidth, this.displayHeight);
-			this.waves.forEach((wave) => this.drawWave(wave));
+			this.waves.forEach((wave) => this.drawWave(wave, deltaScale));
 			this.animationFrameId = requestAnimationFrame(draw);
 		};
 		this.animationFrameId = requestAnimationFrame(draw);
@@ -347,6 +358,7 @@ class SineWaveGenerator {
 			window.cancelAnimationFrame(this.animationFrameId);
 			this.animationFrameId = null;
 		}
+		this.lastFrameTime = null;
 		this.unbindEvents();
 		return this;
 	}
@@ -383,7 +395,7 @@ class SineWaveGenerator {
 	 * @param {Wave} wave - The wave to be drawn.
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
 	 */
-	drawWave(wave) {
+	drawWave(wave, deltaScale = 1) {
 		// Method implementation
 		this.ctx.save();
 		if (wave.rotate) {
@@ -419,7 +431,7 @@ class SineWaveGenerator {
 		this.ctx.lineWidth = LINE_WIDTH;
 		this.ctx.stroke();
 
-		wave.phase += wave.speed * Math.PI * 2;
+		wave.phase += wave.speed * Math.PI * 2 * deltaScale;
 
 		this.ctx.restore();
 
