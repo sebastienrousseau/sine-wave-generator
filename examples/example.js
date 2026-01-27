@@ -54,6 +54,28 @@
 		});
 	};
 
+	const observeStart = (canvas, startFn) => {
+		if (!canvas || typeof startFn !== "function") {
+			return;
+		}
+		if (!("IntersectionObserver" in window)) {
+			startFn();
+			return;
+		}
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						observer.unobserve(entry.target);
+						startFn();
+					}
+				});
+			},
+			{ threshold: 0.2 },
+		);
+		observer.observe(canvas);
+	};
+
 	const setupControls = (card) => {
 		const controls = {
 			bpm: 96,
@@ -111,7 +133,7 @@
 				generator.stop();
 			}
 		};
-		generator.start();
+		observeStart(canvas, () => generator.start());
 	};
 
 	const easedSine = (percent, amplitude) => {
@@ -133,7 +155,7 @@
 				speed: 0.04,
 				segmentLength: 10,
 			});
-			generator.start();
+			observeStart(basic, () => generator.start());
 		}
 
 		const multi = document.getElementById("sineCanvasMulti");
@@ -154,7 +176,7 @@
 				segmentLength: 8,
 				strokeStyle: "rgba(15,23,42,0.35)",
 			});
-			generator.start();
+			observeStart(multi, () => generator.start());
 		}
 
 		const pointer = document.getElementById("sineCanvasPointer");
@@ -185,7 +207,7 @@
 					pointerState.rafId = requestAnimationFrame(applyPointer);
 				}
 			});
-			generator.start();
+			observeStart(pointer, () => generator.start());
 		}
 
 		const dynamic = document.getElementById("sineCanvasDynamic");
@@ -219,8 +241,10 @@
 					setTimeout(addWave, 600);
 				}
 			};
-			addWave();
-			generator.start();
+			observeStart(dynamic, () => {
+				addWave();
+				generator.start();
+			});
 		}
 
 		const performance = document.getElementById("sineCanvasPerformance");
@@ -229,7 +253,7 @@
 			generator.addWave({ amplitude: 18, wavelength: 160, speed: 0.035, segmentLength: 14 });
 			generator.addWave({ amplitude: 10, wavelength: 120, speed: 0.04, segmentLength: 16 });
 			generator.addWave({ amplitude: 6, wavelength: 90, speed: 0.045, segmentLength: 18 });
-			generator.start();
+			observeStart(performance, () => generator.start());
 		}
 
 		const easing = document.getElementById("sineCanvasEasing");
@@ -242,7 +266,7 @@
 				segmentLength: 10,
 				easing: easedSine,
 			});
-			generator.start();
+			observeStart(easing, () => generator.start());
 		}
 
 		const pause = document.getElementById("sineCanvasPause");
@@ -262,7 +286,7 @@
 			if (resumeButton) {
 				resumeButton.addEventListener("click", () => generator.start());
 			}
-			generator.start();
+			observeStart(pause, () => generator.start());
 		}
 	};
 
@@ -662,7 +686,7 @@
 			ctx.shadowBlur = 0;
 			wave.phase += 0.02 * deltaScale;
 		};
-		generator.start();
+		observeStart(canvas, () => generator.start());
 	};
 
 	const startAudioSpectrogram = () => {
@@ -724,7 +748,7 @@
 			}
 			wave.phase += 0.02 * deltaScale;
 		};
-		generator.start();
+		observeStart(canvas, () => generator.start());
 	};
 
 	const boot = () => {
