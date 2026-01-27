@@ -107,6 +107,28 @@ button {
 	color: var(--muted);
 }
 
+.nav-toggle {
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+	width: 40px;
+	height: 40px;
+	border-radius: 999px;
+	border: 1px solid var(--card-border);
+	background: #ffffff;
+	box-shadow: var(--shadow);
+}
+
+.nav-toggle span {
+	display: block;
+	width: 18px;
+	height: 2px;
+	background: #0f172a;
+	border-radius: 999px;
+	margin: 0 auto;
+}
+
 .nav a:hover {
 	color: #0f172a;
 }
@@ -375,6 +397,19 @@ footer {
 	}
 
 	.nav {
-		flex-wrap: wrap;
+		display: none;
+		flex-direction: column;
+		gap: 12px;
+		width: 100%;
+		padding: 12px 0;
+	}
+
+	.site-header.nav-open .nav {
+		display: flex;
+	}
+
+	.nav-toggle {
+		display: flex;
+		align-self: flex-end;
 	}
 }

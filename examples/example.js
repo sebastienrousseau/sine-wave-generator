@@ -22,6 +22,29 @@
 		height: generator.displayHeight || canvas.clientHeight || canvas.height || 1,
 	});
 
+	const createErrorGuard = (label) => {
+		let reported = false;
+		return (error) => {
+			if (reported) {
+				return;
+			}
+			reported = true;
+			console.error(`[sine-wave-generator] ${label} failed`, error);
+		};
+	};
+
+	const setupNavToggle = () => {
+		const header = document.querySelector(".site-header");
+		const toggle = document.querySelector(".nav-toggle");
+		if (!header || !toggle) {
+			return;
+		}
+		toggle.addEventListener("click", () => {
+			const isOpen = header.classList.toggle("nav-open");
+			toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+		});
+	};
+
 	const setupControls = (card) => {
 		const controls = {
 			bpm: 96,
@@ -65,13 +88,19 @@
 		}
 		const controls = setupControls(card);
 		const generator = createGenerator(canvas);
+		const reportError = createErrorGuard(id);
 		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.05 });
 		const ctx = generator.ctx;
 		generator.drawWave = (wave, deltaScale = 1) => {
-			const speed = bpmToSpeed(controls.bpm, beatsPerCycle);
-			const time = wave.phase + (controls.phase * Math.PI) / 180;
-			draw({ ctx, canvas, generator, controls, time });
-			wave.phase += speed * TWO_PI * deltaScale;
+			try {
+				const speed = bpmToSpeed(controls.bpm, beatsPerCycle);
+				const time = wave.phase + (controls.phase * Math.PI) / 180;
+				draw({ ctx, canvas, generator, controls, time });
+				wave.phase += speed * TWO_PI * deltaScale;
+			} catch (error) {
+				reportError(error);
+				generator.stop();
+			}
 		};
 		generator.start();
 	};
@@ -694,6 +723,7 @@
 			setTimeout(boot, 50);
 			return;
 		}
+		setupNavToggle();
 		startFundamentals();
 		startExample("pulseMatrix", 4, drawPulseMatrix);
 		startExample("dnaHelix", 4, drawDNAHelix);
