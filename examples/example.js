@@ -467,13 +467,14 @@
 			const value = Math.sin(r * freq + time);
 			const pulse = amplitude * (0.4 + downbeat);
 			const offset = value * pulse;
+			const nextRadius = Math.max(1, r + offset);
 			const hue = hueFromValue(value, 280);
 			ctx.strokeStyle = `hsla(${hue}deg 75% 60% / 0.6)`;
 			ctx.lineWidth = 1 + Math.abs(value) * 1.8;
 			ctx.shadowBlur = 10;
 			ctx.shadowColor = getBPMColor(time, 128, 280);
 			ctx.beginPath();
-			ctx.arc(centerX, centerY, r + offset, 0, TWO_PI);
+			ctx.arc(centerX, centerY, nextRadius, 0, TWO_PI);
 			ctx.stroke();
 		}
 		ctx.shadowBlur = 0;
