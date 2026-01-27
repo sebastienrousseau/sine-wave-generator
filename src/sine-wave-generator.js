@@ -323,6 +323,13 @@ class SineWaveGenerator {
 			return this;
 		}
 		const draw = () => {
+			if (this.displayWidth === 0 || this.displayHeight === 0) {
+				this.resize();
+				if (this.displayWidth === 0 || this.displayHeight === 0) {
+					this.animationFrameId = requestAnimationFrame(draw);
+					return;
+				}
+			}
 			this.ctx.clearRect(0, 0, this.displayWidth, this.displayHeight);
 			this.waves.forEach((wave) => this.drawWave(wave));
 			this.animationFrameId = requestAnimationFrame(draw);

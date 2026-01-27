@@ -1,10 +1,6 @@
 "use strict";
 
-const {
-	Ease,
-	Wave,
-	SineWaveGenerator,
-} = require("../src/sine-wave-generator.js");
+const { Ease, Wave, SineWaveGenerator } = require("../src/sine-wave-generator.js");
 
 const createMockContext = () => {
 	const gradient = { addColorStop: jest.fn() };
@@ -39,16 +35,15 @@ const createMockContext = () => {
 const createCanvas = (context, rectOverride) => {
 	const canvas = document.createElement("canvas");
 	canvas.getContext = jest.fn(() => context);
-	canvas.getBoundingClientRect = jest.fn(
-		() =>
-			rectOverride || {
-				width: 200,
-				height: 100,
-				top: 0,
-				left: 0,
-				right: 200,
-				bottom: 100,
-			},
+	canvas.getBoundingClientRect = jest.fn(() =>
+		rectOverride || {
+			width: 200,
+			height: 100,
+			top: 0,
+			left: 0,
+			right: 200,
+			bottom: 100,
+		},
 	);
 	return canvas;
 };
@@ -82,8 +77,7 @@ describe("Wave", () => {
 				new Wave({ amplitude: Number.NaN, wavelength: 100, segmentLength: 10 }),
 		).toThrow("Amplitude and wavelength must be finite numbers.");
 		expect(
-			() =>
-				new Wave({ amplitude: 10, wavelength: 100, segmentLength: Number.NaN }),
+			() => new Wave({ amplitude: 10, wavelength: 100, segmentLength: Number.NaN }),
 		).toThrow("Segment length, speed, and rotate must be finite numbers.");
 		expect(
 			() => new Wave({ amplitude: -1, wavelength: 100, segmentLength: 10 }),
@@ -92,37 +86,17 @@ describe("Wave", () => {
 			() => new Wave({ amplitude: 10, wavelength: 100, segmentLength: 0 }),
 		).toThrow("Wave configuration values must be positive.");
 		expect(
-			() =>
-				new Wave({
-					amplitude: 10,
-					wavelength: 100,
-					segmentLength: 10,
-					rotate: -1,
-				}),
+			() => new Wave({ amplitude: 10, wavelength: 100, segmentLength: 10, rotate: -1 }),
 		).toThrow("Rotate value must be between 0 and 360 degrees.");
 		expect(
-			() =>
-				new Wave({
-					amplitude: 10,
-					wavelength: 100,
-					segmentLength: 10,
-					rotate: 360,
-				}),
+			() => new Wave({ amplitude: 10, wavelength: 100, segmentLength: 10, rotate: 360 }),
 		).toThrow("Rotate value must be between 0 and 360 degrees.");
-		const wave = new Wave({
-			amplitude: 10,
-			wavelength: 100,
-			segmentLength: 10,
-		});
+		const wave = new Wave({ amplitude: 10, wavelength: 100, segmentLength: 10 });
 		expect(wave).toBeInstanceOf(Wave);
 	});
 
 	it("updates valid config and rejects invalid config", () => {
-		const wave = new Wave({
-			amplitude: 10,
-			wavelength: 100,
-			segmentLength: 10,
-		});
+		const wave = new Wave({ amplitude: 10, wavelength: 100, segmentLength: 10 });
 		const result = wave.update({ amplitude: 20 });
 		expect(result).toBe(wave);
 		expect(wave.amplitude).toBe(20);
@@ -261,9 +235,7 @@ describe("SineWaveGenerator", () => {
 		const ctx = createMockContext();
 		const canvas = createCanvas(ctx);
 		const generator = new SineWaveGenerator({ el: canvas });
-		generator.waves = [
-			new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 }),
-		];
+		generator.waves = [new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 })];
 		generator.displayHeight = 0;
 		generator.onMouseMove({ clientY: 50 });
 		expect(generator.waves[0].phase).toBeDefined();
@@ -305,6 +277,85 @@ describe("SineWaveGenerator", () => {
 		generator.stop();
 		expect(global.cancelAnimationFrame).toHaveBeenCalledWith(99);
 		expect(generator.animationFrameId).toBeNull();
+	});
+
+	it("retries when canvas size is zero and then recovers", () => {
+		const ctx = createMockContext();
+		const canvas = createCanvas(ctx, { width: 0, height: 0 });
+		const generator = new SineWaveGenerator({ el: canvas });
+		generator.waves = [
+			new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 }),
+		];
+		generator.displayWidth = 0;
+		generator.displayHeight = 0;
+		let resizeCount = 0;
+		jest.spyOn(generator, "resize").mockImplementation(() => {
+			resizeCount += 1;
+			if (resizeCount === 1) {
+				generator.displayWidth = 0;
+				generator.displayHeight = 0;
+			} else {
+				generator.displayWidth = 100;
+				generator.displayHeight = 50;
+			}
+			return generator;
+		});
+		let rafCount = 0;
+		global.requestAnimationFrame = jest.fn((callback) => {
+			rafCount += 1;
+			if (rafCount === 1) {
+				callback();
+			}
+			return 321;
+		});
+		generator.start();
+		expect(ctx.clearRect).toHaveBeenCalled();
+	});
+
+	it("waits for layout when canvas size stays zero", () => {
+		const ctx = createMockContext();
+		const canvas = createCanvas(ctx, { width: 0, height: 0 });
+		const generator = new SineWaveGenerator({ el: canvas });
+		generator.waves = [
+			new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 }),
+		];
+		jest.spyOn(generator, "resize").mockImplementation(() => generator);
+		let rafCount = 0;
+		global.requestAnimationFrame = jest.fn((callback) => {
+			rafCount += 1;
+			if (rafCount === 1) {
+				callback();
+			}
+			return 654;
+		});
+		generator.start();
+		expect(global.requestAnimationFrame).toHaveBeenCalledTimes(2);
+		expect(ctx.clearRect).not.toHaveBeenCalled();
+	});
+
+	it("schedules another frame when height is still zero after resize", () => {
+		const ctx = createMockContext();
+		const canvas = createCanvas(ctx, { width: 0, height: 0 });
+		const generator = new SineWaveGenerator({ el: canvas });
+		generator.waves = [
+			new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 }),
+		];
+		jest.spyOn(generator, "resize").mockImplementation(() => {
+			generator.displayWidth = 100;
+			generator.displayHeight = 0;
+			return generator;
+		});
+		let rafCount = 0;
+		global.requestAnimationFrame = jest.fn((callback) => {
+			rafCount += 1;
+			if (rafCount === 1) {
+				callback();
+			}
+			return 987;
+		});
+		generator.start();
+		expect(global.requestAnimationFrame).toHaveBeenCalledTimes(2);
+		expect(ctx.clearRect).not.toHaveBeenCalled();
 	});
 
 	it("stops cleanly when no animation frame is active", () => {
@@ -385,9 +436,7 @@ describe("SineWaveGenerator", () => {
 		generator.addWave(wave);
 		generator.addWave({ amplitude: 12, wavelength: 90, segmentLength: 10 });
 		expect(generator.waves[generator.waves.length - 1]).toBeInstanceOf(Wave);
-		expect(() => generator.removeWave(999)).toThrow(
-			"Wave index out of bounds.",
-		);
+		expect(() => generator.removeWave(999)).toThrow("Wave index out of bounds.");
 		const count = generator.waves.length;
 		generator.removeWave(count - 1);
 		expect(generator.waves.length).toBe(count - 1);
