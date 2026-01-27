@@ -253,6 +253,36 @@ button {
 	margin-top: 12px;
 }
 
+.control-stack {
+	display: grid;
+	gap: 10px;
+}
+
+.control-group {
+	display: grid;
+	gap: 6px;
+	font-size: 0.85rem;
+	color: var(--muted);
+}
+
+.control-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.control-row input[type="range"] {
+	flex: 1;
+	accent-color: var(--accent);
+}
+
+.control-row span {
+	min-width: 40px;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	color: #0f172a;
+}
+
 .btn {
 	padding: 8px 14px;
 	border-radius: 999px;
