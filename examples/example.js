@@ -71,7 +71,7 @@
 			generator.addWave({
 				amplitude: 26,
 				wavelength: 140,
-				speed: 0.8,
+				speed: 0.25,
 				segmentLength: 8,
 			});
 		});
@@ -82,21 +82,21 @@
 				{
 					amplitude: 18,
 					wavelength: 140,
-					speed: 0.6,
+					speed: 0.22,
 					segmentLength: 10,
 					strokeStyle: null,
 				},
 				{
 					amplitude: 28,
 					wavelength: 200,
-					speed: 0.45,
+					speed: 0.18,
 					segmentLength: 12,
 					strokeStyle: "rgba(14,165,233,0.5)",
 				},
 				{
 					amplitude: 12,
 					wavelength: 90,
-					speed: 0.9,
+					speed: 0.28,
 					segmentLength: 8,
 					strokeStyle: "rgba(15,23,42,0.35)",
 				},
@@ -108,7 +108,7 @@
 			generator.addWave({
 				amplitude: 32,
 				wavelength: 180,
-				speed: 0.7,
+				speed: 0.22,
 				segmentLength: 8,
 			});
 			createPointerController(canvas, generator);
@@ -117,11 +117,11 @@
 		withCanvas("sineCanvasDynamic", (canvas) => {
 			const generator = createGenerator(canvas);
 			const waveStack = [
-				{ amplitude: 12, wavelength: 100, speed: 0.5, segmentLength: 10 },
-				{ amplitude: 20, wavelength: 140, speed: 0.6, segmentLength: 10 },
-				{ amplitude: 28, wavelength: 180, speed: 0.7, segmentLength: 10 },
-				{ amplitude: 36, wavelength: 220, speed: 0.8, segmentLength: 12 },
-				{ amplitude: 18, wavelength: 120, speed: 0.55, segmentLength: 8 },
+				{ amplitude: 12, wavelength: 100, speed: 0.18, segmentLength: 10 },
+				{ amplitude: 20, wavelength: 140, speed: 0.2, segmentLength: 10 },
+				{ amplitude: 28, wavelength: 180, speed: 0.22, segmentLength: 10 },
+				{ amplitude: 36, wavelength: 220, speed: 0.24, segmentLength: 12 },
+				{ amplitude: 18, wavelength: 120, speed: 0.19, segmentLength: 8 },
 			];
 			let currentIndex = 0;
 			let removing = false;
@@ -153,9 +153,9 @@
 		withCanvas("sineCanvasPerformance", (canvas) => {
 			const generator = createGenerator(canvas, { maxPixelRatio: 1 });
 			addWaves(generator, [
-				{ amplitude: 18, wavelength: 160, speed: 0.4, segmentLength: 14 },
-				{ amplitude: 10, wavelength: 120, speed: 0.55, segmentLength: 16 },
-				{ amplitude: 6, wavelength: 90, speed: 0.7, segmentLength: 18 },
+				{ amplitude: 18, wavelength: 160, speed: 0.16, segmentLength: 14 },
+				{ amplitude: 10, wavelength: 120, speed: 0.18, segmentLength: 16 },
+				{ amplitude: 6, wavelength: 90, speed: 0.2, segmentLength: 18 },
 			]);
 		});
 
@@ -164,7 +164,7 @@
 			generator.addWave({
 				amplitude: 30,
 				wavelength: 160,
-				speed: 0.6,
+				speed: 0.22,
 				segmentLength: 10,
 				easing: Ease.easedSine,
 			});
@@ -175,7 +175,7 @@
 			generator.addWave({
 				amplitude: 24,
 				wavelength: 150,
-				speed: 0.7,
+				speed: 0.24,
 				segmentLength: 10,
 			});
 
