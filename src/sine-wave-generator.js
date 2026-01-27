@@ -350,8 +350,10 @@ class SineWaveGenerator {
 	 */
 	resize() {
 		const rect = this.el.getBoundingClientRect();
-		const nextWidth = rect.width || window.innerWidth;
-		const nextHeight = rect.height || window.innerHeight;
+		const nextWidth =
+			rect.width || this.el.clientWidth || this.el.offsetWidth || window.innerWidth;
+		const nextHeight =
+			rect.height || this.el.clientHeight || this.el.offsetHeight || window.innerHeight;
 		this.displayWidth = Math.max(1, Math.floor(nextWidth));
 		this.displayHeight = Math.max(1, Math.floor(nextHeight));
 		const ratio = Math.min(this.pixelRatio, this.maxPixelRatio);
