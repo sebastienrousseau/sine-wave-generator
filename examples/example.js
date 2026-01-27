@@ -1079,7 +1079,7 @@
 				data = new Uint8Array(analyser.frequencyBinCount);
 				source.connect(analyser);
 				status.textContent = "Live";
-			} catch (error) {
+			} catch {
 				status.textContent = "Blocked";
 			}
 		};
@@ -1187,7 +1187,6 @@
 		}
 		const controls = setupControls(card);
 		const generator = createGenerator(canvas);
-		let currentWaveCount = 0;
 
 		const easingFunctions = {
 			sineInOut: (percent, amp) =>
@@ -1236,11 +1235,15 @@
 		if (presetSelect) {
 			presetSelect.addEventListener("change", () => {
 				const preset = PRESETS[presetSelect.value];
-				if (!preset) return;
+				if (!preset) {
+					return;
+				}
 				const sliders = card.querySelectorAll("[data-control]");
 				sliders.forEach((input) => {
 					const key = input.dataset.control;
-					if (key === "preset" || key === "strokeColor") return;
+					if (key === "preset" || key === "strokeColor") {
+						return;
+					}
 					if (preset[key] !== undefined) {
 						input.value = preset[key];
 						input.dispatchEvent(new Event("input", { bubbles: true }));
@@ -1285,7 +1288,6 @@
 				wave.easing = easingFn;
 				wave.strokeStyle = color;
 			});
-			currentWaveCount = desiredCount;
 		};
 
 		card.addEventListener("input", syncWaves);
