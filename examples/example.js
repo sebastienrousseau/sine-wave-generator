@@ -22,7 +22,7 @@
 		height: generator.displayHeight || canvas.clientHeight || canvas.height || 1,
 	});
 
-	const createErrorGuard = (label) => {
+	const createErrorGuard = (label, card) => {
 		let reported = false;
 		return (error) => {
 			if (reported) {
@@ -30,6 +30,15 @@
 			}
 			reported = true;
 			console.error(`[sine-wave-generator] ${label} failed`, error);
+			if (card) {
+				const existing = card.querySelector(".demo-error");
+				if (!existing) {
+					const badge = document.createElement("span");
+					badge.className = "demo-error";
+					badge.textContent = "Demo stopped. Check console.";
+					card.appendChild(badge);
+				}
+			}
 		};
 	};
 
@@ -88,7 +97,7 @@
 		}
 		const controls = setupControls(card);
 		const generator = createGenerator(canvas);
-		const reportError = createErrorGuard(id);
+		const reportError = createErrorGuard(id, card);
 		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.05 });
 		const ctx = generator.ctx;
 		generator.drawWave = (wave, deltaScale = 1) => {

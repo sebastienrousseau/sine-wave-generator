@@ -319,6 +319,19 @@ button {
 	color: var(--muted);
 }
 
+.demo-error {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-top: 10px;
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: rgba(239, 68, 68, 0.12);
+	color: #b91c1c;
+	font-size: 0.8rem;
+	font-weight: 600;
+}
+
 .status {
 	display: inline-flex;
 	align-items: center;
