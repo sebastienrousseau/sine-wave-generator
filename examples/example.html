@@ -27,7 +27,9 @@
 				</div>
 				<nav class="nav">
 					<a href="#overview">Overview</a>
+					<a href="#fundamentals">Fundamentals</a>
 					<a href="#examples">Examples</a>
+					<a href="#lab">Lab</a>
 					<a href="#advanced-modes">Advanced modes</a>
 					<a href="#api">API</a>
 					<a href="#performance">Performance</a>
@@ -88,6 +90,86 @@
 
 generator.start();</code></pre>
 					</div>
+				</div>
+			</section>
+
+			<section class="section" id="fundamentals">
+				<div class="section-header">
+					<h2>Fundamentals</h2>
+					<p>Core interactions you can remix immediately.</p>
+				</div>
+				<div class="card-grid">
+					<article class="card">
+						<h3>Basic wave</h3>
+						<p>Single wave with default gradient stroke.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasBasic"
+							aria-label="Basic wave"
+						></canvas>
+					</article>
+					<article class="card">
+						<h3>Layered waves</h3>
+						<p>Stack multiple waves for depth and parallax.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasMulti"
+							aria-label="Layered waves"
+						></canvas>
+					</article>
+					<article class="card">
+						<h3>Pointer reactive</h3>
+						<p>Pointer movement shapes amplitude and wavelength.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPointer"
+							aria-label="Pointer reactive"
+						></canvas>
+					</article>
+					<article class="card">
+						<h3>Dynamic management</h3>
+						<p>Programmatic add/remove of wave layers.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasDynamic"
+							aria-label="Dynamic waves"
+						></canvas>
+					</article>
+					<article class="card">
+						<h3>Performance mode</h3>
+						<p>Low-memory settings with pixel-ratio caps.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPerformance"
+							aria-label="Performance mode"
+						></canvas>
+					</article>
+					<article class="card">
+						<h3>Custom easing</h3>
+						<p>Swap easing curves for cinematic motion.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasEasing"
+							aria-label="Custom easing"
+						></canvas>
+					</article>
+					<article class="card">
+						<h3>Pause and resume</h3>
+						<p>Explicit control over the render loop.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPause"
+							aria-label="Pause resume"
+						></canvas>
+						<div class="controls">
+							<button class="btn" type="button" data-action="pause">
+								Pause
+							</button>
+							<button class="btn" type="button" data-action="resume">
+								Resume
+							</button>
+						</div>
+					</article>
 				</div>
 			</section>
 
@@ -224,6 +306,140 @@ generator.start();</code></pre>
 										max="360"
 										step="5"
 										value="30"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+					<article class="card" data-example="fluidColumn">
+						<h3>Fluid column</h3>
+						<p>Vertical flow with volumetric thickness.</p>
+						<canvas
+							class="demo-canvas"
+							id="fluidColumnCanvas"
+							aria-label="Fluid column"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="60"
+										step="1"
+										value="28"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+					<article class="card" data-example="diagonalRain">
+						<h3>Diagonal rain</h3>
+						<p>Angled strokes with tempo-locked shimmer.</p>
+						<canvas
+							class="demo-canvas"
+							id="diagonalRainCanvas"
+							aria-label="Diagonal rain"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="112"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="6"
+										max="40"
+										step="1"
+										value="20"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="16"
+										step="1"
+										value="9"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
 										data-control="phase"
 									/>
 									<span data-value></span>
@@ -434,6 +650,374 @@ generator.start();</code></pre>
 					</article>
 				</div>
 			</section>
+
+			<section class="section" id="lab">
+				<div class="section-header">
+					<h2>Lab presets</h2>
+					<p>Curated scenes you can drop into a hero section.</p>
+				</div>
+				<div class="card-grid">
+					<article class="card" data-example="labOcean">
+						<h3>🌊 The Ocean</h3>
+						<p>Horizontal layering with slow tides.</p>
+						<canvas
+							class="demo-canvas"
+							id="labOceanCanvas"
+							aria-label="The Ocean"
+						></canvas>
+					</article>
+					<article class="card" data-example="labHelix">
+						<h3>🧬 The Helix</h3>
+						<p>Vertical strands with parallax depth.</p>
+						<canvas
+							class="demo-canvas"
+							id="labHelixCanvas"
+							aria-label="The Helix"
+						></canvas>
+					</article>
+					<article class="card" data-example="labPulse">
+						<h3>⚡ The Pulse</h3>
+						<p>BPM-reactive ripples with color sync.</p>
+						<canvas
+							class="demo-canvas"
+							id="labPulseCanvas"
+							aria-label="The Pulse"
+						></canvas>
+					</article>
+					<article class="card" data-example="labOrbit">
+						<h3>🎡 The Orbit</h3>
+						<p>Lissajous curves with orbital drift.</p>
+						<canvas
+							class="demo-canvas"
+							id="labOrbitCanvas"
+							aria-label="The Orbit"
+						></canvas>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="advanced-modes">
+				<div class="section-header">
+					<h2>Advanced modes</h2>
+					<p>Experimental sketches built on sine-driven motion.</p>
+				</div>
+				<div class="card-grid">
+					<article class="card" data-example="moireInterference">
+						<h3>Interference grid</h3>
+						<p>Two angled lattices creating moiré shimmer.</p>
+						<canvas
+							class="demo-canvas"
+							id="moireInterferenceCanvas"
+							aria-label="Interference grid"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="90"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="20"
+										step="1"
+										value="10"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="16"
+										step="1"
+										value="8"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+					<article class="card" data-example="kineticTypography">
+						<h3>Kinetic typography</h3>
+						<p>Letterforms that breathe with the beat.</p>
+						<canvas
+							class="demo-canvas"
+							id="kineticTypographyCanvas"
+							aria-label="Kinetic typography"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="60"
+										max="180"
+										step="1"
+										value="104"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="6"
+										max="30"
+										step="1"
+										value="16"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="1"
+										max="10"
+										step="1"
+										value="4"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="10"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+					<article class="card" data-example="dampedSine">
+						<h3>Damped sine</h3>
+						<p>Organic motion with exponential decay.</p>
+						<canvas
+							class="demo-canvas"
+							id="dampedSineCanvas"
+							aria-label="Damped sine"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="160"
+										step="1"
+										value="78"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="8"
+										max="40"
+										step="1"
+										value="24"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="1"
+										max="10"
+										step="1"
+										value="5"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+					<article class="card" data-example="recursiveSine">
+						<h3>Recursive sine</h3>
+						<p>Nested oscillators for organic drift.</p>
+						<canvas
+							class="demo-canvas"
+							id="recursiveSineCanvas"
+							aria-label="Recursive sine"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group">
+								<span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="50"
+										max="180"
+										step="1"
+										value="112"
+										data-control="bpm"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="6"
+										max="40"
+										step="1"
+										value="20"
+										data-control="amplitude"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="14"
+										step="1"
+										value="7"
+										data-control="frequency"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+							<label class="control-group">
+								<span>Phase shift</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="0"
+										max="360"
+										step="5"
+										value="0"
+										data-control="phase"
+									/>
+									<span data-value></span>
+								</div>
+							</label>
+						</div>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="lab">
+				<div class="section-header">
+					<h2>Lab presets</h2>
+					<p>Curated scenes you can drop into a hero section.</p>
+				</div>
+				<div class="card-grid">
+					<article class="card" data-example="labOcean">
+						<h3>🌊 The Ocean</h3>
+						<p>Horizontal layering with slow tides.</p>
+						<canvas
+							class="demo-canvas"
+							id="labOceanCanvas"
+							aria-label="The Ocean"
+						></canvas>
+					</article>
+					<article class="card" data-example="labHelix">
+						<h3>🧬 The Helix</h3>
+						<p>Vertical strands with parallax depth.</p>
+						<canvas
+							class="demo-canvas"
+							id="labHelixCanvas"
+							aria-label="The Helix"
+						></canvas>
+					</article>
+					<article class="card" data-example="labPulse">
+						<h3>⚡ The Pulse</h3>
+						<p>BPM-reactive ripples with color sync.</p>
+						<canvas
+							class="demo-canvas"
+							id="labPulseCanvas"
+							aria-label="The Pulse"
+						></canvas>
+					</article>
+					<article class="card" data-example="labOrbit">
+						<h3>🎡 The Orbit</h3>
+						<p>Lissajous curves with orbital drift.</p>
+						<canvas
+							class="demo-canvas"
+							id="labOrbitCanvas"
+							aria-label="The Orbit"
+						></canvas>
+					</article>
+				</div>
+			</section>
+
 			<section class="section" id="advanced-modes">
 				<div class="section-header">
 					<h2>Advanced modes</h2>
