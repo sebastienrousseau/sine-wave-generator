@@ -209,8 +209,112 @@
 		}
 	};
 
-	document.addEventListener("DOMContentLoaded", () => {
+	const drawMoireInterference = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const spacing = 10 + controls.frequency * 2;
+		const angle = Math.sin(time) * 0.25 + (controls.phase * Math.PI) / 360;
+		const centerX = width * 0.5;
+		const centerY = height * 0.5;
+		const maxExtent = Math.max(width, height) * 0.75;
+		const drawGrid = (rotation, hueOffset) => {
+			ctx.save();
+			ctx.translate(centerX, centerY);
+			ctx.rotate(rotation);
+			ctx.translate(-centerX, -centerY);
+			for (let x = -maxExtent; x <= width + maxExtent; x += spacing) {
+				const value = Math.sin((x / spacing) * 0.35 + time);
+				const hue = hueFromValue(value, hueOffset);
+				ctx.strokeStyle = `hsla(${hue}deg 70% 60% / 0.35)`;
+				ctx.beginPath();
+				ctx.moveTo(x, -maxExtent);
+				ctx.lineTo(x, height + maxExtent);
+				ctx.stroke();
+			}
+			ctx.restore();
+		};
+		drawGrid(angle, 180);
+		drawGrid(-angle * 1.3, 240);
+	};
+
+	const drawKineticTypography = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const text = "SINE WAVE";
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.6;
+		ctx.textAlign = "center";
+		ctx.textBaseline = "middle";
+		ctx.font = "600 28px 'SF Pro Text', 'Helvetica Neue', sans-serif";
+		const letters = text.split("");
+		const totalWidth = letters.length * 18;
+		letters.forEach((char, index) => {
+			const offset = index - letters.length / 2;
+			const wave = Math.sin(time + offset * freq) * amplitude;
+			const hue = hueFromValue(wave / amplitude, 210);
+			ctx.fillStyle = `hsl(${hue}deg 80% 55%)`;
+			ctx.fillText(
+				char,
+				width * 0.5 + offset * 18,
+				height * 0.5 + wave,
+			);
+		});
+		ctx.strokeStyle = "rgba(15, 23, 42, 0.1)";
+		ctx.strokeRect(
+			width * 0.5 - totalWidth * 0.5 - 16,
+			height * 0.5 - 30,
+			totalWidth + 32,
+			60,
+		);
+	};
+
+	const drawDampedSine = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.03;
+		const progress = (time / TWO_PI) % 1;
+		const envelope = Math.exp(-3.2 * progress);
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 4) {
+			const value = Math.sin(x * freq + time);
+			const y = centerY + value * amplitude * envelope;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		const hue = hueFromValue(envelope, 140);
+		ctx.strokeStyle = `hsla(${hue}deg 70% 55% / 0.8)`;
+		ctx.lineWidth = 2;
+		ctx.stroke();
+	};
+
+	const drawRecursiveSine = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const baseFreq = controls.frequency * 0.02;
+		const mod = Math.sin(time * 0.8) * 0.02 * controls.frequency;
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 4) {
+			const nested = Math.sin(time + x * baseFreq * 0.4) * 0.6 + 1;
+			const value = Math.sin(x * (baseFreq + mod * nested) + time);
+			const y = centerY + value * amplitude * (0.6 + nested * 0.4);
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		const hue = hueFromValue(Math.sin(time), 260);
+		ctx.strokeStyle = `hsla(${hue}deg 70% 55% / 0.85)`;
+		ctx.lineWidth = 2;
+		ctx.stroke();
+	};
+
+	const boot = () => {
 		if (typeof window.SineWaveGenerator !== "function") {
+			setTimeout(boot, 50);
 			return;
 		}
 		startExample("pulseMatrix", 4, drawPulseMatrix);
@@ -218,5 +322,13 @@
 		startExample("lissajousOrbit", 3, drawLissajousOrbit);
 		startExample("waveformTerrain", 6, drawWaveformTerrain);
 		startExample("radialBloom", 4, drawRadialBloom);
+		startExample("moireInterference", 4, drawMoireInterference);
+		startExample("kineticTypography", 4, drawKineticTypography);
+		startExample("dampedSine", 4, drawDampedSine);
+		startExample("recursiveSine", 4, drawRecursiveSine);
+	};
+
+	document.addEventListener("DOMContentLoaded", () => {
+		boot();
 	});
 })();
