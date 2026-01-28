@@ -2622,7 +2622,7 @@ export class WaveComponent implements AfterViewInit, OnDestroy {
 						<h3>prefers-reduced-motion</h3>
 						<p>
 							When <code>prefers-reduced-motion: reduce</code> is active,
-							animations render a single static frame instead of looping.
+							animations slow down to respect motion preferences.
 						</p>
 					</div>
 					<div class="card">
@@ -2680,7 +2680,7 @@ export class WaveComponent implements AfterViewInit, OnDestroy {
 							Make sure you call <code>generator.start()</code> after setup.
 							Also check that <code>speed</code> is a positive number. If
 							<code>prefers-reduced-motion</code> is enabled in your OS,
-							animations will render a single static frame.
+							animations will slow down to respect the setting.
 						</p>
 					</details>
 					<details class="card faq-item">

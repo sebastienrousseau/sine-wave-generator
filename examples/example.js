@@ -6,7 +6,8 @@
 	const prefersReducedMotion = window.matchMedia(
 		"(prefers-reduced-motion: reduce)",
 	).matches;
-	const motionScale = prefersReducedMotion ? 0 : 1;
+	// Respect reduced motion by slowing animations rather than stopping them.
+	const motionScale = prefersReducedMotion ? 0.25 : 1;
 
 	const clamp01 = (value) => Math.min(1, Math.max(0, value));
 
@@ -153,14 +154,7 @@
 				generator.stop();
 			}
 		};
-		if (prefersReducedMotion) {
-			observeStart(canvas, () => {
-				generator.start();
-				requestAnimationFrame(() => generator.stop());
-			});
-		} else {
-			observeStart(canvas, () => generator.start());
-		}
+		observeStart(canvas, () => generator.start());
 	};
 
 	const easedSine = (percent, amplitude) => {
@@ -174,14 +168,7 @@
 
 	const startFundamentals = () => {
 		const lazyStart = (canvas, generator) => {
-			if (prefersReducedMotion) {
-				observeStart(canvas, () => {
-					generator.start();
-					requestAnimationFrame(() => generator.stop());
-				});
-			} else {
-				observeStart(canvas, () => generator.start());
-			}
+			observeStart(canvas, () => generator.start());
 		};
 
 		const basic = document.getElementById("sineCanvasBasic");
@@ -311,19 +298,10 @@
 					setTimeout(addWave, 600);
 				}
 			};
-			if (prefersReducedMotion) {
-				observeStart(dynamic, () => {
-					generator.addWave(waveStack[0]);
-					generator.addWave(waveStack[1]);
-					generator.start();
-					requestAnimationFrame(() => generator.stop());
-				});
-			} else {
-				observeStart(dynamic, () => {
-					addWave();
-					generator.start();
-				});
-			}
+			observeStart(dynamic, () => {
+				addWave();
+				generator.start();
+			});
 		}
 
 		const performance = document.getElementById("sineCanvasPerformance");
@@ -1145,12 +1123,7 @@
 			});
 			ro.observe(container);
 		}
-		if (prefersReducedMotion) {
-			generator.start();
-			requestAnimationFrame(() => generator.stop());
-		} else {
-			observeStart(canvas, () => generator.start());
-		}
+		observeStart(canvas, () => generator.start());
 	};
 
 	/* --- Hero background --- */
@@ -1160,16 +1133,13 @@
 		if (!canvas) {
 			return;
 		}
-		if (prefersReducedMotion) {
-			return;
-		}
 		const generator = createGenerator(canvas, { autoResize: true });
 		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.02 });
 		const ctx = generator.ctx;
 		generator.drawWave = (wave, deltaScale = 1) => {
 			const time = wave.phase;
 			drawHeroBackground({ ctx, canvas, generator, time });
-			wave.phase += 0.01 * deltaScale;
+			wave.phase += 0.01 * deltaScale * motionScale;
 		};
 		generator.start();
 	};
@@ -1321,12 +1291,7 @@
 			});
 		}
 
-		if (prefersReducedMotion) {
-			generator.start();
-			requestAnimationFrame(() => generator.stop());
-		} else {
-			generator.start();
-		}
+		generator.start();
 	};
 
 	/* --- Dark/light mode toggle --- */
