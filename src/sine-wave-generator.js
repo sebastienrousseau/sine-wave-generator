@@ -72,6 +72,11 @@ const DEFAULT_MAX_PIXEL_RATIO = 2;
 const TWO_PI = Math.PI * 2;
 const GOLDEN_SECTION = (1 - 1 / 1.618033988749895) / 2;
 const GOLDEN_SECTION_INV = 1 / (1 - 2 * GOLDEN_SECTION);
+const QUALITY_PRESETS = {
+	quality: 2,
+	balanced: 1.5,
+	battery: 1,
+};
 
 /**
  * Represents a wave for the sine wave generator.
@@ -224,10 +229,13 @@ class SineWaveGenerator {
 		this.handleResize = this.resize.bind(this);
 		this.handleMouseMove = this.onMouseMove.bind(this);
 		this.handleTouchMove = this.onTouchMove.bind(this);
+		this.handlePointerMove = this.onPointerMove.bind(this);
 		this.animationFrameId = null;
 		this.touchListenerOptions = { passive: true };
 		this.eventsBound = false;
 		this.autoResize = autoResize;
+		this.supportsPointerEvents =
+			typeof window !== "undefined" && "PointerEvent" in window;
 		this.pixelRatio =
 			typeof pixelRatio === "number" && Number.isFinite(pixelRatio)
 				? pixelRatio
@@ -255,12 +263,20 @@ class SineWaveGenerator {
 		if (this.autoResize) {
 			window.addEventListener("resize", this.handleResize);
 		}
-		this.el.addEventListener("mousemove", this.handleMouseMove);
-		this.el.addEventListener(
-			"touchmove",
-			this.handleTouchMove,
-			this.touchListenerOptions,
-		);
+		if (this.supportsPointerEvents) {
+			this.el.addEventListener(
+				"pointermove",
+				this.handlePointerMove,
+				this.touchListenerOptions,
+			);
+		} else {
+			this.el.addEventListener("mousemove", this.handleMouseMove);
+			this.el.addEventListener(
+				"touchmove",
+				this.handleTouchMove,
+				this.touchListenerOptions,
+			);
+		}
 		this.eventsBound = true;
 		return this;
 	}
@@ -276,12 +292,20 @@ class SineWaveGenerator {
 		if (this.autoResize) {
 			window.removeEventListener("resize", this.handleResize);
 		}
-		this.el.removeEventListener("mousemove", this.handleMouseMove);
-		this.el.removeEventListener(
-			"touchmove",
-			this.handleTouchMove,
-			this.touchListenerOptions,
-		);
+		if (this.supportsPointerEvents) {
+			this.el.removeEventListener(
+				"pointermove",
+				this.handlePointerMove,
+				this.touchListenerOptions,
+			);
+		} else {
+			this.el.removeEventListener("mousemove", this.handleMouseMove);
+			this.el.removeEventListener(
+				"touchmove",
+				this.handleTouchMove,
+				this.touchListenerOptions,
+			);
+		}
 		this.eventsBound = false;
 		return this;
 	}
@@ -315,6 +339,22 @@ class SineWaveGenerator {
 		}
 		const touchY = event.touches[0].clientY / this.displayHeight;
 		const phase = Math.min(1, Math.max(0, touchY)) * TWO_PI;
+		const waves = this.waves;
+		for (let i = 0, len = waves.length; i < len; i++) {
+			waves[i].phase = phase;
+		}
+	}
+
+	/**
+	 * Handles pointer movement.
+	 * @param {PointerEvent} event - The pointer event.
+	 */
+	onPointerMove(event) {
+		if (this.displayHeight <= 0) {
+			return;
+		}
+		const pointerY = event.clientY / this.displayHeight;
+		const phase = Math.min(1, Math.max(0, pointerY)) * TWO_PI;
 		const waves = this.waves;
 		for (let i = 0, len = waves.length; i < len; i++) {
 			waves[i].phase = phase;
@@ -483,6 +523,48 @@ class SineWaveGenerator {
 			throw new Error("Wave index out of bounds.");
 		}
 		this.waves.splice(index, 1);
+		return this;
+	}
+
+	/**
+	 * Replace the full wave stack in a single update.
+	 * @param {Wave[]|Object[]} waves - Array of Wave instances or configs.
+	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 */
+	setWaves(waves) {
+		if (!Array.isArray(waves)) {
+			throw new Error("setWaves expects an array of wave configs.");
+		}
+		this.waves = waves.map((wave) =>
+			wave instanceof Wave ? wave : new Wave(wave),
+		);
+		return this;
+	}
+
+	/**
+	 * Apply a quality preset for memory/perf balance.
+	 * @param {"quality"|"balanced"|"battery"} preset - The preset name.
+	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 */
+	setQualityPreset(preset) {
+		const next = QUALITY_PRESETS[preset];
+		if (!next) {
+			throw new Error(
+				'Invalid preset. Use "quality", "balanced", or "battery".',
+			);
+		}
+		this.maxPixelRatio = Math.max(1, next);
+		this.resize();
+		return this;
+	}
+
+	/**
+	 * Fully stop and unbind events.
+	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 */
+	destroy() {
+		this.stop();
+		this.waves = [];
 		return this;
 	}
 }

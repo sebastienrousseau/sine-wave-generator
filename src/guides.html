@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Guides - Sine Wave Generator</title>
+		<meta
+			name="description"
+			content="Short guides for hero backgrounds, scroll-reactive waves, audio-driven visuals, and performance tuning."
+		/>
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Guides - Sine Wave Generator" />
+		<meta
+			property="og:description"
+			content="Short guides for hero backgrounds, scroll-reactive waves, audio-driven visuals, and performance tuning."
+		/>
+		<meta
+			property="og:url"
+			content="https://sine-wave-generator.com/guides/"
+		/>
+		<meta
+			property="og:image"
+			content="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
+		/>
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Guides - Sine Wave Generator" />
+		<meta
+			name="twitter:description"
+			content="Short guides for hero backgrounds, scroll-reactive waves, audio-driven visuals, and performance tuning."
+		/>
+		<meta name="theme-color" content="#0ea5e9" />
+		<link rel="canonical" href="https://sine-wave-generator.com/guides/" />
+		<link rel="stylesheet" href="../reset.css" />
+		<link rel="icon" href="../favicon.ico" />
+	</head>
+	<body>
+		<div class="loading-overlay" id="loadingOverlay">
+			<div class="loading-spinner"></div>
+		</div>
+		<canvas id="heroBackgroundCanvas" class="hero-bg-canvas" aria-hidden="true"></canvas>
+		<header class="site-header">
+			<div class="brand">
+				<img
+					src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
+					alt="Sine Wave Generator logo"
+				/>
+				<span>Sine Wave Generator</span>
+			</div>
+			<nav class="nav" id="site-nav">
+				<a href="/">Home</a>
+				<a href="/getting-started/">Get started</a>
+				<a href="/examples/">Examples</a>
+				<a href="/playground/">Playground</a>
+				<a href="/docs/api/">API</a>
+				<a href="/guides/">Guides</a>
+				<a href="/showcase/">Showcase</a>
+			</nav>
+			<div class="header-actions">
+				<a
+					class="gh-star-btn"
+					href="https://github.com/sebastienrousseau/sine-wave-generator"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="Star on GitHub"
+					>GitHub</a
+				>
+				<button
+					class="theme-toggle"
+					type="button"
+					id="themeToggle"
+					aria-label="Toggle dark mode"
+					title="Toggle dark mode"
+				>
+					<svg
+						class="theme-icon theme-icon-sun"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<circle cx="12" cy="12" r="5"></circle>
+						<line x1="12" y1="1" x2="12" y2="3"></line>
+						<line x1="12" y1="21" x2="12" y2="23"></line>
+						<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+						<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+						<line x1="1" y1="12" x2="3" y2="12"></line>
+						<line x1="21" y1="12" x2="23" y2="12"></line>
+						<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+						<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+					</svg>
+					<svg
+						class="theme-icon theme-icon-moon"
+						width="20"
+						height="20"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+					</svg>
+				</button>
+				<button
+					class="nav-toggle"
+					type="button"
+					aria-label="Toggle navigation"
+					aria-controls="site-nav"
+					aria-expanded="false"
+				>
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+			</div>
+			<a class="cta" href="/getting-started/">Get started</a>
+		</header>
+		<main class="page">
+			<section class="section" id="guides-hero">
+				<div class="section-header">
+					<h1>Guides</h1>
+					<p>Short, focused recipes. Built for shipping.</p>
+				</div>
+			</section>
+
+			<section class="section alt-section" id="guides">
+				<div class="card-grid">
+					<article class="card">
+						<h3>Hero background</h3>
+						<p>Build a subtle, layered hero backdrop that stays performant.</p>
+						<a class="btn-secondary" href="/guides/#hero-background"
+							>Learn more</a
+						>
+					</article>
+					<article class="card">
+						<h3>Scroll-reactive parallax</h3>
+						<p>Tie wave amplitude and wavelength to scroll position.</p>
+						<a class="btn-secondary" href="/guides/#scroll-reactive"
+							>Learn more</a
+						>
+					</article>
+					<article class="card">
+						<h3>Audio-driven waves</h3>
+						<p>Use WebAudio input to drive intensity and color.</p>
+						<a class="btn-secondary" href="/guides/#audio-driven"
+							>Learn more</a
+						>
+					</article>
+					<article class="card">
+						<h3>Quality presets</h3>
+						<p>Balance memory and clarity for battery, balanced, and quality modes.</p>
+						<a class="btn-secondary" href="/guides/#quality-presets"
+							>Learn more</a
+						>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="hero-background">
+				<div class="section-header">
+					<h2>Hero background</h2>
+					<p>Atmosphere, not distraction.</p>
+				</div>
+				<div class="guide-layout">
+					<div class="guide-demo" data-example="heroBackgroundGuide">
+						<canvas class="demo-canvas" aria-label="Hero background demo"></canvas>
+						<pre class="code-block"><code>const gen = new SineWaveGenerator({
+  el: "#hero",
+  autoResize: true,
+  waves: [
+    { amplitude: 16, wavelength: 220, speed: 0.6 },
+    { amplitude: 10, wavelength: 160, speed: 0.4 }
+  ]
+});
+
+gen.start();</code></pre>
+					</div>
+					<div class="card">
+						<h3>Purpose</h3>
+						<p>Give the page depth and calm motion without competing with copy.</p>
+						<h3>Why it works</h3>
+						<p>
+							Two slow waves create parallax at low contrast. The eye reads the
+							motion as atmosphere, not content.
+						</p>
+						<h3>How to apply</h3>
+						<ul>
+							<li>Keep amplitude under 20px to avoid stealing attention.</li>
+							<li>Use two wavelengths for depth (e.g., 220 + 160).</li>
+							<li>Lower stroke opacity to 0.15–0.4 for softness.</li>
+							<li>Set <code>autoResize: true</code> for responsive headers.</li>
+						</ul>
+						<a class="btn-secondary" href="/docs/api/#addwave">Learn more</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="section alt-section" id="scroll-reactive">
+				<div class="section-header">
+					<h2>Scroll-reactive parallax</h2>
+					<p>Motion that tracks progress.</p>
+				</div>
+				<div class="guide-layout">
+					<div class="guide-demo" data-example="scrollReactive">
+						<canvas class="demo-canvas" aria-label="Scroll reactive demo"></canvas>
+						<pre class="code-block"><code>window.addEventListener("scroll", () => {
+  const progress = scrollY / (docHeight - innerHeight);
+  wave.amplitude = 10 + 30 * progress;
+  wave.wavelength = 140 + 240 * (1 - progress);
+});</code></pre>
+					</div>
+					<div class="card">
+						<h3>Purpose</h3>
+						<p>Let users “feel” progression without extra UI.</p>
+						<h3>Why it works</h3>
+						<p>
+							Amplitude increases while wavelength tightens, so the motion
+							intensifies naturally as users move through the page.
+						</p>
+						<h3>How to apply</h3>
+						<ul>
+							<li>Throttle updates with <code>requestAnimationFrame</code>.</li>
+							<li>Clamp progress to 0–1 for stable motion.</li>
+							<li>Use a reduced-motion fallback (slow or pause).</li>
+						</ul>
+						<a class="btn-secondary" href="/docs/api/#resize">Learn more</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="section" id="audio-driven">
+				<div class="section-header">
+					<h2>Audio-driven waves</h2>
+					<p>Sound in, motion out.</p>
+				</div>
+				<div class="guide-layout">
+					<div class="guide-demo" data-example="audioSpectrogram">
+						<canvas class="demo-canvas" aria-label="Audio spectrogram"></canvas>
+						<div class="controls">
+							<button class="btn" type="button" data-action="audio-start">
+								Start microphone
+							</button>
+							<span data-audio-status>Idle</span>
+						</div>
+						<pre class="code-block"><code>const analyser = audioCtx.createAnalyser();
+analyser.fftSize = 128;
+// Map frequency bins to wave intensity.</code></pre>
+					</div>
+					<div class="card">
+						<h3>Purpose</h3>
+						<p>Turn audio energy into visual rhythm.</p>
+						<h3>Why it works</h3>
+						<p>
+							FFT bins provide a stable amplitude envelope that maps cleanly to
+							wave height and color.
+						</p>
+						<h3>How to apply</h3>
+						<ul>
+							<li>Start audio on a user gesture to satisfy mobile policies.</li>
+							<li>Normalize 0–255 data into 0–1 amplitudes.</li>
+							<li>Use light smoothing for natural motion.</li>
+						</ul>
+						<a class="btn-secondary" href="/docs/api/#drawwave">Learn more</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="section alt-section" id="quality-presets">
+				<div class="section-header">
+					<h2>Quality presets</h2>
+					<p>Fidelity when you want it. Battery when you need it.</p>
+				</div>
+				<div class="guide-layout">
+					<div class="guide-demo" data-example="qualityPresets">
+						<canvas class="demo-canvas" aria-label="Quality presets demo"></canvas>
+						<div class="quality-buttons">
+							<button class="btn-secondary is-active" data-quality="balanced">
+								Balanced
+							</button>
+							<button class="btn-secondary" data-quality="quality">Quality</button>
+							<button class="btn-secondary" data-quality="battery">Battery</button>
+						</div>
+						<div class="quality-status" data-quality-status>
+							Quality preset: balanced
+						</div>
+						<pre class="code-block"><code>gen.setQualityPreset("balanced");
+gen.setQualityPreset("quality");
+gen.setQualityPreset("battery");</code></pre>
+					</div>
+					<div class="card">
+						<h3>Purpose</h3>
+						<p>Keep visuals consistent across devices with one switch.</p>
+						<h3>Why it works</h3>
+						<p>
+							Pixel ratio controls the render buffer size, which is the biggest
+							cost driver for canvas memory and fill rate.
+						</p>
+						<h3>How to apply</h3>
+						<ul>
+							<li>Use <code>balanced</code> as the default.</li>
+							<li>Switch to <code>battery</code> on mobile or low power.</li>
+							<li>Offer <code>quality</code> for hero moments.</li>
+						</ul>
+						<a class="btn-secondary" href="/docs/api/#setqualitypreset"
+							>Learn more</a
+						>
+					</div>
+				</div>
+			</section>
+
+			<footer class="site-footer">
+				<div class="footer-links">
+					<a href="/docs/api/">API</a>
+					<a href="/examples/">Examples</a>
+					<a href="/playground/">Playground</a>
+					<a href="/getting-started/">Get started</a>
+					<a
+						href="https://github.com/sebastienrousseau/sine-wave-generator"
+						target="_blank"
+						rel="noopener noreferrer"
+						>GitHub</a
+					>
+				</div>
+				<p>
+					&copy; 2026 Sine Wave Generator. All rights reserved. Licensed under
+					Apache-2.0.
+				</p>
+			</footer>
+		</main>
+		<script defer src="../example.js"></script>
+	</body>
+</html>

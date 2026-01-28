@@ -27,11 +27,43 @@ module.exports = {
 			favicon: "favicon.ico",
 			template: "src/template.html",
 		}),
+		new HtmlWebpackPlugin({
+			filename: "getting-started/index.html",
+			favicon: "favicon.ico",
+			template: "src/getting-started.html",
+		}),
+		new HtmlWebpackPlugin({
+			filename: "examples/index.html",
+			favicon: "favicon.ico",
+			template: "src/examples.html",
+		}),
+		new HtmlWebpackPlugin({
+			filename: "playground/index.html",
+			favicon: "favicon.ico",
+			template: "src/playground.html",
+		}),
+		new HtmlWebpackPlugin({
+			filename: "docs/api/index.html",
+			favicon: "favicon.ico",
+			template: "src/docs-api.html",
+		}),
+		new HtmlWebpackPlugin({
+			filename: "guides/index.html",
+			favicon: "favicon.ico",
+			template: "src/guides.html",
+		}),
+		new HtmlWebpackPlugin({
+			filename: "showcase/index.html",
+			favicon: "favicon.ico",
+			template: "src/showcase.html",
+		}),
 		new CopyPlugin({
 			patterns: [
 				{ from: "examples/reset.css", to: "." },
 				{ from: "examples/example.js", to: "." },
 				{ from: "LICENSE", to: "." },
+				{ from: "sitemap.xml", to: "." },
+				{ from: "robots.txt", to: "." },
 			],
 		}),
 	],

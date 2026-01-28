@@ -60,6 +60,569 @@
 		});
 	};
 
+	const setActiveNav = () => {
+		const nav = document.getElementById("site-nav");
+		if (!nav) {
+			return;
+		}
+		const normalize = (value) => {
+			if (!value) {
+				return "/";
+			}
+			const trimmed = value
+				.replace(/\/index\.html$/, "")
+				.replace(/\/+$/, "");
+			return trimmed === "" ? "/" : trimmed;
+		};
+		const current = normalize(window.location.pathname);
+		const links = nav.querySelectorAll("a");
+		links.forEach((link) => {
+			const href = link.getAttribute("href");
+			if (!href || href.startsWith("http")) {
+				return;
+			}
+			const path = normalize(new URL(href, window.location.origin).pathname);
+			const isRoot = path === "/";
+			if ((isRoot && current === "/") || (!isRoot && current.startsWith(path))) {
+				link.classList.add("is-active");
+			}
+		});
+	};
+
+	const addMotionNote = (card) => {
+		if (!prefersReducedMotion || !card) {
+			return;
+		}
+		if (card.querySelector(".motion-note")) {
+			return;
+		}
+		const note = document.createElement("div");
+		note.className = "motion-note";
+		note.textContent = "Reduced motion is on.";
+		card.appendChild(note);
+	};
+
+	const attachMotionToggle = (card, generator, startFn) => {
+		if (!card || !generator) {
+			return;
+		}
+		const actions =
+			card.querySelector(".gallery-actions") ||
+			card.querySelector(".controls") ||
+			card;
+		let button = card.querySelector('[data-action="toggle-motion"]');
+		if (!button) {
+			button = document.createElement("button");
+			button.type = "button";
+			button.className = "btn motion-toggle";
+			button.setAttribute("data-action", "toggle-motion");
+			actions.appendChild(button);
+		}
+		let isPaused = false;
+		const updateLabel = () => {
+			button.textContent = isPaused ? "Resume animation" : "Pause animation";
+			button.setAttribute("aria-pressed", isPaused ? "true" : "false");
+		};
+		updateLabel();
+		button.addEventListener("click", () => {
+			if (!isPaused) {
+				generator.stop();
+				isPaused = true;
+			} else {
+				if (typeof startFn === "function") {
+					startFn();
+				} else {
+					generator.start();
+				}
+				isPaused = false;
+			}
+			updateLabel();
+		});
+	};
+
+	const addCanvasDescriptions = () => {
+		const cards = document.querySelectorAll("[data-example]");
+		cards.forEach((card) => {
+			const canvas = card.querySelector("canvas");
+			if (!canvas || canvas.getAttribute("aria-describedby")) {
+				return;
+			}
+			const desc =
+				card.querySelector(".gallery-head p") ||
+				card.querySelector(":scope > p") ||
+				card.querySelector("p");
+			if (!desc) {
+				return;
+			}
+			const id = `${card.dataset.example}-desc`;
+			if (!document.getElementById(id)) {
+				const span = document.createElement("span");
+				span.className = "visually-hidden";
+				span.id = id;
+				span.textContent = desc.textContent.trim();
+				card.appendChild(span);
+			}
+			canvas.setAttribute("aria-describedby", id);
+		});
+	};
+
+	const addExampleMeta = () => {
+		const meta = {
+			pulseMatrix: {
+				purpose: "Add rhythm to structured layouts.",
+				why: "Grid interference reads as energy without visual noise.",
+			},
+			dnaHelix: {
+				purpose: "Create depth with minimal geometry.",
+				why: "Counterphase strands create instant parallax.",
+			},
+			fluidColumn: {
+				purpose: "Give panels a liquid accent.",
+				why: "Phase‑shifted columns feel organic at low cost.",
+			},
+			diagonalRain: {
+				purpose: "Add direction and momentum.",
+				why: "Angle‑based strokes imply motion without full particles.",
+			},
+			lissajousOrbit: {
+				purpose: "Show elegant orbital motion.",
+				why: "Dual frequencies trace stable paths.",
+			},
+			lissajousExplorer: {
+				purpose: "Highlight complex motion quickly.",
+				why: "Frequency offsets create rich loops.",
+			},
+			feedbackLoop: {
+				purpose: "Communicate intensity shifts.",
+				why: "Amplitude modulation builds visible dynamics.",
+			},
+			waveformTerrain: {
+				purpose: "Create layered horizons.",
+				why: "Depth‑shifted phases form terrain.",
+			},
+			radialBloom: {
+				purpose: "Add a focal pulse.",
+				why: "Radial rings peak on downbeats.",
+			},
+			gradientFill: {
+				purpose: "Turn waves into shapes.",
+				why: "Closed paths allow layered fills.",
+			},
+			audioVisualizerSim: {
+				purpose: "Preview audio energy quickly.",
+				why: "Simulated bins map cleanly to height.",
+			},
+			labOcean: {
+				purpose: "Calm, cinematic backdrops.",
+				why: "Layered horizons soften motion.",
+			},
+			labHelix: {
+				purpose: "Add vertical depth cues.",
+				why: "Helix strands imply 3D motion.",
+			},
+			labPulse: {
+				purpose: "Create a steady heartbeat.",
+				why: "Radial pulses read as rhythm.",
+			},
+			labOrbit: {
+				purpose: "Show a clean orbital loop.",
+				why: "Phase offsets keep the path stable.",
+			},
+			moireInterference: {
+				purpose: "Build visual tension fast.",
+				why: "Interference lines create moiré.",
+			},
+			kineticTypography: {
+				purpose: "Animate type without heavy assets.",
+				why: "Wave‑driven offsets add life.",
+			},
+			dampedSine: {
+				purpose: "Show motion decay.",
+				why: "Exponential damping reads as physics.",
+			},
+			recursiveSine: {
+				purpose: "Show complex oscillation.",
+				why: "Nested waves add richness.",
+			},
+			verticalWave: {
+				purpose: "Create flowing ribbons.",
+				why: "Layered offsets add parallax.",
+			},
+			dashArray: {
+				purpose: "Introduce cadence and texture.",
+				why: "Dash patterns add visual rhythm.",
+			},
+			variableWidth: {
+				purpose: "Make motion feel alive.",
+				why: "Width modulation tracks energy.",
+			},
+			compositingGlow: {
+				purpose: "Add premium glow effects.",
+				why: "Screen blending deepens color.",
+			},
+			zenMode: {
+				purpose: "Calm, minimal background motion.",
+				why: "Low‑contrast waves stay subtle.",
+			},
+		};
+		document.querySelectorAll("[data-example]").forEach((card) => {
+			if (!card.closest("#examples")) {
+				return;
+			}
+			const key = card.dataset.example;
+			const entry = meta[key];
+			if (!entry || card.querySelector(".example-meta")) {
+				return;
+			}
+			const wrap = document.createElement("div");
+			wrap.className = "example-meta";
+			const purpose = document.createElement("p");
+			purpose.className = "meta-line";
+			purpose.innerHTML = `<span>Purpose</span>${entry.purpose}`;
+			const why = document.createElement("p");
+			why.className = "meta-line";
+			why.innerHTML = `<span>Why it works</span>${entry.why}`;
+			wrap.appendChild(purpose);
+			wrap.appendChild(why);
+			const after =
+				card.querySelector(".gallery-head") ||
+				card.querySelector("h3") ||
+				card.firstElementChild;
+			if (after && after.parentNode) {
+				after.parentNode.insertBefore(wrap, after.nextSibling);
+			} else {
+				card.appendChild(wrap);
+			}
+		});
+	};
+
+	const startRainbowFundamentals = () => {
+		const card = document.querySelector('[data-example="rainbowFundamentals"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		if (!canvas) {
+			return;
+		}
+		const debugBadge = document.createElement("div");
+		debugBadge.style.position = "absolute";
+		debugBadge.style.top = "12px";
+		debugBadge.style.right = "12px";
+		debugBadge.style.padding = "6px 10px";
+		debugBadge.style.background = "rgba(15, 23, 42, 0.7)";
+		debugBadge.style.color = "#fff";
+		debugBadge.style.fontSize = "12px";
+		debugBadge.style.borderRadius = "999px";
+		debugBadge.style.zIndex = "2";
+		debugBadge.textContent = "rainbow: init";
+		card.style.position = "relative";
+		card.appendChild(debugBadge);
+		try {
+			const generator = createGenerator(canvas, { autoResize: true });
+			// Disable built-in pointer phase updates so custom controls feel consistent.
+			generator.unbindEvents();
+			debugBadge.textContent = "rainbow: generator";
+			addMotionNote(card);
+			attachMotionToggle(card, generator);
+			const rainbowOffsets = [0, 45, 90, 150, 210, 265, 320];
+			const yOffsets = [-1, -0.7, -0.35, 0, 0.35, 0.7, 1];
+			const baseSpeed = 0.014 * motionScale;
+			const baseWavelength = 300;
+			const baseAmplitude = 30;
+			const rotateBase = 6;
+			for (let i = 0; i < 7; i += 1) {
+				const sign = i % 2 === 0 ? 1 : -1;
+				generator.addWave({
+					amplitude: baseAmplitude - i * 2,
+					wavelength: baseWavelength - i * 14,
+					speed: baseSpeed * (1 - i * 0.08),
+					segmentLength: 5,
+					rotate: (rotateBase + i * 1.5) % 360,
+				});
+				const wave = generator.waves[generator.waves.length - 1];
+				wave._rotateDir = sign;
+			}
+			generator.waves.forEach((wave, index) => {
+				wave._rainbowOffset = rainbowOffsets[index % rainbowOffsets.length];
+				wave._rainbowIndex = index;
+			});
+			const updateGradient = (shift = 0) => {
+				const width = generator.displayWidth || canvas.clientWidth || 1;
+				const baseStops = [0, 40, 120, 200, 260, 300, 350];
+				return (offset) => {
+					const gradient = generator.ctx.createLinearGradient(0, 0, width, 0);
+					gradient.addColorStop(
+						0,
+						`hsla(${(baseStops[0] + shift + offset) % 360}, 85%, 60%, 0.9)`,
+					);
+					gradient.addColorStop(
+						0.16,
+						`hsla(${(baseStops[1] + shift + offset) % 360}, 90%, 60%, 0.9)`,
+					);
+					gradient.addColorStop(
+						0.33,
+						`hsla(${(baseStops[2] + shift + offset) % 360}, 85%, 55%, 0.9)`,
+					);
+					gradient.addColorStop(
+						0.5,
+						`hsla(${(baseStops[3] + shift + offset) % 360}, 90%, 60%, 0.9)`,
+					);
+					gradient.addColorStop(
+						0.66,
+						`hsla(${(baseStops[4] + shift + offset) % 360}, 85%, 65%, 0.9)`,
+					);
+					gradient.addColorStop(
+						0.83,
+						`hsla(${(baseStops[5] + shift + offset) % 360}, 80%, 65%, 0.9)`,
+					);
+					gradient.addColorStop(
+						1,
+						`hsla(${(baseStops[6] + shift + offset) % 360}, 85%, 60%, 0.9)`,
+					);
+					return gradient;
+				};
+			};
+			const originalResize = generator.resize.bind(generator);
+			generator.resize = () => {
+				const result = originalResize();
+				generator._gradientFactory = updateGradient();
+				return result;
+			};
+			generator.drawWave = (wave, deltaScale = 1) => {
+				const ctx = generator.ctx;
+				if (!generator._gradientFactory) {
+					generator._gradientFactory = updateGradient();
+				}
+				const shift = (wave.phase * 12) % 360;
+				wave.strokeStyle = generator._gradientFactory(
+					(shift + (wave._rainbowOffset || 0)) % 360,
+				);
+				const index = wave._rainbowIndex || 0;
+				if (typeof generator._spinPhase !== "number") {
+					generator._spinPhase = wave.phase;
+				}
+				if (index === 0) {
+					generator._spinPhase += 0.09 * deltaScale;
+				}
+				const spinPhase = generator._spinPhase + index * 0.7;
+				if (typeof generator._centerY !== "number") {
+					generator._centerY = generator.displayHeight * 0.5;
+					generator._centerYTarget = generator._centerY;
+				}
+				if (typeof generator._phaseOffset !== "number") {
+					generator._phaseOffset = 0;
+					generator._phaseOffsetTarget = 0;
+				}
+				generator._centerY +=
+					(generator._centerYTarget - generator._centerY) * 0.08;
+				generator._phaseOffset +=
+					(generator._phaseOffsetTarget - generator._phaseOffset) * 0.08;
+				const centerY = generator._centerY;
+				const orbit = Math.sin(spinPhase);
+				const depth = (Math.cos(spinPhase) + 1) * 0.5;
+				const sweep =
+					Math.sin(spinPhase * 0.5 + index * 0.15) *
+					(generator.displayHeight * 0.28);
+				const offsetY =
+					yOffsets[index % yOffsets.length] + orbit * 12 + sweep;
+				ctx.save();
+				ctx.translate(0, centerY + offsetY);
+				ctx.scale(1, 0.3 + depth * 0.7);
+				ctx.translate(0, -centerY);
+				ctx.shadowBlur = 20;
+				ctx.shadowColor = "rgba(255, 255, 255, 0.35)";
+				ctx.globalAlpha = 0.45 + depth * 0.55;
+				ctx.beginPath();
+				const width = generator.displayWidth;
+				const height = generator.displayHeight;
+				const mid = height * 0.5;
+				const overscan = Math.max(48, width * 0.18);
+				const span = width + overscan * 2;
+				const segment = Math.max(1, Math.round(wave.segmentLength || 6));
+				const golden = 1.61803398875;
+				const goldenEasing = (p, amp) => {
+					const t = Math.min(1, Math.max(0, p));
+					const band = Math.sin(t * Math.PI * golden);
+					return amp * band;
+				};
+				const easing = wave.easing || goldenEasing;
+				const baseAmp = Math.min(
+					height * 0.34,
+					wave.amplitude * Math.max(1.2, height / 160),
+				);
+				for (let x = -overscan; x <= width + overscan; x += segment) {
+					const percent = (x + overscan) / span;
+					const amp = easing(percent, baseAmp * orbit);
+					const y =
+						Math.sin(
+							percent * TWO_PI + wave.phase + generator._phaseOffset,
+						) *
+							amp +
+						mid;
+					if (x === -overscan) {
+						ctx.moveTo(x, y);
+					} else {
+						ctx.lineTo(x, y);
+					}
+				}
+				ctx.strokeStyle = wave.strokeStyle;
+				ctx.lineWidth = 2.2;
+				ctx.stroke();
+				ctx.restore();
+				return generator;
+			};
+			let startAttempts = 0;
+			let frames = 0;
+			const updateBadge = (label) => {
+				debugBadge.textContent = `rainbow: ${label} | ${frames}f`;
+			};
+			const manualStart = () => {
+				if (generator.animationFrameId) {
+					updateBadge("already");
+					return;
+				}
+				let lastTime = performance.now();
+				const tick = (time) => {
+					const delta = Math.min(
+						5,
+						Math.max(0.2, (time - lastTime) / 16.67),
+					);
+					lastTime = time;
+					generator.resize();
+					generator.ctx.clearRect(
+						0,
+						0,
+						generator.displayWidth,
+						generator.displayHeight,
+					);
+					generator.waves.forEach((wave) => generator.drawWave(wave, delta));
+					frames += 1;
+					if (frames % 30 === 0) {
+						updateBadge(
+							`manual ${generator.displayWidth}x${generator.displayHeight}`,
+						);
+					}
+					generator.animationFrameId = requestAnimationFrame(tick);
+				};
+				updateBadge("manual start");
+				generator.animationFrameId = requestAnimationFrame(tick);
+			};
+			const start = () => {
+				generator.resize();
+				generator.start();
+				updateBadge(
+					`start ${generator.displayWidth}x${generator.displayHeight}`,
+				);
+				if (!generator.animationFrameId && startAttempts < 6) {
+					startAttempts += 1;
+					setTimeout(start, 200);
+				}
+				if (!generator.animationFrameId && startAttempts >= 6) {
+					manualStart();
+				}
+			};
+			observeStart(canvas, start);
+			requestAnimationFrame(start);
+			setTimeout(start, 0);
+			window.addEventListener("load", start, { once: true });
+			updateBadge("armed");
+			let pointerActive = false;
+			const updateCenterFromEvent = (event) => {
+				const rect = canvas.getBoundingClientRect();
+				const nextY = Math.min(
+					rect.height,
+					Math.max(0, event.clientY - rect.top),
+				);
+				const nextX = Math.min(
+					rect.width,
+					Math.max(0, event.clientX - rect.left),
+				);
+				const xPercent = rect.width > 0 ? nextX / rect.width : 0;
+				generator._centerYTarget = nextY;
+				generator._phaseOffsetTarget = xPercent * TWO_PI;
+			};
+			canvas.addEventListener("pointerdown", (event) => {
+				pointerActive = true;
+				canvas.setPointerCapture?.(event.pointerId);
+				updateCenterFromEvent(event);
+			});
+			canvas.addEventListener(
+				"pointermove",
+				(event) => {
+					if (!pointerActive) {
+						return;
+					}
+					updateCenterFromEvent(event);
+				},
+				{ passive: true },
+			);
+			canvas.addEventListener("pointerup", (event) => {
+				pointerActive = false;
+				canvas.releasePointerCapture?.(event.pointerId);
+			});
+			canvas.addEventListener("pointerleave", () => {
+				pointerActive = false;
+			});
+			const phaseBaseline = generator.waves[0]?.phase ?? 0;
+			setTimeout(() => {
+				const currentPhase = generator.waves[0]?.phase ?? 0;
+				if (currentPhase === phaseBaseline) {
+					manualStart();
+				}
+			}, 800);
+			if (generator.displayWidth === 0 || generator.displayHeight === 0) {
+				const ro = new ResizeObserver(() => {
+					generator.resize();
+					if (generator.displayWidth > 0 && generator.displayHeight > 0) {
+						start();
+						ro.disconnect();
+					}
+				});
+				ro.observe(card);
+			}
+		} catch (error) {
+			console.error("[rainbowFundamentals]", error);
+			const message =
+				error && typeof error.message === "string"
+					? error.message
+					: String(error);
+			debugBadge.textContent = `rainbow: ${message}`.slice(0, 80);
+		} finally {
+			debugBadge.remove();
+		}
+	};
+
+	const setupSearch = () => {
+		const inputs = document.querySelectorAll("[data-search]");
+		inputs.forEach((input) => {
+			const mode = input.getAttribute("data-search");
+			const getItems = () => {
+				if (mode === "examples") {
+					return Array.from(document.querySelectorAll("[data-example]"));
+				}
+				if (mode === "api") {
+					return Array.from(
+						document.querySelectorAll(".cheat-table tbody tr"),
+					);
+				}
+				return [];
+			};
+			const items = getItems();
+			if (items.length === 0) {
+				return;
+			}
+			input.addEventListener("input", () => {
+				const query = input.value.trim().toLowerCase();
+				items.forEach((item) => {
+					const text = item.textContent.toLowerCase();
+					const match = query === "" || text.includes(query);
+					item.style.display = match ? "" : "none";
+				});
+			});
+		});
+	};
+
 	const observeStart = (canvas, startFn) => {
 		if (!canvas || typeof startFn !== "function") {
 			return;
@@ -169,8 +732,10 @@
 		const controls = setupControls(card);
 		const generator = createGenerator(canvas);
 		const reportError = createErrorGuard(id, card);
+		addMotionNote(card);
 		generator.addWave({ amplitude: 1, wavelength: 1, speed: 0.05 });
 		const ctx = generator.ctx;
+		let started = false;
 		generator.drawWave = (wave, deltaScale = 1) => {
 			try {
 				const speed = bpmToSpeed(controls.bpm, beatsPerCycle) * motionScale;
@@ -182,7 +747,18 @@
 				generator.stop();
 			}
 		};
-		observeStart(canvas, () => generator.start());
+		const start = () => {
+			started = true;
+			generator.start();
+		};
+		observeStart(canvas, start);
+		attachMotionToggle(card, generator, () => {
+			if (!started) {
+				start();
+				return;
+			}
+			generator.start();
+		});
 	};
 
 	const easedSine = (percent, amplitude) => {
@@ -203,10 +779,25 @@
 		if (basic) {
 			const generator = createGenerator(basic);
 			generator.addWave({
-				amplitude: 26,
-				wavelength: 140,
-				speed: 0.04 * motionScale,
+				amplitude: 22,
+				wavelength: 160,
+				speed: 0.05 * motionScale,
 				segmentLength: 10,
+				strokeStyle: "hsla(0deg 80% 60% / 0.75)",
+			});
+			generator.addWave({
+				amplitude: 16,
+				wavelength: 200,
+				speed: 0.04 * motionScale,
+				segmentLength: 12,
+				strokeStyle: "hsla(120deg 80% 60% / 0.65)",
+			});
+			generator.addWave({
+				amplitude: 12,
+				wavelength: 120,
+				speed: 0.06 * motionScale,
+				segmentLength: 8,
+				strokeStyle: "hsla(220deg 80% 60% / 0.65)",
 			});
 			lazyStart(basic, generator);
 		}
@@ -1185,6 +1776,8 @@
 		}
 		const controls = setupControls(card);
 		const generator = createGenerator(canvas);
+		addMotionNote(card);
+		attachMotionToggle(card, generator);
 
 		const easingFunctions = {
 			sineInOut: (percent, amp) =>
@@ -1322,6 +1915,132 @@
 		generator.start();
 	};
 
+	/* --- Scroll reactive guide --- */
+
+	const startHeroBackgroundGuide = () => {
+		const card = document.querySelector('[data-example="heroBackgroundGuide"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		if (!canvas) {
+			return;
+		}
+		const generator = createGenerator(canvas, { autoResize: true });
+		addMotionNote(card);
+		attachMotionToggle(card, generator);
+		generator.addWave({
+			amplitude: 14,
+			wavelength: 200,
+			speed: 0.03 * motionScale,
+			segmentLength: 10,
+			strokeStyle: "rgba(14, 165, 233, 0.45)",
+		});
+		generator.addWave({
+			amplitude: 8,
+			wavelength: 140,
+			speed: 0.02 * motionScale,
+			segmentLength: 12,
+			strokeStyle: "rgba(124, 58, 237, 0.2)",
+		});
+		observeStart(canvas, () => generator.start());
+	};
+
+	const startScrollReactive = () => {
+		const card = document.querySelector('[data-example="scrollReactive"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		if (!canvas) {
+			return;
+		}
+		const generator = createGenerator(canvas, { autoResize: true });
+		addMotionNote(card);
+		attachMotionToggle(card, generator);
+		generator.addWave({
+			amplitude: 18,
+			wavelength: 180,
+			speed: 0.04 * motionScale,
+			segmentLength: 10,
+		});
+		const updateFromScroll = () => {
+			const total = document.documentElement.scrollHeight - window.innerHeight;
+			const progress = total > 0 ? clamp01(window.scrollY / total) : 0;
+			const amp = 10 + 30 * progress;
+			const wl = 140 + 240 * (1 - progress);
+			generator.waves.forEach((wave) => {
+				wave.amplitude = amp;
+				wave.wavelength = wl;
+			});
+		};
+		let rafId = null;
+		const onScroll = () => {
+			if (rafId) {
+				return;
+			}
+			rafId = requestAnimationFrame(() => {
+				rafId = null;
+				updateFromScroll();
+			});
+		};
+		window.addEventListener("scroll", onScroll, { passive: true });
+		updateFromScroll();
+		observeStart(canvas, () => generator.start());
+	};
+
+	/* --- Quality presets guide --- */
+
+	const startQualityPresets = () => {
+		const card = document.querySelector('[data-example="qualityPresets"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		if (!canvas) {
+			return;
+		}
+		const generator = createGenerator(canvas, { autoResize: true });
+		addMotionNote(card);
+		attachMotionToggle(card, generator);
+		generator.addWave({
+			amplitude: 22,
+			wavelength: 160,
+			speed: 0.04 * motionScale,
+			segmentLength: 10,
+		});
+		const buttons = Array.from(card.querySelectorAll("[data-quality]"));
+		const status =
+			card.querySelector("[data-quality-status]") ||
+			(() => {
+				const el = document.createElement("div");
+				el.className = "quality-status";
+				card.appendChild(el);
+				return el;
+			})();
+		const setActive = (preset) => {
+			buttons.forEach((btn) => {
+				btn.classList.toggle(
+					"is-active",
+					btn.getAttribute("data-quality") === preset,
+				);
+			});
+			status.textContent = `Quality preset: ${preset}`;
+		};
+		buttons.forEach((button) => {
+			button.addEventListener("click", () => {
+				const preset = button.getAttribute("data-quality");
+				if (!preset) {
+					return;
+				}
+				generator.setQualityPreset(preset);
+				setActive(preset);
+			});
+		});
+		setActive("balanced");
+		observeStart(canvas, () => generator.start());
+	};
+
 	/* --- Dark/light mode toggle --- */
 
 	const setupThemeToggle = () => {
@@ -1423,6 +2142,10 @@
 			setTimeout(() => overlay.remove(), 300);
 		}
 		setupNavToggle();
+		setActiveNav();
+		addCanvasDescriptions();
+		addExampleMeta();
+		setupSearch();
 		const safeCall = (fn) => {
 			try {
 				fn();
@@ -1462,6 +2185,10 @@
 		safeCall(() => startResponsiveResize());
 		safeCall(() => startHeroBackground());
 		safeCall(() => startPlayground());
+		safeCall(() => startRainbowFundamentals());
+		safeCall(() => startHeroBackgroundGuide());
+		safeCall(() => startScrollReactive());
+		safeCall(() => startQualityPresets());
 		setupCopyButtons();
 		setupViewCodeToggles();
 	};

@@ -115,6 +115,12 @@ export class SineWaveGenerator {
 	addWave(config: WaveConfig): this;
 	/** Remove a wave by index. Returns this for chaining. */
 	removeWave(index: number): this;
+	/** Replace all waves in a single update. Returns this for chaining. */
+	setWaves(waves: WaveConfig[] | Wave[]): this;
+	/** Apply a quality preset. Returns this for chaining. */
+	setQualityPreset(preset: "quality" | "balanced" | "battery"): this;
+	/** Stop and unbind events. Returns this for chaining. */
+	destroy(): this;
 	/** Bind resize, mousemove, and touchmove events. Returns this for chaining. */
 	bindEvents(): this;
 	/** Unbind all events. Returns this for chaining. */

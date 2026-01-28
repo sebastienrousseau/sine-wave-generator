@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Get started - Sine Wave Generator</title><meta name="description" content="Install Sine Wave Generator and ship animated canvas waves in minutes. Copy-ready setup patterns and defaults included."/><meta name="keywords" content="sine wave generator install, canvas animation setup, JavaScript canvas waves"/><link rel="preconnect" href="https://kura.pro"/><meta property="og:type" content="website"/><meta property="og:title" content="Get started - Sine Wave Generator"/><meta property="og:description" content="Install and launch animated canvas waves quickly with ready-to-copy patterns."/><meta property="og:url" content="https://sine-wave-generator.com/getting-started/"/><meta property="og:image" content="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content="Get started - Sine Wave Generator"/><meta name="twitter:description" content="Install and launch animated canvas waves quickly with ready-to-copy patterns."/><meta name="theme-color" content="#0ea5e9"/><link rel="canonical" href="https://sine-wave-generator.com/getting-started/"/><link rel="stylesheet" href="../reset.css"/><link rel="icon" href="../favicon.ico"/><link rel="icon" href="../favicon.ico"><script defer="defer" src="../main.js"></script></head><body><div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div><canvas id="heroBackgroundCanvas" class="hero-bg-canvas" aria-hidden="true"></canvas><header class="site-header"><div class="brand"><img src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp" alt="Sine Wave Generator logo"/> <span>Sine Wave Generator</span></div><nav class="nav" id="site-nav"><a href="/">Home</a> <a href="/getting-started/">Get started</a> <a href="/examples/">Examples</a> <a href="/playground/">Playground</a> <a href="/docs/api/">API</a> <a href="/guides/">Guides</a> <a href="/showcase/">Showcase</a></nav><div class="header-actions"><a class="gh-star-btn" href="https://github.com/sebastienrousseau/sine-wave-generator" target="_blank" rel="noopener noreferrer" aria-label="Star on GitHub">GitHub</a> <button class="theme-toggle" type="button" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode"><svg class="theme-icon theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> <svg class="theme-icon theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button> <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-controls="site-nav" aria-expanded="false"><span></span> <span></span> <span></span></button></div><a class="cta" href="/getting-started/">Get started</a></header><main class="page"><section class="section" id="get-started"><div class="section-header"><h1>Get started</h1><p>Install once. Ship motion fast.</p></div><h3>Installation</h3><div class="card-grid"><div class="card"><h3>NPM</h3><pre class="code-block"><code>npm install @sebastienrousseau/sine-wave-generator</code></pre></div><div class="card"><h3>CDN (unpkg)</h3><pre class="code-block"><code>&lt;script src="https://unpkg.com/@sebastienrousseau/sine-wave-generator"&gt;&lt;/script&gt;</code></pre></div><div class="card"><h3>CDN (jsDelivr)</h3><pre class="code-block"><code>&lt;script src="https://cdn.jsdelivr.net/npm/@sebastienrousseau/sine-wave-generator"&gt;&lt;/script&gt;</code></pre></div></div><h3>Quick Start</h3><div class="card-grid"><div class="card"><h3>Browser (script tag)</h3><pre class="code-block"><code>&lt;canvas id="sine"&gt;&lt;/canvas&gt;
+&lt;script src="https://unpkg.com/@sebastienrousseau/sine-wave-generator"&gt;&lt;/script&gt;
+&lt;script&gt;
+  const generator = new SineWaveGenerator({
+    el: "#sine",
+    waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }]
+  });
+  generator.start();
+&lt;/script&gt;</code></pre></div><div class="card"><h3>CommonJS / ESM</h3><pre class="code-block"><code>const { SineWaveGenerator } = require(
+  "@sebastienrousseau/sine-wave-generator"
+);
+
+const generator = new SineWaveGenerator({
+  el: document.getElementById("sine"),
+  maxPixelRatio: 2,
+  waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }]
+});
+
+generator.start();</code></pre></div></div><h3>TypeScript</h3><div class="card"><p>Types are bundled with the package. Import the interfaces directly:</p><pre class="code-block"><code>import { SineWaveGenerator, Wave, Ease } from "@sebastienrousseau/sine-wave-generator";
+
+const gen = new SineWaveGenerator({
+  el: "#canvas",
+  waves: [{ amplitude: 30, wavelength: 140, speed: 0.8 }],
+});
+
+gen.start();</code></pre><p>The package exports <code>SineWaveGenerator</code>, <code>Wave</code>, and <code>Ease</code> with full JSDoc annotations for editor autocompletion.</p></div></section><section class="section alt-section" id="common-patterns"><div class="section-header"><h2>Common patterns</h2><p>Production‑ready by default.</p></div><div class="card-grid"><div class="card"><h3>Hero background</h3><p>Full-bleed canvas with layered waves and low opacity.</p><pre class="code-block"><code>const gen = new SineWaveGenerator({
+  el: "#hero",
+  autoResize: true,
+  waves: [
+    { amplitude: 16, wavelength: 220, speed: 0.6 },
+    { amplitude: 10, wavelength: 160, speed: 0.4 }
+  ]
+});
+
+gen.start();</code></pre></div><div class="card"><h3>Responsive container</h3><p>Use ResizeObserver for components that resize independently.</p><pre class="code-block"><code>const gen = new SineWaveGenerator({ el: canvas });
+const ro = new ResizeObserver(() => gen.resize());
+ro.observe(canvas.parentElement);
+
+gen.start();</code></pre></div><div class="card"><h3>Pointer interaction</h3><p>Bind to pointer move for responsive phase shifts.</p><pre class="code-block"><code>canvas.addEventListener("pointermove", (event) => {
+  const y = event.clientY / canvas.clientHeight;
+  gen.waves.forEach((wave) => {
+    wave.phase = y * Math.PI * 2;
+  });
+});</code></pre></div></div></section><footer class="site-footer"><div class="footer-links"><a href="/docs/api/">API</a> <a href="/examples/">Examples</a> <a href="/playground/">Playground</a> <a href="/guides/">Guides</a> <a href="https://github.com/sebastienrousseau/sine-wave-generator" target="_blank" rel="noopener noreferrer">GitHub</a></div><p>&copy; 2026 Sine Wave Generator. All rights reserved. Licensed under Apache-2.0.</p></footer></main><script defer="defer" src="../example.js"></script></body></html>
