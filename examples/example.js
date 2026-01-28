@@ -64,22 +64,50 @@
 		if (!canvas || typeof startFn !== "function") {
 			return;
 		}
-		if (!("IntersectionObserver" in window)) {
+		const isInView = () => {
+			const rect = canvas.getBoundingClientRect();
+			return rect.bottom >= 0 && rect.top <= window.innerHeight;
+		};
+		let started = false;
+		let observer = null;
+		let fallbackTimer = null;
+		const startOnce = () => {
+			if (started) {
+				return;
+			}
+			started = true;
+			if (observer) {
+				observer.disconnect();
+			}
+			if (fallbackTimer) {
+				clearTimeout(fallbackTimer);
+			}
 			startFn();
+		};
+		if (isInView()) {
+			startOnce();
 			return;
 		}
-		const observer = new IntersectionObserver(
+		if (!("IntersectionObserver" in window)) {
+			startOnce();
+			return;
+		}
+		observer = new IntersectionObserver(
 			(entries) => {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						observer.unobserve(entry.target);
-						startFn();
+						startOnce();
 					}
 				});
 			},
 			{ threshold: 0.2 },
 		);
 		observer.observe(canvas);
+		fallbackTimer = setTimeout(() => {
+			if (isInView()) {
+				startOnce();
+			}
+		}, 1200);
 	};
 
 	const setupControls = (card) => {

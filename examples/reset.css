@@ -338,10 +338,18 @@ button {
 	flex-wrap: wrap;
 	gap: 8px;
 	margin-bottom: 48px;
+	align-items: center;
 }
 
 .badges img {
 	display: inline-block;
+	height: 28px;
+	width: auto;
+}
+
+.badges a {
+	display: inline-flex;
+	align-items: center;
 }
 
 .hero {
@@ -846,17 +854,29 @@ button {
 
 @media (max-width: 720px) {
 	.site-header {
-		flex-direction: column;
-		align-items: flex-start;
-		position: sticky;
+		align-items: center;
+		flex-direction: row;
 	}
 
 	.nav {
 		display: none;
 		flex-direction: column;
 		gap: 12px;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
 		width: 100%;
-		padding: 12px 0;
+		padding: 12px 6vw 18px;
+		background: rgba(255, 255, 255, 0.98);
+		border-bottom: 1px solid var(--card-border);
+		box-shadow: 0 18px 32px rgba(15, 23, 42, 0.12);
+		backdrop-filter: blur(12px);
+		-webkit-backdrop-filter: blur(12px);
+	}
+
+	[data-theme="dark"] .nav {
+		background: rgba(2, 6, 23, 0.98);
 	}
 
 	.site-header.nav-open .nav {
@@ -865,11 +885,10 @@ button {
 
 	.nav-toggle {
 		display: flex;
-		align-self: flex-end;
 	}
 
 	.header-actions {
-		align-self: flex-end;
+		margin-left: auto;
 	}
 
 	.playground-canvas {
