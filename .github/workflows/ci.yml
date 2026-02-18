@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "feat/**"]
+  pull_request:
+    branches: [main, "feat/**"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Node CI
+    uses: sebastienrousseau/pipelines/.github/workflows/node-ci.yml@main
+    with:
+      node-version: '20'
+      package-manager: 'pnpm'
+      run-lint: true
+      run-typecheck: false
+      run-tests: true
+      run-build: true
+      test-coverage: true
+    secrets: inherit
