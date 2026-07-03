@@ -61,6 +61,7 @@ module.exports = {
 			patterns: [
 				{ from: "examples/reset.css", to: "." },
 				{ from: "examples/example.js", to: "." },
+				{ from: "src/audio-sync.js", to: "." },
 				{ from: "LICENSE", to: "." },
 				{ from: "sitemap.xml", to: "." },
 				{ from: "robots.txt", to: "." },

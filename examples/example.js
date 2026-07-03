@@ -69,9 +69,7 @@
 			if (!value) {
 				return "/";
 			}
-			const trimmed = value
-				.replace(/\/index\.html$/, "")
-				.replace(/\/+$/, "");
+			const trimmed = value.replace(/\/index\.html$/, "").replace(/\/+$/, "");
 			return trimmed === "" ? "/" : trimmed;
 		};
 		const current = normalize(window.location.pathname);
@@ -83,7 +81,10 @@
 			}
 			const path = normalize(new URL(href, window.location.origin).pathname);
 			const isRoot = path === "/";
-			if ((isRoot && current === "/") || (!isRoot && current.startsWith(path))) {
+			if (
+				(isRoot && current === "/") ||
+				(!isRoot && current.startsWith(path))
+			) {
 				link.classList.add("is-active");
 			}
 		});
@@ -264,6 +265,18 @@
 				purpose: "Calm, minimal background motion.",
 				why: "Low‑contrast waves stay subtle.",
 			},
+			heartbeatMonitor: {
+				purpose: "Visualize a biometric signal, not just a decorative wave.",
+				why: "A recognizable EKG shape reads as data, not just motion.",
+			},
+			voiceWaveform: {
+				purpose: "Show AudioSync driving a wave from a real microphone.",
+				why: "Live input makes the audio-reactive API tangible.",
+			},
+			waveLoop: {
+				purpose: "A seamless, endlessly looping ambient motif.",
+				why: "Closed curves read as calmer and more continuous than open waves.",
+			},
 		};
 		document.querySelectorAll("[data-example]").forEach((card) => {
 			if (!card.closest("#examples")) {
@@ -424,8 +437,7 @@
 				const sweep =
 					Math.sin(spinPhase * 0.5 + index * 0.15) *
 					(generator.displayHeight * 0.28);
-				const offsetY =
-					yOffsets[index % yOffsets.length] + orbit * 12 + sweep;
+				const offsetY = yOffsets[index % yOffsets.length] + orbit * 12 + sweep;
 				ctx.save();
 				ctx.translate(0, centerY + offsetY);
 				ctx.scale(1, 0.3 + depth * 0.7);
@@ -455,9 +467,7 @@
 					const percent = (x + overscan) / span;
 					const amp = easing(percent, baseAmp * orbit);
 					const y =
-						Math.sin(
-							percent * TWO_PI + wave.phase + generator._phaseOffset,
-						) *
+						Math.sin(percent * TWO_PI + wave.phase + generator._phaseOffset) *
 							amp +
 						mid;
 					if (x === -overscan) {
@@ -484,10 +494,7 @@
 				}
 				let lastTime = performance.now();
 				const tick = (time) => {
-					const delta = Math.min(
-						5,
-						Math.max(0.2, (time - lastTime) / 16.67),
-					);
+					const delta = Math.min(5, Math.max(0.2, (time - lastTime) / 16.67));
 					lastTime = time;
 					generator.resize();
 					generator.ctx.clearRect(
@@ -602,9 +609,7 @@
 					return Array.from(document.querySelectorAll("[data-example]"));
 				}
 				if (mode === "api") {
-					return Array.from(
-						document.querySelectorAll(".cheat-table tbody tr"),
-					);
+					return Array.from(document.querySelectorAll(".cheat-table tbody tr"));
 				}
 				return [];
 			};
@@ -1593,6 +1598,99 @@
 		ctx.stroke();
 	};
 
+	/* --- Rhythm & signal --- */
+
+	// Stylized single-cycle EKG trace: flat baseline, P wave, QRS spike, T wave.
+	const ekgWaveform = (percent) => {
+		if (percent < 0.08) {
+			return Math.sin((percent / 0.08) * Math.PI) * 0.15;
+		}
+		if (percent < 0.12) {
+			return 0;
+		}
+		if (percent < 0.16) {
+			return -((percent - 0.12) / 0.04) * 0.2;
+		}
+		if (percent < 0.19) {
+			return -0.2 + ((percent - 0.16) / 0.03) * 1.2;
+		}
+		if (percent < 0.23) {
+			return 1.0 - ((percent - 0.19) / 0.04) * 1.3;
+		}
+		if (percent < 0.28) {
+			return -0.3 + ((percent - 0.23) / 0.05) * 0.3;
+		}
+		if (percent < 0.45) {
+			return 0;
+		}
+		if (percent < 0.6) {
+			return Math.sin(((percent - 0.45) / 0.15) * Math.PI) * 0.25;
+		}
+		return 0;
+	};
+
+	const drawHeartbeatMonitor = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 3) {
+			const percent = (((x / width + time / TWO_PI) % 1) + 1) % 1;
+			const beat = ekgWaveform(percent);
+			const y = centerY - beat * amplitude * 3;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		const pulse = (Math.sin(time * 4) + 1) * 0.5;
+		ctx.lineWidth = 2;
+		ctx.shadowBlur = 14;
+		ctx.shadowColor = "rgba(74, 222, 128, 0.9)";
+		ctx.strokeStyle = `rgba(74, 222, 128, ${0.7 + pulse * 0.3})`;
+		ctx.stroke();
+		ctx.shadowBlur = 0;
+
+		ctx.beginPath();
+		ctx.moveTo(0, centerY);
+		ctx.lineTo(width, centerY);
+		ctx.strokeStyle = "rgba(74, 222, 128, 0.15)";
+		ctx.lineWidth = 1;
+		ctx.stroke();
+	};
+
+	const drawWaveLoop = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerX = width * 0.5;
+		const centerY = height * 0.5;
+		const baseRadius = Math.min(width, height) * 0.28;
+		const amplitude = controls.amplitude * 0.6;
+		const lobes = Math.max(1, Math.round(controls.frequency));
+		const points = 160;
+		ctx.beginPath();
+		for (let i = 0; i <= points; i++) {
+			const angle = (i / points) * TWO_PI;
+			const wobble = Math.sin(angle * lobes + time) * amplitude;
+			const radius = baseRadius + wobble;
+			const x = centerX + Math.cos(angle) * radius;
+			const y = centerY + Math.sin(angle) * radius * 0.72;
+			if (i === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		ctx.closePath();
+		const hue = hueFromValue(Math.sin(time * 0.3), 200);
+		ctx.lineWidth = 2 + Math.abs(Math.sin(time)) * 1.5;
+		ctx.shadowBlur = 16;
+		ctx.shadowColor = `hsla(${hue}deg 80% 60% / 0.6)`;
+		ctx.strokeStyle = `hsla(${hue}deg 80% 60% / 0.85)`;
+		ctx.stroke();
+		ctx.shadowBlur = 0;
+	};
+
 	/* --- String physics --- */
 
 	const startStringPhysics = () => {
@@ -1711,6 +1809,82 @@
 			}
 			wave.phase += 0.02 * deltaScale * motionScale;
 		};
+		observeStart(canvas, () => generator.start());
+	};
+
+	/* --- Voice waveform (AudioSync + microphone) --- */
+
+	const startVoiceWaveform = () => {
+		const card = document.querySelector('[data-example="voiceWaveform"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		const button = card.querySelector("[data-action=voice-start]");
+		const status = card.querySelector("[data-voice-status]");
+		if (!canvas || !button || !status) {
+			return;
+		}
+		const generator = createGenerator(canvas);
+		generator.addWave({
+			amplitude: 18,
+			wavelength: 140,
+			speed: 0.4 * motionScale,
+			segmentLength: 6,
+		});
+		generator.addWave({
+			amplitude: 12,
+			wavelength: 100,
+			speed: 0.5 * motionScale,
+			segmentLength: 6,
+			strokeStyle: "rgba(168, 85, 247, 0.55)",
+		});
+		let audioSync = null;
+		let stream = null;
+
+		const stopListening = () => {
+			if (!audioSync) {
+				return;
+			}
+			generator.unsyncAudio();
+			audioSync.disconnect();
+			audioSync = null;
+			if (stream) {
+				stream.getTracks().forEach((track) => track.stop());
+				stream = null;
+			}
+			status.textContent = "Idle";
+			button.textContent = "Start listening";
+		};
+
+		const startListening = async () => {
+			if (audioSync || typeof window.AudioSync !== "function") {
+				status.textContent = "Not supported";
+				return;
+			}
+			try {
+				stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+				audioSync = new window.AudioSync();
+				audioSync.connect(stream);
+				generator.syncToAudio(audioSync, {
+					amplitude: { source: "energy", intensity: 3 },
+					speed: { source: "treble", intensity: 1.5 },
+				});
+				status.textContent = "Listening — speak or play music";
+				button.textContent = "Stop";
+			} catch {
+				status.textContent = "Microphone access blocked";
+			}
+		};
+
+		button.addEventListener("click", () => {
+			if (audioSync) {
+				stopListening();
+			} else {
+				startListening();
+			}
+		});
+
 		observeStart(canvas, () => generator.start());
 	};
 
@@ -2180,6 +2354,9 @@
 		safeCall(() => startExample("variableWidth", 4, drawVariableWidth));
 		safeCall(() => startExample("compositingGlow", 4, drawCompositingGlow));
 		safeCall(() => startExample("zenMode", 8, drawZenMode));
+		safeCall(() => startExample("heartbeatMonitor", 1, drawHeartbeatMonitor));
+		safeCall(() => startVoiceWaveform());
+		safeCall(() => startExample("waveLoop", 6, drawWaveLoop));
 		safeCall(() => startStringPhysics());
 		safeCall(() => startAudioSpectrogram());
 		safeCall(() => startResponsiveResize());

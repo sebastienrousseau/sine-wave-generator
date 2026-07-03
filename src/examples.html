@@ -12,7 +12,7 @@
 		<meta property="og:title" content="Examples - Sine Wave Generator" />
 		<meta
 			property="og:description"
-			content="Curated gallery of animated sine wave demos with live previews and code." 
+			content="Curated gallery of animated sine wave demos with live previews and code."
 		/>
 		<meta
 			property="og:url"
@@ -23,10 +23,7 @@
 			content="https://cloudcdn.pro/clients/sinewavegenerator/v1/logos/sinewavegenerator.svg"
 		/>
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta
-			name="twitter:title"
-			content="Examples - Sine Wave Generator"
-		/>
+		<meta name="twitter:title" content="Examples - Sine Wave Generator" />
 		<meta
 			name="twitter:description"
 			content="Curated gallery of animated sine wave demos with live previews and code."
@@ -40,7 +37,11 @@
 		<div class="loading-overlay" id="loadingOverlay">
 			<div class="loading-spinner"></div>
 		</div>
-		<canvas id="heroBackgroundCanvas" class="hero-bg-canvas" aria-hidden="true"></canvas>
+		<canvas
+			id="heroBackgroundCanvas"
+			class="hero-bg-canvas"
+			aria-hidden="true"
+		></canvas>
 		<header class="site-header">
 			<div class="brand">
 				<img
@@ -442,7 +443,11 @@ for (let i = 0; i &lt; count; i++) {
 }</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="lissajousOrbit" id="lissajousOrbit">
+					<article
+						class="card"
+						data-example="lissajousOrbit"
+						id="lissajousOrbit"
+					>
 						<h3>Lissajous orbit</h3>
 						<p>Parametric loops synced to time signature.</p>
 						<canvas
@@ -512,7 +517,11 @@ for (let i = 0; i &lt;= 240; i++) {
 }</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="waveformTerrain" id="waveformTerrain">
+					<article
+						class="card"
+						data-example="waveformTerrain"
+						id="waveformTerrain"
+					>
 						<h3>Waveform terrain</h3>
 						<p>Layered horizons with depth-shifted phases.</p>
 						<canvas
@@ -725,7 +734,11 @@ ctx.fillStyle = grad;
 ctx.fill();</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="audioVisualizerSim" id="audioVisualizerSim">
+					<article
+						class="card"
+						data-example="audioVisualizerSim"
+						id="audioVisualizerSim"
+					>
 						<h3>Audio visualizer</h3>
 						<p>Simulated volume-driven multi-wave display.</p>
 						<canvas
@@ -1009,7 +1022,11 @@ for (let x = 0; x &lt; width; x += 6) {
 }</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="compositingGlow" id="compositingGlow">
+					<article
+						class="card"
+						data-example="compositingGlow"
+						id="compositingGlow"
+					>
 						<h3>Compositing glow</h3>
 						<p>Screen blending for neon glow effects.</p>
 						<canvas
@@ -1139,8 +1156,6 @@ for (let x = 0; x &lt;= width; x += 6) {
 				</div>
 			</section>
 
-
-
 			<section class="section" id="motion-lab">
 				<div class="section-header">
 					<h2>Motion lab</h2>
@@ -1168,7 +1183,11 @@ state.amplitude *= 0.95; // decay each frame
 const y = centerY + Math.sin(x * 0.02 + phase) * state.amplitude * 0.02;</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="audioSpectrogram" id="audioSpectrogram">
+					<article
+						class="card"
+						data-example="audioSpectrogram"
+						id="audioSpectrogram"
+					>
 						<h3>Audio spectrogram</h3>
 						<p>64 wave forest mapped across bass to treble.</p>
 						<canvas
@@ -1195,7 +1214,11 @@ for (let i = 0; i &lt; 64; i++) {
 }</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="lissajousExplorer" id="lissajousExplorer">
+					<article
+						class="card"
+						data-example="lissajousExplorer"
+						id="lissajousExplorer"
+					>
 						<h3>Lissajous explorer</h3>
 						<p>Orbit knots with adjustable a:b ratios.</p>
 						<canvas
@@ -1342,7 +1365,148 @@ for (let x = 0; x &lt;= width; x += 4) {
 				</div>
 			</section>
 
-
+			<section class="section alt-section" id="rhythm-signal">
+				<div class="section-header">
+					<h2>Rhythm &amp; signal</h2>
+					<p>
+						Biometric, voice, and looping waveforms — the shapes a heartbeat
+						monitor, a voice assistant, or a seamless loop actually draw.
+					</p>
+				</div>
+				<div class="card-grid">
+					<article
+						class="card"
+						data-example="heartbeatMonitor"
+						id="heartbeatMonitor"
+					>
+						<h3>Heartbeat monitor</h3>
+						<p>A stylized EKG trace — P wave, QRS spike, T wave, repeat.</p>
+						<canvas
+							class="demo-canvas"
+							id="heartbeatMonitorCanvas"
+							aria-label="Heartbeat monitor"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group"
+								><span>Heart rate (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="180"
+										step="1"
+										value="72"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="8"
+										max="30"
+										step="1"
+										value="18"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
+						<div class="code-reveal">
+							<pre
+								class="code-block"
+							><code>// Stylized EKG cycle: P wave, QRS spike, T wave
+const beat = ekgWaveform((x / width + time / TWO_PI) % 1);
+const y = centerY - beat * amplitude * 3;
+ctx.lineTo(x, y);</code></pre>
+						</div>
+					</article>
+					<article class="card" data-example="voiceWaveform" id="voiceWaveform">
+						<h3>Voice waveform</h3>
+						<p>
+							Live microphone input driving amplitude and speed via
+							<code>AudioSync</code>.
+						</p>
+						<canvas
+							class="demo-canvas"
+							id="voiceWaveformCanvas"
+							aria-label="Voice waveform"
+						></canvas>
+						<div class="controls">
+							<button class="btn" type="button" data-action="voice-start">
+								Start listening
+							</button>
+							<span class="status" data-voice-status>Idle</span>
+						</div>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
+						<div class="code-reveal">
+							<pre
+								class="code-block"
+							><code>// Bind live mic input to wave amplitude and speed
+const audioSync = new AudioSync();
+audioSync.connect(micStream);
+generator.syncToAudio(audioSync, {
+  amplitude: { source: "energy", intensity: 3 },
+  speed: { source: "treble", intensity: 1.5 },
+});</code></pre>
+						</div>
+					</article>
+					<article class="card" data-example="waveLoop" id="waveLoop">
+						<h3>Wave loop</h3>
+						<p>A closed, continuously wobbling ribbon — no start, no end.</p>
+						<canvas
+							class="demo-canvas"
+							id="waveLoopCanvas"
+							aria-label="Wave loop"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="4"
+										max="24"
+										step="1"
+										value="14"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Lobes</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="16"
+										step="1"
+										value="6"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
+						<div class="code-reveal">
+							<pre
+								class="code-block"
+							><code>// Closed loop with a sine-modulated radius
+for (let i = 0; i &lt;= points; i++) {
+  const angle = (i / points) * TWO_PI;
+  const radius = baseRadius + Math.sin(angle * lobes + time) * amplitude;
+  ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+}
+ctx.closePath();</code></pre>
+						</div>
+					</article>
+				</div>
+			</section>
 
 			<section class="section alt-section" id="lab">
 				<div class="section-header">
@@ -1425,15 +1589,17 @@ for (let x = 0; x &lt;= width; x += 4) {
 				</div>
 			</section>
 
-
-
 			<section class="section" id="advanced-modes">
 				<div class="section-header">
 					<h2>Advanced modes</h2>
 					<p>Experimental sketches built on sine-driven motion.</p>
 				</div>
 				<div class="card-grid">
-					<article class="card" data-example="moireInterference" id="moireInterference">
+					<article
+						class="card"
+						data-example="moireInterference"
+						id="moireInterference"
+					>
 						<h3>Interference grid</h3>
 						<p>Two angled lattices creating moire shimmer.</p>
 						<canvas
@@ -1507,7 +1673,11 @@ const drawGrid = (rotation) =&gt; {
 };</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="kineticTypography" id="kineticTypography">
+					<article
+						class="card"
+						data-example="kineticTypography"
+						id="kineticTypography"
+					>
 						<h3>Kinetic typography</h3>
 						<p>Letterforms that breathe with the beat.</p>
 						<canvas
@@ -1723,7 +1893,6 @@ for (let x = 0; x &lt;= width; x += 4) {
 				</div>
 			</section>
 
-
 			<footer class="site-footer">
 				<div class="footer-links">
 					<a href="/docs/api/">API</a>
@@ -1740,6 +1909,7 @@ for (let x = 0; x &lt;= width; x += 4) {
 				<p>&copy; 2026 Sine Wave Generator. All rights reserved.</p>
 			</footer>
 		</main>
+		<script defer src="../audio-sync.js"></script>
 		<script defer src="../example.js"></script>
 	</body>
 </html>
