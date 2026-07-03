@@ -26,6 +26,7 @@ The library ships at roughly 3 KB gzipped. It uses `requestAnimationFrame` for b
 - [Key features](#key-features)
 - [Get started](#get-started)
 - [API reference](#api-reference)
+- [React](#react)
 - [Examples](#examples)
 - [TypeScript](#typescript)
 - [Contributing](#contributing)
@@ -236,6 +237,28 @@ const generator = new SineWaveGenerator({
 Metrics returned by `update()`/`getMetrics()`: `energy`, `bass`, `mid`, `treble` (all normalized 0--1), `beat` (boolean, true on the detected frame), `beatPhase` (0--1 progress through the current beat), and `bpm` (manual or auto-detected tempo, or `null` if unknown).
 
 **Beat detection is a lightweight heuristic, not a validated DSP algorithm.** It's a variance-thresholded energy detector on the bass band alone — cheap enough to run once per animation frame, but it under-detects material whose rhythm isn't bass-driven (ambient, classical, sparse/syncopated percussion), and only reports a `bpm` once two or more beats land 60--200 BPM apart. See the `detectBeat()` JSDoc in `src/audio-sync.js` for the full algorithm basis and limitations. For more robust detection, pass a known `bpm` manually, or pair `AudioSync` with a dedicated analysis library (e.g. `realtime-bpm-analyzer`, `web-audio-beat-detector`, or `Meyda` for richer spectral features) and feed its output through a custom object exposing `update(timestampMs)`.
+
+<p align="right"><a href="#sine-wave-generator--smooth-canvas-animation">Back to Top</a></p>
+
+---
+
+## React
+
+An optional `useSineWaveGenerator` hook lives at `src/use-sine-wave-generator.js`. It creates the generator on mount, starts it, and destroys it on unmount; `react` is a peer dependency (only required if you import this file).
+
+```jsx
+import { useSineWaveGenerator } from "@sebastienrousseau/sine-wave-generator/src/use-sine-wave-generator.js";
+
+function AmbientBackground() {
+	const { canvasRef } = useSineWaveGenerator({
+		waves: [{ amplitude: 20, wavelength: 120, speed: 0.5 }],
+		ariaLabel: "Ambient background animation",
+	});
+	return <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />;
+}
+```
+
+The hook is intentionally thin: it creates the generator once from the options passed on the first render (a new `waves` array on a later render calls `setWaves()` automatically), and returns `generatorRef` as an escape hatch — call any instance method on `generatorRef.current` (`addWave`, `syncToAudio`, `setQualityPreset`, ...) for anything else you need to update imperatively.
 
 <p align="right"><a href="#sine-wave-generator--smooth-canvas-animation">Back to Top</a></p>
 

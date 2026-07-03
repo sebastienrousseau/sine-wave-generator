@@ -34,6 +34,7 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - `ValidationError`, `CanvasError`, `AudioSyncError`: a typed error hierarchy (all `instanceof Error`) replacing generic `Error` throws throughout, so consumers can discriminate failure modes with `instanceof`
 - `tsconfig.json` and a `typecheck` script: JSDoc-driven type-checking with no added build step
 - `colorScheme` option: the default gradient now follows `prefers-color-scheme` live (with a distinct, higher-contrast palette for dark backgrounds), or force `"light"`/`"dark"`
+- `useSineWaveGenerator` (`src/use-sine-wave-generator.js`): an optional React hook that creates, starts, and destroys a `SineWaveGenerator` across the component lifecycle. `react` is an optional peer dependency — only required if this file is imported
 
 ### Changed
 

@@ -12,6 +12,8 @@
 		"@babel/core": "^7.29.6",
 		"@babel/preset-env": "^7.28.6",
 		"@sebastienrousseau/prettier-config": "^0.0.4",
+		"@testing-library/react": "^16.1.0",
+		"@types/react": "^18.3.18",
 		"babel-loader": "^9.1.3",
 		"copy-webpack-plugin": "^13.0.1",
 		"eslint": "^9.39.2",
@@ -21,11 +23,21 @@
 		"jest": "^30.2.0",
 		"jest-environment-jsdom": "^30.2.0",
 		"prettier": "^3.2.5",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
 		"terser-webpack-plugin": "^5.3.10",
 		"typescript": "^5.7.3",
 		"webpack": "^5.104.1",
 		"webpack-cli": "^6.0.1",
 		"webpack-dev-server": "^5.2.5"
+	},
+	"peerDependencies": {
+		"react": ">=16.8.0"
+	},
+	"peerDependenciesMeta": {
+		"react": {
+			"optional": true
+		}
 	},
 	"engines": {
 		"node": ">=16"

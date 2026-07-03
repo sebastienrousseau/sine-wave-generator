@@ -1,6 +1,10 @@
 module.exports = {
 	collectCoverage: true,
-	collectCoverageFrom: ["src/sine-wave-generator.js", "src/audio-sync.js"],
+	collectCoverageFrom: [
+		"src/sine-wave-generator.js",
+		"src/audio-sync.js",
+		"src/use-sine-wave-generator.js",
+	],
 	coverageThreshold: {
 		global: {
 			branches: 100,
