@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD033 MD041 -->
 
 <img
-src="https://kura.pro/sinewavegenerator/images/logos/sinewavegenerator.webp"
+src="https://cloudcdn.pro/clients/sinewavegenerator/v1/logos/sinewavegenerator.svg"
 align="right"
 alt="Sine Wave Generator Logo"
 height="261"
