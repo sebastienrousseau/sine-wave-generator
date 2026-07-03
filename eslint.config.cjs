@@ -1,6 +1,6 @@
 module.exports = [
 	{
-		ignores: ["dist/**", "docs/**"],
+		ignores: ["dist/**", "docs/**", "lib/**", "build-entries/**"],
 	},
 	{
 		files: ["**/*.js"],

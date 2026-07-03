@@ -26,6 +26,7 @@
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"terser-webpack-plugin": "^5.3.10",
+		"tsup": "^8.3.5",
 		"typescript": "^5.7.3",
 		"webpack": "^5.104.1",
 		"webpack-cli": "^6.0.1",
@@ -44,6 +45,7 @@
 	},
 	"files": [
 		"dist",
+		"lib",
 		"src",
 		"index.d.ts",
 		"LICENSE",
@@ -58,15 +60,37 @@
 		"wave"
 	],
 	"license": "Apache-2.0",
-	"main": "./src/sine-wave-generator.js",
+	"main": "./lib/sine-wave-generator.js",
+	"module": "./lib/sine-wave-generator.mjs",
 	"types": "./index.d.ts",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"import": "./lib/sine-wave-generator.mjs",
+			"require": "./lib/sine-wave-generator.js"
+		},
+		"./audio-sync": {
+			"types": "./index.d.ts",
+			"import": "./lib/audio-sync.mjs",
+			"require": "./lib/audio-sync.js"
+		},
+		"./use-sine-wave-generator": {
+			"types": "./src/use-sine-wave-generator.d.ts",
+			"default": "./src/use-sine-wave-generator.js"
+		},
+		"./src/sine-wave-generator.js": "./src/sine-wave-generator.js",
+		"./src/audio-sync.js": "./src/audio-sync.js",
+		"./src/use-sine-wave-generator.js": "./src/use-sine-wave-generator.js",
+		"./package.json": "./package.json"
+	},
 	"name": "@sebastienrousseau/sine-wave-generator",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/sebastienrousseau/sine-wave-generator.git"
 	},
 	"scripts": {
-		"build": "webpack --mode production",
+		"build": "webpack --mode production && pnpm run build:lib",
+		"build:lib": "tsup",
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"lint": "eslint . --ext .js",

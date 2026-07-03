@@ -35,6 +35,7 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - `tsconfig.json` and a `typecheck` script: JSDoc-driven type-checking with no added build step
 - `colorScheme` option: the default gradient now follows `prefers-color-scheme` live (with a distinct, higher-contrast palette for dark backgrounds), or force `"light"`/`"dark"`
 - `useSineWaveGenerator` (`src/use-sine-wave-generator.js`): an optional React hook that creates, starts, and destroys a `SineWaveGenerator` across the component lifecycle. `react` is an optional peer dependency — only required if this file is imported
+- Dual ESM/CJS build (via `tsup`) plus a `package.json` `exports` map: `require("@sebastienrousseau/sine-wave-generator")` and `import ... from "@sebastienrousseau/sine-wave-generator"` (and the `/audio-sync`, `/use-sine-wave-generator` subpaths) now both resolve natively. The previous `require(".../src/*.js")` deep-import paths still work unchanged, kept as explicit legacy aliases in the exports map
 
 ### Changed
 

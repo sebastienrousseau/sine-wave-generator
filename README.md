@@ -87,13 +87,19 @@ pnpm add @sebastienrousseau/sine-wave-generator
 </script>
 ```
 
-### Module usage (CommonJS)
+### Module usage (CommonJS or ESM)
 
 ```js
-const {
-	SineWaveGenerator,
-} = require("@sebastienrousseau/sine-wave-generator/src/sine-wave-generator.js");
+// CommonJS
+const { SineWaveGenerator } = require("@sebastienrousseau/sine-wave-generator");
+```
 
+```js
+// ESM
+import { SineWaveGenerator } from "@sebastienrousseau/sine-wave-generator";
+```
+
+```js
 const generator = new SineWaveGenerator({
 	el: "#sine",
 	maxPixelRatio: 2,
@@ -103,6 +109,17 @@ const generator = new SineWaveGenerator({
 generator.start();
 ```
 
+`AudioSync` is available the same way from the `/audio-sync` subpath:
+
+```js
+const {
+	AudioSync,
+} = require("@sebastienrousseau/sine-wave-generator/audio-sync");
+// or: import { AudioSync } from "@sebastienrousseau/sine-wave-generator/audio-sync";
+```
+
+The package ships both a CommonJS and a native ESM build (resolved automatically via `package.json` `exports`), plus bundled TypeScript types. The deep-import paths used in older versions of these docs — `require("@sebastienrousseau/sine-wave-generator/src/sine-wave-generator.js")` and `.../src/audio-sync.js` — still work unchanged; they resolve straight to the unbundled source.
+
 Set `strokeStyle` to `null` to use the built-in gradient stroke.
 
 ### Sync animation to audio (BPM-reactive)
@@ -110,12 +127,10 @@ Set `strokeStyle` to `null` to use the built-in gradient stroke.
 Bind an `AudioSync` instance to a `SineWaveGenerator` so wave parameters react to music in real time — amplitude pulses with bass, speed tracks overall energy, and beats trigger a short amplitude boost.
 
 ```js
-const {
-	SineWaveGenerator,
-} = require("@sebastienrousseau/sine-wave-generator/src/sine-wave-generator.js");
+const { SineWaveGenerator } = require("@sebastienrousseau/sine-wave-generator");
 const {
 	AudioSync,
-} = require("@sebastienrousseau/sine-wave-generator/src/audio-sync.js");
+} = require("@sebastienrousseau/sine-wave-generator/audio-sync");
 
 const generator = new SineWaveGenerator({
 	el: "#sine",
@@ -244,10 +259,10 @@ Metrics returned by `update()`/`getMetrics()`: `energy`, `bass`, `mid`, `treble`
 
 ## React
 
-An optional `useSineWaveGenerator` hook lives at `src/use-sine-wave-generator.js`. It creates the generator on mount, starts it, and destroys it on unmount; `react` is a peer dependency (only required if you import this file).
+An optional `useSineWaveGenerator` hook is available from the `/use-sine-wave-generator` subpath (raw source, not bundled — `react` is a peer dependency, only required if you import this). It creates the generator on mount, starts it, and destroys it on unmount.
 
 ```jsx
-import { useSineWaveGenerator } from "@sebastienrousseau/sine-wave-generator/src/use-sine-wave-generator.js";
+import { useSineWaveGenerator } from "@sebastienrousseau/sine-wave-generator/use-sine-wave-generator";
 
 function AmbientBackground() {
 	const { canvasRef } = useSineWaveGenerator({

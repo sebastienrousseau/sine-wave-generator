@@ -2,6 +2,7 @@
 *.tgz
 debug
 dist
+lib
 
 # Logs
 logs
