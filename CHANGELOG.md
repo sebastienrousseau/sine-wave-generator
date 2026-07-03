@@ -25,6 +25,8 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - Apple-inspired documentation refresh with new examples and performance guidance
 - New options: `pixelRatio`, `maxPixelRatio`, and `autoResize`
 - Pause/resume example controls and a performance-tuned demo
+- `AudioSync` (`src/audio-sync.js`): analyzes an `HTMLMediaElement` or `MediaStream` via the Web Audio API and derives real-time energy, frequency-band, beat, and BPM metrics
+- `SineWaveGenerator.syncToAudio()` / `unsyncAudio()`: bind an `AudioSync` (or any object exposing `update(timestamp)`) so wave amplitude, speed, and rotation react to music, with a configurable per-property metric mapping
 
 ### Changed
 

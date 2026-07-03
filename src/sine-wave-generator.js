@@ -77,6 +77,12 @@ const QUALITY_PRESETS = {
 	balanced: 1.5,
 	battery: 1,
 };
+const DEFAULT_AUDIO_MAPPING = {
+	amplitude: { source: "bass", intensity: 1.5 },
+	speed: { source: "energy", intensity: 0.75 },
+};
+const AUDIO_BEAT_PULSE_BOOST = 0.6;
+const AUDIO_BEAT_PULSE_DECAY = 0.9;
 
 /**
  * Represents a wave for the sine wave generator.
@@ -248,6 +254,8 @@ class SineWaveGenerator {
 		this.displayHeight = 0;
 		this.gradient = null;
 		this.lastFrameTime = null;
+		this.audioSync = null;
+		this.audioMapping = null;
 
 		this.bindEvents();
 	}
@@ -389,6 +397,7 @@ class SineWaveGenerator {
 					? 1
 					: Math.min(5, Math.max(0, frameDeltaSeconds * 60));
 			this.lastFrameTime = isNumberTime ? time : 0;
+			this.applyAudioSync(isNumberTime ? time : 0);
 			this.ctx.clearRect(0, 0, this.displayWidth, this.displayHeight);
 			const waves = this.waves;
 			for (let i = 0, len = waves.length; i < len; i++) {
@@ -559,12 +568,127 @@ class SineWaveGenerator {
 	}
 
 	/**
+	 * Binds an audio source's live metrics to wave parameters so the
+	 * animation reacts to music (BPM, beats, and frequency energy).
+	 * @param {{update: function(number): Object}} audioSync - An object exposing update(timestampMs), e.g. an AudioSync instance from `audio-sync.js`.
+	 * @param {Object} [mapping] - Per-property audio mapping. Keys are wave properties ("amplitude", "speed", "rotate"); values are `{source, intensity}`, where `source` is a metric name ("energy", "bass", "mid", "treble") and `intensity` scales its effect. Defaults to modulating amplitude by bass and speed by overall energy.
+	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 * @throws {Error} Throws if audioSync does not expose an update() method.
+	 */
+	syncToAudio(audioSync, mapping = DEFAULT_AUDIO_MAPPING) {
+		if (!audioSync || typeof audioSync.update !== "function") {
+			throw new Error(
+				"syncToAudio requires an object with an update(timestamp) method.",
+			);
+		}
+		this.audioSync = audioSync;
+		this.audioMapping = mapping;
+		const waves = this.waves;
+		for (let i = 0, len = waves.length; i < len; i++) {
+			this.captureAudioBase(waves[i]);
+		}
+		return this;
+	}
+
+	/**
+	 * Snapshots a wave's pre-audio-sync values so modulation can be applied
+	 * relative to its original configuration rather than compounding.
+	 * @param {Wave} wave - The wave to snapshot.
+	 * @returns {Wave} - The wave, for chaining.
+	 */
+	captureAudioBase(wave) {
+		if (!wave._audioBase) {
+			wave._audioBase = {
+				amplitude: wave.amplitude,
+				speed: wave.speed,
+				rotate: wave.rotate,
+			};
+			wave._beatPulse = 0;
+		}
+		return wave;
+	}
+
+	/**
+	 * Detaches the bound audio source and restores each wave's
+	 * pre-audio-sync amplitude, speed, and rotation.
+	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 */
+	unsyncAudio() {
+		if (!this.audioSync) {
+			return this;
+		}
+		const waves = this.waves;
+		for (let i = 0, len = waves.length; i < len; i++) {
+			const wave = waves[i];
+			if (wave._audioBase) {
+				wave.amplitude = wave._audioBase.amplitude;
+				wave.speed = wave._audioBase.speed;
+				wave.rotate = wave._audioBase.rotate;
+				delete wave._audioBase;
+				delete wave._beatPulse;
+			}
+		}
+		this.audioSync = null;
+		this.audioMapping = null;
+		return this;
+	}
+
+	/**
+	 * Samples the bound audio source and modulates wave parameters
+	 * accordingly. No-ops if no audio source is bound. Called automatically
+	 * once per frame while the animation is running.
+	 * @param {number} time - The current timestamp in milliseconds.
+	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 */
+	applyAudioSync(time) {
+		if (!this.audioSync) {
+			return this;
+		}
+		const metrics = this.audioSync.update(time);
+		const mapping = this.audioMapping || DEFAULT_AUDIO_MAPPING;
+		const waves = this.waves;
+		for (let i = 0, len = waves.length; i < len; i++) {
+			const wave = waves[i];
+			this.captureAudioBase(wave);
+			const base = wave._audioBase;
+			wave._beatPulse = metrics.beat
+				? AUDIO_BEAT_PULSE_BOOST
+				: wave._beatPulse * AUDIO_BEAT_PULSE_DECAY;
+			if (mapping.amplitude) {
+				const value = metrics[mapping.amplitude.source] || 0;
+				wave.amplitude = Math.max(
+					0,
+					base.amplitude *
+						(1 + value * mapping.amplitude.intensity + wave._beatPulse),
+				);
+			}
+			if (mapping.speed) {
+				const value = metrics[mapping.speed.source] || 0;
+				wave.speed = Math.max(
+					0,
+					base.speed * (1 + value * mapping.speed.intensity),
+				);
+			}
+			if (mapping.rotate) {
+				const value = metrics[mapping.rotate.source] || 0;
+				wave.rotate =
+					(((base.rotate + value * mapping.rotate.intensity * 360) % 360) +
+						360) %
+					360;
+			}
+		}
+		return this;
+	}
+
+	/**
 	 * Fully stop and unbind events.
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
 	 */
 	destroy() {
 		this.stop();
 		this.waves = [];
+		this.audioSync = null;
+		this.audioMapping = null;
 		return this;
 	}
 }

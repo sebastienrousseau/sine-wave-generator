@@ -497,4 +497,436 @@ describe("SineWaveGenerator", () => {
 		generator.removeWave(count - 1);
 		expect(generator.waves.length).toBe(count - 1);
 	});
+
+	it("replaces the wave stack via setWaves", () => {
+		const ctx = createMockContext();
+		const canvas = createCanvas(ctx);
+		const generator = new SineWaveGenerator({ el: canvas });
+		expect(() => generator.setWaves("not-an-array")).toThrow(
+			"setWaves expects an array of wave configs.",
+		);
+		const wave = new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 });
+		generator.setWaves([
+			wave,
+			{ amplitude: 12, wavelength: 90, segmentLength: 10 },
+		]);
+		expect(generator.waves[0]).toBe(wave);
+		expect(generator.waves[1]).toBeInstanceOf(Wave);
+		expect(generator.waves.length).toBe(2);
+	});
+
+	it("applies a quality preset and rejects unknown presets", () => {
+		const ctx = createMockContext();
+		const canvas = createCanvas(ctx);
+		const generator = new SineWaveGenerator({ el: canvas });
+		const resizeSpy = jest.spyOn(generator, "resize");
+		generator.setQualityPreset("battery");
+		expect(generator.maxPixelRatio).toBe(1);
+		expect(resizeSpy).toHaveBeenCalled();
+		expect(() => generator.setQualityPreset("ultra")).toThrow(
+			'Invalid preset. Use "quality", "balanced", or "battery".',
+		);
+	});
+
+	it("binds and handles pointer events when PointerEvent is supported", () => {
+		const ctx = createMockContext();
+		const canvas = createCanvas(ctx);
+		const originalPointerEvent = window.PointerEvent;
+		window.PointerEvent = function PointerEvent() {};
+		const addSpy = jest.spyOn(canvas, "addEventListener");
+		const generator = new SineWaveGenerator({ el: canvas });
+		expect(generator.supportsPointerEvents).toBe(true);
+		expect(addSpy).toHaveBeenCalledWith(
+			"pointermove",
+			generator.handlePointerMove,
+			generator.touchListenerOptions,
+		);
+		generator.waves = [
+			new Wave({ amplitude: 10, wavelength: 80, segmentLength: 10 }),
+		];
+		generator.displayHeight = 0;
+		generator.onPointerMove({ clientY: 50 });
+		expect(generator.waves[0].phase).toBeDefined();
+		generator.displayHeight = 100;
+		generator.onPointerMove({ clientY: -10 });
+		expect(generator.waves[0].phase).toBe(0);
+		generator.onPointerMove({ clientY: 200 });
+		expect(generator.waves[0].phase).toBe(Math.PI * 2);
+		const removeSpy = jest.spyOn(canvas, "removeEventListener");
+		generator.unbindEvents();
+		expect(removeSpy).toHaveBeenCalledWith(
+			"pointermove",
+			generator.handlePointerMove,
+			generator.touchListenerOptions,
+		);
+		window.PointerEvent = originalPointerEvent;
+	});
+
+	describe("audio sync", () => {
+		it("throws when syncToAudio is given an invalid audio source", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(() => generator.syncToAudio(null)).toThrow(
+				"syncToAudio requires an object with an update(timestamp) method.",
+			);
+			expect(() => generator.syncToAudio({})).toThrow(
+				"syncToAudio requires an object with an update(timestamp) method.",
+			);
+		});
+
+		it("is a no-op until an audio source is bound", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			generator.waves = [wave];
+			expect(generator.applyAudioSync(100)).toBe(generator);
+			expect(wave.amplitude).toBe(10);
+			expect(wave.speed).toBe(0.5);
+		});
+
+		it("modulates amplitude and speed using the default mapping", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			generator.waves = [wave];
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 0.4,
+					bass: 0.2,
+					mid: 0,
+					treble: 0,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync);
+			expect(wave._audioBase).toEqual({ amplitude: 10, speed: 0.5, rotate: 0 });
+			generator.applyAudioSync(1000);
+			expect(audioSync.update).toHaveBeenCalledWith(1000);
+			expect(wave.amplitude).toBeCloseTo(10 * (1 + 0.2 * 1.5), 6);
+			expect(wave.speed).toBeCloseTo(0.5 * (1 + 0.4 * 0.75), 6);
+		});
+
+		it("captures each wave's base values only once", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			generator.captureAudioBase(wave);
+			wave.amplitude = 999;
+			generator.captureAudioBase(wave);
+			expect(wave._audioBase.amplitude).toBe(10);
+		});
+
+		it("captures waves added after syncToAudio on the next applyAudioSync call", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 0,
+					bass: 0,
+					mid: 0,
+					treble: 0,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync);
+			generator.addWave({
+				amplitude: 6,
+				speed: 0.2,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			const wave = generator.waves[0];
+			expect(wave._audioBase).toBeUndefined();
+			generator.applyAudioSync(0);
+			expect(wave._audioBase).toEqual({ amplitude: 6, speed: 0.2, rotate: 0 });
+		});
+
+		it("applies a beat pulse boost to amplitude that decays across frames", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			generator.waves = [wave];
+			let beat = true;
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 0,
+					bass: 0,
+					mid: 0,
+					treble: 0,
+					beat,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync);
+			generator.applyAudioSync(0);
+			const boosted = wave.amplitude;
+			expect(boosted).toBeCloseTo(10 * 1.6, 6);
+			beat = false;
+			generator.applyAudioSync(16);
+			const decayed = wave.amplitude;
+			expect(decayed).toBeLessThan(boosted);
+			expect(decayed).toBeGreaterThan(10);
+		});
+
+		it("applies a custom mapping including rotate and wraps negative angles", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+				rotate: 0,
+			});
+			generator.waves = [wave];
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 0,
+					bass: 0,
+					mid: 0,
+					treble: 0.5,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync, {
+				rotate: { source: "treble", intensity: -1 },
+			});
+			generator.applyAudioSync(0);
+			expect(wave.rotate).toBeCloseTo(180, 6);
+			expect(wave.amplitude).toBe(10);
+			expect(wave.speed).toBe(0.5);
+		});
+
+		it("never lets modulated amplitude or speed go negative", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			generator.waves = [wave];
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 1,
+					bass: 1,
+					mid: 0,
+					treble: 0,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync, {
+				amplitude: { source: "bass", intensity: -10 },
+				speed: { source: "energy", intensity: -10 },
+			});
+			generator.applyAudioSync(0);
+			expect(wave.amplitude).toBe(0);
+			expect(wave.speed).toBe(0);
+		});
+
+		it("unsyncAudio restores original wave values and clears audio state", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			generator.waves = [wave];
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 0.5,
+					bass: 0.5,
+					mid: 0,
+					treble: 0,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync);
+			generator.applyAudioSync(0);
+			expect(wave.amplitude).not.toBe(10);
+			generator.unsyncAudio();
+			expect(wave.amplitude).toBe(10);
+			expect(wave.speed).toBe(0.5);
+			expect(wave._audioBase).toBeUndefined();
+			expect(wave._beatPulse).toBeUndefined();
+			expect(generator.audioSync).toBeNull();
+			expect(generator.audioMapping).toBeNull();
+		});
+
+		it("unsyncAudio leaves waves untouched when they were never captured", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const audioSync = { update: jest.fn(() => ({})) };
+			generator.syncToAudio(audioSync);
+			generator.waves = [
+				new Wave({
+					amplitude: 10,
+					speed: 0.5,
+					wavelength: 80,
+					segmentLength: 10,
+				}),
+			];
+			expect(generator.waves[0]._audioBase).toBeUndefined();
+			expect(() => generator.unsyncAudio()).not.toThrow();
+			expect(generator.waves[0].amplitude).toBe(10);
+			expect(generator.audioSync).toBeNull();
+		});
+
+		it("falls back to the default mapping when audioMapping is unset", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+			});
+			generator.waves = [wave];
+			generator.audioSync = {
+				update: jest.fn(() => ({
+					energy: 0.4,
+					bass: 0.2,
+					mid: 0,
+					treble: 0,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.audioMapping = null;
+			generator.applyAudioSync(0);
+			expect(wave.amplitude).toBeCloseTo(10 * (1 + 0.2 * 1.5), 6);
+			expect(wave.speed).toBeCloseTo(0.5 * (1 + 0.4 * 0.75), 6);
+		});
+
+		it("treats a falsy rotate metric as zero", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const wave = new Wave({
+				amplitude: 10,
+				speed: 0.5,
+				wavelength: 80,
+				segmentLength: 10,
+				rotate: 90,
+			});
+			generator.waves = [wave];
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 0,
+					bass: 0,
+					mid: 0,
+					treble: 0,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync, {
+				rotate: { source: "treble", intensity: 1 },
+			});
+			generator.applyAudioSync(0);
+			expect(wave.rotate).toBe(90);
+		});
+
+		it("unsyncAudio is a no-op when no audio source is bound", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.unsyncAudio()).toBe(generator);
+		});
+
+		it("samples the bound audio source once per animation frame", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			generator.waves = [
+				new Wave({
+					amplitude: 10,
+					speed: 0.5,
+					wavelength: 80,
+					segmentLength: 10,
+				}),
+			];
+			const audioSync = {
+				update: jest.fn(() => ({
+					energy: 0,
+					bass: 0,
+					mid: 0,
+					treble: 0,
+					beat: false,
+					beatPhase: 0,
+					bpm: null,
+				})),
+			};
+			generator.syncToAudio(audioSync);
+			let rafCount = 0;
+			global.requestAnimationFrame = jest.fn((callback) => {
+				rafCount += 1;
+				if (rafCount === 1) {
+					callback(500);
+				}
+				return 42;
+			});
+			generator.start();
+			expect(audioSync.update).toHaveBeenCalledWith(500);
+		});
+
+		it("destroy clears the bound audio sync", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			const audioSync = { update: jest.fn(() => generator.audioSync?.metrics) };
+			generator.syncToAudio(audioSync);
+			generator.destroy();
+			expect(generator.audioSync).toBeNull();
+			expect(generator.audioMapping).toBeNull();
+			expect(generator.waves).toEqual([]);
+		});
+	});
 });

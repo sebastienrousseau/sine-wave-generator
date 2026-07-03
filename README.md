@@ -42,6 +42,7 @@ The library ships at roughly 3 KB gzipped. It uses `requestAnimationFrame` for b
 - **Layered waves.** Stack multiple waves with independent settings for depth and parallax.
 - **Responsive sizing.** Element-bound dimensions with device pixel ratio support and a configurable cap.
 - **Pointer control.** Built-in mouse and touch tracking adjusts wave phase in real time.
+- **Audio-reactive sync.** Bind a live audio source so wave amplitude, speed, and rotation react to beats, tempo, and frequency energy.
 
 ### Performance
 
@@ -93,6 +94,49 @@ generator.start();
 
 Set `strokeStyle` to `null` to use the built-in gradient stroke.
 
+### Sync animation to audio (BPM-reactive)
+
+Bind an `AudioSync` instance to a `SineWaveGenerator` so wave parameters react to music in real time — amplitude pulses with bass, speed tracks overall energy, and beats trigger a short amplitude boost.
+
+```js
+const {
+	SineWaveGenerator,
+} = require("@sebastienrousseau/sine-wave-generator/src/sine-wave-generator.js");
+const {
+	AudioSync,
+} = require("@sebastienrousseau/sine-wave-generator/src/audio-sync.js");
+
+const generator = new SineWaveGenerator({
+	el: "#sine",
+	waves: [{ amplitude: 20, wavelength: 120, speed: 0.5 }],
+});
+
+const audioSync = new AudioSync(); // or new AudioSync({ bpm: 128 }) for a known tempo
+const audioEl = document.querySelector("audio");
+audioEl.addEventListener(
+	"play",
+	() => {
+		audioSync.connect(audioEl); // also accepts a MediaStream, e.g. from getUserMedia()
+		generator.syncToAudio(audioSync);
+	},
+	{ once: true },
+);
+
+generator.start();
+```
+
+Pass a custom `mapping` as the second argument to `syncToAudio()` to control which metric (`"energy"`, `"bass"`, `"mid"`, `"treble"`) drives which wave property (`amplitude`, `speed`, `rotate`), and how strongly:
+
+```js
+generator.syncToAudio(audioSync, {
+	amplitude: { source: "bass", intensity: 2 },
+	speed: { source: "energy", intensity: 1 },
+	rotate: { source: "treble", intensity: 0.5 },
+});
+```
+
+Call `generator.unsyncAudio()` to detach and restore each wave's original amplitude, speed, and rotation.
+
 <p align="right"><a href="#sine-wave-generator--smooth-canvas-animation">Back to Top</a></p>
 
 ---
@@ -126,17 +170,38 @@ Set `strokeStyle` to `null` to use the built-in gradient stroke.
 
 ### Instance methods
 
-| Method              | Description                                   |
-| ------------------- | --------------------------------------------- |
-| `start()`           | Start the animation loop                      |
-| `stop()`            | Stop the animation loop and unbind events     |
-| `resize()`          | Recalculate canvas size and rebuild gradients |
-| `addWave(config)`   | Add a new wave at runtime                     |
-| `removeWave(index)` | Remove a wave by index                        |
-| `bindEvents()`      | Bind resize, mouse, and touch events          |
-| `unbindEvents()`    | Unbind all events                             |
+| Method                             | Description                                                    |
+| ---------------------------------- | -------------------------------------------------------------- |
+| `start()`                          | Start the animation loop                                       |
+| `stop()`                           | Stop the animation loop and unbind events                      |
+| `resize()`                         | Recalculate canvas size and rebuild gradients                  |
+| `addWave(config)`                  | Add a new wave at runtime                                      |
+| `removeWave(index)`                | Remove a wave by index                                         |
+| `bindEvents()`                     | Bind resize, mouse, and touch events                           |
+| `unbindEvents()`                   | Unbind all events                                              |
+| `syncToAudio(audioSync, mapping?)` | Bind an audio source's live metrics to wave parameters         |
+| `unsyncAudio()`                    | Detach the bound audio source and restore original wave values |
 
 A high `maxPixelRatio` on large canvases will increase memory use proportionally.
+
+### AudioSync
+
+`new AudioSync(options?)` — analyzes an `HTMLMediaElement` or `MediaStream` with the Web Audio API and derives real-time metrics for `syncToAudio()`.
+
+| Option                  | Type             | Default | Description                                    |
+| ----------------------- | ---------------- | ------- | ---------------------------------------------- |
+| `fftSize`               | `number`         | `1024`  | FFT size for the analyser (must be power of 2) |
+| `smoothingTimeConstant` | `number`         | `0.8`   | Analyser smoothing, 0--1                       |
+| `bpm`                   | `number \| null` | `null`  | Manual tempo override; omit to auto-detect     |
+
+| Method                | Description                                       |
+| --------------------- | ------------------------------------------------- |
+| `connect(source)`     | Connect an `HTMLMediaElement` or `MediaStream`    |
+| `disconnect()`        | Disconnect and reset analysis state               |
+| `update(timestampMs)` | Sample the source and refresh metrics             |
+| `getMetrics()`        | Return the last computed metrics without sampling |
+
+Metrics returned by `update()`/`getMetrics()`: `energy`, `bass`, `mid`, `treble` (all normalized 0--1), `beat` (boolean, true on the detected frame), `beatPhase` (0--1 progress through the current beat), and `bpm` (manual or auto-detected tempo, or `null` if unknown).
 
 <p align="right"><a href="#sine-wave-generator--smooth-canvas-animation">Back to Top</a></p>
 
@@ -164,6 +229,10 @@ import {
 	Ease,
 	WaveConfig,
 	SineWaveGeneratorOptions,
+	AudioSync,
+	AudioSyncOptions,
+	AudioMapping,
+	AudioMetrics,
 } from "@sebastienrousseau/sine-wave-generator";
 ```
 

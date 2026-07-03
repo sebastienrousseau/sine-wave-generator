@@ -125,4 +125,78 @@ export class SineWaveGenerator {
 	bindEvents(): this;
 	/** Unbind all events. Returns this for chaining. */
 	unbindEvents(): this;
+	/** Bind an audio source's live metrics to wave parameters. Returns this for chaining. */
+	syncToAudio(
+		audioSync: { update(timestampMs: number): AudioMetrics },
+		mapping?: AudioMapping,
+	): this;
+	/** Detach the bound audio source and restore original wave parameters. Returns this for chaining. */
+	unsyncAudio(): this;
+	/** Sample the bound audio source and modulate wave parameters. No-op if unbound. Returns this for chaining. */
+	applyAudioSync(time: number): this;
+}
+
+/** A single wave-property audio mapping entry. */
+export interface AudioMappingEntry {
+	/** The metric driving this property. */
+	source: "energy" | "bass" | "mid" | "treble";
+	/** Scales the metric's effect on the property. */
+	intensity: number;
+}
+
+/** Per-wave-property audio mapping passed to `syncToAudio`. */
+export interface AudioMapping {
+	amplitude?: AudioMappingEntry;
+	speed?: AudioMappingEntry;
+	rotate?: AudioMappingEntry;
+}
+
+/** Real-time metrics derived from an analyzed audio source. */
+export interface AudioMetrics {
+	/** Overall frequency-spectrum energy, normalized 0-1. */
+	energy: number;
+	/** Low-frequency band energy, normalized 0-1. */
+	bass: number;
+	/** Mid-frequency band energy, normalized 0-1. */
+	mid: number;
+	/** High-frequency band energy, normalized 0-1. */
+	treble: number;
+	/** True on the frame a beat was detected. */
+	beat: boolean;
+	/** Progress through the current beat cycle, 0-1. */
+	beatPhase: number;
+	/** Manual or auto-detected tempo, or null if unknown. */
+	bpm: number | null;
+}
+
+/** Options for initializing an AudioSync instance. */
+export interface AudioSyncOptions {
+	/** FFT size for the underlying AnalyserNode. Must be a power of 2. Defaults to 1024. */
+	fftSize?: number;
+	/** Analyser smoothing, 0-1. Defaults to 0.8. */
+	smoothingTimeConstant?: number;
+	/** Manual tempo override. Defaults to null (auto-detected). */
+	bpm?: number | null;
+}
+
+/** Analyzes an audio source and derives beat/tempo/frequency metrics for driving audio-reactive animations. */
+export class AudioSync {
+	fftSize: number;
+	smoothingTimeConstant: number;
+	manualBpm: number | null;
+
+	/** Creates an instance of AudioSync. */
+	constructor(options?: AudioSyncOptions);
+
+	/** Whether an audio source is currently connected. */
+	readonly isConnected: boolean;
+
+	/** Connects an audio source for analysis. Throws if unsupported. Returns this for chaining. */
+	connect(source: HTMLMediaElement | MediaStream): this;
+	/** Disconnects the current audio source and resets analysis state. Returns this for chaining. */
+	disconnect(): this;
+	/** Samples the connected audio source and refreshes derived metrics. */
+	update(timestampMs: number): AudioMetrics;
+	/** Returns the last computed metrics snapshot without sampling again. */
+	getMetrics(): AudioMetrics;
 }
