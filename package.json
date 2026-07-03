@@ -7,10 +7,6 @@
 	"bugs": {
 		"url": "https://github.com/sebastienrousseau/sine-wave-generator/issues"
 	},
-	"dependencies": {
-		"path": "^0.12.7",
-		"remark": "^15.0.1"
-	},
 	"description": "A JavaScript library for generating animated sine waves on a canvas.",
 	"devDependencies": {
 		"@babel/core": "^7.29.6",
@@ -26,6 +22,7 @@
 		"jest-environment-jsdom": "^30.2.0",
 		"prettier": "^3.2.5",
 		"terser-webpack-plugin": "^5.3.10",
+		"typescript": "^5.7.3",
 		"webpack": "^5.104.1",
 		"webpack-cli": "^6.0.1",
 		"webpack-dev-server": "^5.2.5"
@@ -64,7 +61,8 @@
 		"lint:fix": "eslint . --ext .js --fix",
 		"prepare": "pnpm run build && node copyDistToDocs.js",
 		"start": "webpack-dev-server --open",
-		"test": "jest --coverage"
+		"test": "jest --coverage",
+		"typecheck": "tsc --noEmit"
 	},
 	"sideEffects": false,
 	"version": "0.0.3"

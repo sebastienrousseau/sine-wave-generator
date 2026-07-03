@@ -8,7 +8,7 @@
 
 # Sine Wave Generator — Smooth Canvas Animation
 
-[![Build](https://img.shields.io/github/actions/workflow/status/sebastienrousseau/sine-wave-generator/release.yml?style=for-the-badge)](https://github.com/sebastienrousseau/sine-wave-generator/actions) [![Version](https://img.shields.io/badge/Version-v0.0.3-blue?style=for-the-badge)](https://github.com/sebastienrousseau/sine-wave-generator/releases/tag/v0.0.3) [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg?style=for-the-badge)](LICENSE) [![npm](https://img.shields.io/npm/v/@sebastienrousseau/sine-wave-generator?style=for-the-badge)](https://www.npmjs.com/package/@sebastienrousseau/sine-wave-generator) [![Last Commit](https://img.shields.io/github/last-commit/sebastienrousseau/sine-wave-generator?style=for-the-badge)](https://github.com/sebastienrousseau/sine-wave-generator/commits)
+[![Build](https://img.shields.io/github/actions/workflow/status/sebastienrousseau/sine-wave-generator/release.yml?style=for-the-badge)](https://github.com/sebastienrousseau/sine-wave-generator/actions) [![Version](https://img.shields.io/badge/Version-v0.0.3-blue?style=for-the-badge)](https://github.com/sebastienrousseau/sine-wave-generator/releases/tag/v0.0.3) [![License](https://img.shields.io/badge/License-Apache--2.0-green.svg?style=for-the-badge)](LICENSE) [![npm](https://img.shields.io/npm/v/@sebastienrousseau/sine-wave-generator?style=for-the-badge)](https://www.npmjs.com/package/@sebastienrousseau/sine-wave-generator) [![Bundle size](https://img.shields.io/bundlephobia/minzip/@sebastienrousseau/sine-wave-generator?style=for-the-badge&label=gzip%20size)](https://bundlephobia.com/package/@sebastienrousseau/sine-wave-generator) [![Last Commit](https://img.shields.io/github/last-commit/sebastienrousseau/sine-wave-generator?style=for-the-badge)](https://github.com/sebastienrousseau/sine-wave-generator/commits)
 
 ---
 
@@ -58,7 +58,17 @@ The library ships at roughly 3 KB gzipped. It uses `requestAnimationFrame` for b
 
 ```bash
 npm install @sebastienrousseau/sine-wave-generator
+# or
+yarn add @sebastienrousseau/sine-wave-generator
+# or
+pnpm add @sebastienrousseau/sine-wave-generator
 ```
+
+### Requirements
+
+- **Browser:** any evergreen browser with Canvas 2D support (Chrome, Firefox, Safari, Edge). `AudioSync` additionally requires the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) (supported in all evergreen browsers).
+- **Node.js:** `>=16` — only relevant for the build/test tooling in this repo; the published package is plain browser JavaScript with zero runtime dependencies.
+- No bundler or build step is required to consume the library: drop `src/sine-wave-generator.js` in with a `<script>` tag, or `require`/`import` it directly.
 
 ### Basic usage
 
@@ -233,7 +243,23 @@ import {
 	AudioSyncOptions,
 	AudioMapping,
 	AudioMetrics,
+	ValidationError,
+	CanvasError,
+	AudioSyncError,
 } from "@sebastienrousseau/sine-wave-generator";
+```
+
+Every error thrown by this library is one of `ValidationError`, `CanvasError`, or `AudioSyncError` (all extend `Error`), so you can discriminate failure modes with `instanceof` instead of matching on message strings:
+
+```ts
+try {
+	new SineWaveGenerator({ el: "#missing-canvas" });
+} catch (error) {
+	if (error instanceof CanvasError) {
+		// canvas element or its 2D context is missing/unusable
+	}
+	throw error;
+}
 ```
 
 ---

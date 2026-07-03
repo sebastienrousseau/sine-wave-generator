@@ -1,6 +1,6 @@
 "use strict";
 
-const { AudioSync } = require("../src/audio-sync.js");
+const { AudioSync, AudioSyncError } = require("../src/audio-sync.js");
 
 class MockMediaStream {}
 
@@ -86,6 +86,7 @@ describe("AudioSync", () => {
 		window.webkitAudioContext = undefined;
 		const sync = new AudioSync();
 		const el = document.createElement("audio");
+		expect(() => sync.connect(el)).toThrow(AudioSyncError);
 		expect(() => sync.connect(el)).toThrow(/Web Audio API/);
 	});
 
@@ -177,6 +178,11 @@ describe("AudioSync", () => {
 		expect(metrics.beat).toBe(true);
 		expect(sync.beatIntervals.length).toBeGreaterThan(0);
 		expect(metrics.bpm).toBeNull();
+	});
+
+	it("computes zero band average when no frequency data is available", () => {
+		const sync = new AudioSync();
+		expect(sync.bandAverage(0, 4)).toBe(0);
 	});
 
 	it("computes zero band average for an empty range", () => {

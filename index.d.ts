@@ -3,6 +3,21 @@
  * TypeScript type definitions
  */
 
+/** Thrown when a configuration object or argument fails validation. */
+export class ValidationError extends Error {
+	constructor(message: string);
+}
+
+/** Thrown when a canvas element or its 2D rendering context is missing or unusable. */
+export class CanvasError extends Error {
+	constructor(message: string);
+}
+
+/** Thrown when audio analysis cannot proceed (unsupported environment or source). */
+export class AudioSyncError extends Error {
+	constructor(message: string);
+}
+
 /** Easing functions for smooth animations. */
 export namespace Ease {
 	/** Smooth easing in and out animation. */
@@ -42,10 +57,10 @@ export class Wave {
 	easing: (percent: number, amplitude: number) => number;
 	rotate: number;
 
-	/** Creates an instance of Wave. Throws if config values are invalid. */
+	/** Creates an instance of Wave. Throws ValidationError if config values are invalid. */
 	constructor(config: WaveConfig);
 
-	/** Validates the configuration values for the wave. Throws on invalid values. */
+	/** Validates the configuration values for the wave. Throws ValidationError on invalid values. */
 	validateConfig(config: {
 		amplitude: number;
 		wavelength: number;
@@ -100,7 +115,7 @@ export class SineWaveGenerator {
 	/** Current animation frame ID, or null if stopped. */
 	animationFrameId: number | null;
 
-	/** Creates an instance of SineWaveGenerator. Throws if canvas is invalid. */
+	/** Creates an instance of SineWaveGenerator. Throws CanvasError if canvas is invalid. */
 	constructor(options: SineWaveGeneratorOptions);
 
 	/** Start the animation loop. Returns this for chaining. */
@@ -191,7 +206,7 @@ export class AudioSync {
 	/** Whether an audio source is currently connected. */
 	readonly isConnected: boolean;
 
-	/** Connects an audio source for analysis. Throws if unsupported. Returns this for chaining. */
+	/** Connects an audio source for analysis. Throws AudioSyncError if unsupported. Returns this for chaining. */
 	connect(source: HTMLMediaElement | MediaStream): this;
 	/** Disconnects the current audio source and resets analysis state. Returns this for chaining. */
 	disconnect(): this;

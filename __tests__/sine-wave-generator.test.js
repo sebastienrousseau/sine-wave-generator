@@ -4,6 +4,8 @@ const {
 	Ease,
 	Wave,
 	SineWaveGenerator,
+	ValidationError,
+	CanvasError,
 } = require("../src/sine-wave-generator.js");
 
 const createMockContext = () => {
@@ -77,6 +79,10 @@ describe("Wave", () => {
 	});
 
 	it("validates configuration values", () => {
+		expect(
+			() =>
+				new Wave({ amplitude: Number.NaN, wavelength: 100, segmentLength: 10 }),
+		).toThrow(ValidationError);
 		expect(
 			() =>
 				new Wave({ amplitude: Number.NaN, wavelength: 100, segmentLength: 10 }),
@@ -194,6 +200,9 @@ describe("SineWaveGenerator", () => {
 	});
 
 	it("throws for invalid elements", () => {
+		expect(() => new SineWaveGenerator({ el: "#missing" })).toThrow(
+			CanvasError,
+		);
 		expect(() => new SineWaveGenerator({ el: "#missing" })).toThrow(
 			"SineWaveGenerator requires a valid canvas element.",
 		);
@@ -614,7 +623,12 @@ describe("SineWaveGenerator", () => {
 				})),
 			};
 			generator.syncToAudio(audioSync);
-			expect(wave._audioBase).toEqual({ amplitude: 10, speed: 0.5, rotate: 0 });
+			expect(generator.audioState.get(wave)).toEqual({
+				amplitude: 10,
+				speed: 0.5,
+				rotate: 0,
+				beatPulse: 0,
+			});
 			generator.applyAudioSync(1000);
 			expect(audioSync.update).toHaveBeenCalledWith(1000);
 			expect(wave.amplitude).toBeCloseTo(10 * (1 + 0.2 * 1.5), 6);
@@ -634,7 +648,7 @@ describe("SineWaveGenerator", () => {
 			generator.captureAudioBase(wave);
 			wave.amplitude = 999;
 			generator.captureAudioBase(wave);
-			expect(wave._audioBase.amplitude).toBe(10);
+			expect(generator.audioState.get(wave).amplitude).toBe(10);
 		});
 
 		it("captures waves added after syncToAudio on the next applyAudioSync call", () => {
@@ -660,9 +674,14 @@ describe("SineWaveGenerator", () => {
 				segmentLength: 10,
 			});
 			const wave = generator.waves[0];
-			expect(wave._audioBase).toBeUndefined();
+			expect(generator.audioState.has(wave)).toBe(false);
 			generator.applyAudioSync(0);
-			expect(wave._audioBase).toEqual({ amplitude: 6, speed: 0.2, rotate: 0 });
+			expect(generator.audioState.get(wave)).toEqual({
+				amplitude: 6,
+				speed: 0.2,
+				rotate: 0,
+				beatPulse: 0,
+			});
 		});
 
 		it("applies a beat pulse boost to amplitude that decays across frames", () => {
@@ -790,8 +809,7 @@ describe("SineWaveGenerator", () => {
 			generator.unsyncAudio();
 			expect(wave.amplitude).toBe(10);
 			expect(wave.speed).toBe(0.5);
-			expect(wave._audioBase).toBeUndefined();
-			expect(wave._beatPulse).toBeUndefined();
+			expect(generator.audioState.has(wave)).toBe(false);
 			expect(generator.audioSync).toBeNull();
 			expect(generator.audioMapping).toBeNull();
 		});
@@ -810,7 +828,7 @@ describe("SineWaveGenerator", () => {
 					segmentLength: 10,
 				}),
 			];
-			expect(generator.waves[0]._audioBase).toBeUndefined();
+			expect(generator.audioState.has(generator.waves[0])).toBe(false);
 			expect(() => generator.unsyncAudio()).not.toThrow();
 			expect(generator.waves[0].amplitude).toBe(10);
 			expect(generator.audioSync).toBeNull();

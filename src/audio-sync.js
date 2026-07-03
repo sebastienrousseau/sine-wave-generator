@@ -52,6 +52,23 @@ const MAX_BPM = 200;
 const MS_PER_MINUTE = 60000;
 
 /**
+ * Thrown when audio analysis cannot proceed (e.g. the Web Audio API is
+ * unavailable, or an unsupported source was passed to `connect()`).
+ * @class
+ * @augments Error
+ */
+class AudioSyncError extends Error {
+	/**
+	 * Creates an instance of AudioSyncError.
+	 * @param {string} message - A human-readable description of the failure.
+	 */
+	constructor(message) {
+		super(message);
+		this.name = "AudioSyncError";
+	}
+}
+
+/**
  * Analyzes an audio source and derives beat/tempo/frequency metrics for
  * driving audio-reactive animations.
  * @class
@@ -73,8 +90,11 @@ class AudioSync {
 		this.audioContext = null;
 		this.analyser = null;
 		this.sourceNode = null;
+		/** @type {Uint8Array<ArrayBuffer>|null} */
 		this.frequencyData = null;
+		/** @type {number[]} */
 		this.energyHistory = [];
+		/** @type {number[]} */
 		this.beatIntervals = [];
 		this.lastBeatTime = null;
 		this.startTime = null;
@@ -102,7 +122,7 @@ class AudioSync {
 	 * Connects an audio source for analysis.
 	 * @param {HTMLMediaElement|MediaStream} source - An audio/video element or a media stream (e.g. from getUserMedia).
 	 * @returns {this} - The AudioSync instance for chaining.
-	 * @throws {Error} Throws if Web Audio API is unavailable or the source type is unsupported.
+	 * @throws {AudioSyncError} Throws if Web Audio API is unavailable or the source type is unsupported.
 	 */
 	connect(source) {
 		if (this.isConnected) {
@@ -110,10 +130,11 @@ class AudioSync {
 		}
 		const AudioContextClass =
 			(typeof window !== "undefined" &&
-				(window.AudioContext || window.webkitAudioContext)) ||
+				(window.AudioContext ||
+					/** @type {any} */ (window).webkitAudioContext)) ||
 			null;
 		if (!AudioContextClass) {
-			throw new Error(
+			throw new AudioSyncError(
 				"AudioSync requires a browser environment with Web Audio API support.",
 			);
 		}
@@ -123,7 +144,7 @@ class AudioSync {
 			typeof HTMLMediaElement !== "undefined" &&
 			source instanceof HTMLMediaElement;
 		if (!isStream && !isElement) {
-			throw new Error(
+			throw new AudioSyncError(
 				"AudioSync.connect requires an HTMLMediaElement or a MediaStream.",
 			);
 		}
@@ -132,8 +153,12 @@ class AudioSync {
 		this.analyser.fftSize = this.fftSize;
 		this.analyser.smoothingTimeConstant = this.smoothingTimeConstant;
 		this.sourceNode = isStream
-			? this.audioContext.createMediaStreamSource(source)
-			: this.audioContext.createMediaElementSource(source);
+			? this.audioContext.createMediaStreamSource(
+					/** @type {MediaStream} */ (source),
+				)
+			: this.audioContext.createMediaElementSource(
+					/** @type {HTMLMediaElement} */ (source),
+				);
 		this.sourceNode.connect(this.analyser);
 		if (isElement) {
 			this.sourceNode.connect(this.audioContext.destination);
@@ -173,6 +198,9 @@ class AudioSync {
 	 */
 	bandAverage(from, to) {
 		const data = this.frequencyData;
+		if (!data) {
+			return 0;
+		}
 		let sum = 0;
 		let count = 0;
 		for (let i = from; i < to && i < data.length; i++) {
@@ -259,15 +287,17 @@ class AudioSync {
 	 * @returns {AudioMetrics} - The refreshed metrics snapshot.
 	 */
 	update(timestampMs) {
-		if (!this.isConnected) {
+		const analyser = this.analyser;
+		const frequencyData = this.frequencyData;
+		if (!analyser || !frequencyData) {
 			return this.metrics;
 		}
 		const time = typeof timestampMs === "number" ? timestampMs : 0;
 		if (this.startTime === null) {
 			this.startTime = time;
 		}
-		this.analyser.getByteFrequencyData(this.frequencyData);
-		const len = this.frequencyData.length;
+		analyser.getByteFrequencyData(frequencyData);
+		const len = frequencyData.length;
 		const bass = this.bandAverage(0, Math.floor(len * 0.1));
 		const mid = this.bandAverage(Math.floor(len * 0.1), Math.floor(len * 0.5));
 		const treble = this.bandAverage(Math.floor(len * 0.5), len);
@@ -296,10 +326,11 @@ class AudioSync {
 
 /* istanbul ignore next */
 if (typeof window !== "undefined") {
-	window.AudioSync = AudioSync;
+	/** @type {any} */ (window).AudioSync = AudioSync;
+	/** @type {any} */ (window).AudioSyncError = AudioSyncError;
 }
 
 /* istanbul ignore next */
 if (typeof module !== "undefined" && module.exports) {
-	module.exports = { AudioSync };
+	module.exports = { AudioSync, AudioSyncError };
 }

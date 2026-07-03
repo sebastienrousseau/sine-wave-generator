@@ -21,6 +21,36 @@
 "use strict";
 
 /**
+ * @typedef {Object} AudioMetricsLike
+ * @property {number} [energy] - Normalized overall energy, 0-1.
+ * @property {number} [bass] - Normalized low-frequency energy, 0-1.
+ * @property {number} [mid] - Normalized mid-frequency energy, 0-1.
+ * @property {number} [treble] - Normalized high-frequency energy, 0-1.
+ * @property {boolean} [beat] - True on the frame a beat was detected.
+ */
+
+/**
+ * @typedef {Object} AudioMappingEntry
+ * @property {"energy"|"bass"|"mid"|"treble"} source - The metric driving this property.
+ * @property {number} intensity - Scales the metric's effect on the property.
+ */
+
+/**
+ * @typedef {Object} AudioMapping
+ * @property {AudioMappingEntry} [amplitude] - Maps a metric to wave amplitude.
+ * @property {AudioMappingEntry} [speed] - Maps a metric to wave speed.
+ * @property {AudioMappingEntry} [rotate] - Maps a metric to wave rotation.
+ */
+
+/**
+ * @typedef {Object} AudioBaseState
+ * @property {number} amplitude - The wave's amplitude before audio sync began.
+ * @property {number} speed - The wave's speed before audio sync began.
+ * @property {number} rotate - The wave's rotation before audio sync began.
+ * @property {number} beatPulse - The current decaying beat-boost value.
+ */
+
+/**
  * @typedef {Object} WaveConfig
  * @property {number} [phase=Math.random() * Math.PI * 2] - The phase of the wave.
  * @property {number} [speed=Math.random() * 0.5 + 0.5] - The speed of the wave.
@@ -31,6 +61,40 @@
  * @property {Function} [easing=Ease.sineInOut] - The easing function of the wave.
  * @property {number} [rotate=0] - The rotation angle of the wave.
  */
+
+/**
+ * Thrown when a configuration object or argument fails validation
+ * (e.g. an invalid Wave config, preset name, or out-of-bounds index).
+ * @class
+ * @augments Error
+ */
+class ValidationError extends Error {
+	/**
+	 * Creates an instance of ValidationError.
+	 * @param {string} message - A human-readable description of the failure.
+	 */
+	constructor(message) {
+		super(message);
+		this.name = "ValidationError";
+	}
+}
+
+/**
+ * Thrown when a canvas element or its 2D rendering context is missing
+ * or unusable.
+ * @class
+ * @augments Error
+ */
+class CanvasError extends Error {
+	/**
+	 * Creates an instance of CanvasError.
+	 * @param {string} message - A human-readable description of the failure.
+	 */
+	constructor(message) {
+		super(message);
+		this.name = "CanvasError";
+	}
+}
 
 /**
  * Ease functions for smooth animations.
@@ -77,6 +141,7 @@ const QUALITY_PRESETS = {
 	balanced: 1.5,
 	battery: 1,
 };
+/** @type {AudioMapping} */
 const DEFAULT_AUDIO_MAPPING = {
 	amplitude: { source: "bass", intensity: 1.5 },
 	speed: { source: "energy", intensity: 0.75 },
@@ -92,7 +157,7 @@ class Wave {
 	/**
 	 * Creates an instance of Wave.
 	 * @param {WaveConfig} config - The configuration object for the wave.
-	 * @throws {Error} Throws an error if any configuration value is invalid.
+	 * @throws {ValidationError} Throws if any configuration value is invalid.
 	 */
 	constructor({
 		phase = Math.random() * TWO_PI,
@@ -129,26 +194,30 @@ class Wave {
 	 * @param {number} param0.segmentLength - The segment length of the wave.
 	 * @param {number} param0.speed - The speed of the wave.
 	 * @param {number} param0.rotate - The rotation angle of the wave.
-	 * @throws {Error} Throws an error if any configuration value is invalid.
+	 * @throws {ValidationError} Throws if any configuration value is invalid.
 	 */
 	validateConfig({ amplitude, wavelength, segmentLength, speed, rotate }) {
 		if (!Number.isFinite(amplitude) || !Number.isFinite(wavelength)) {
-			throw new Error("Amplitude and wavelength must be finite numbers.");
+			throw new ValidationError(
+				"Amplitude and wavelength must be finite numbers.",
+			);
 		}
 		if (
 			!Number.isFinite(segmentLength) ||
 			!Number.isFinite(speed) ||
 			!Number.isFinite(rotate)
 		) {
-			throw new Error(
+			throw new ValidationError(
 				"Segment length, speed, and rotate must be finite numbers.",
 			);
 		}
 		if (amplitude < 0 || wavelength < 0 || segmentLength <= 0 || speed < 0) {
-			throw new Error("Wave configuration values must be positive.");
+			throw new ValidationError("Wave configuration values must be positive.");
 		}
 		if (rotate < 0 || rotate >= 360) {
-			throw new Error("Rotate value must be between 0 and 360 degrees.");
+			throw new ValidationError(
+				"Rotate value must be between 0 and 360 degrees.",
+			);
 		}
 	}
 
@@ -209,7 +278,7 @@ class SineWaveGenerator {
 	 * @param {number} [options.pixelRatio=window.devicePixelRatio] - Device pixel ratio override.
 	 * @param {number} [options.maxPixelRatio=2] - Maximum pixel ratio cap for memory/perf.
 	 * @param {boolean} [options.autoResize=true] - Automatically resize on window resize.
-	 * @throws {Error} Throws an error if the canvas element is not provided.
+	 * @throws {CanvasError} Throws if the canvas element or its 2D context is unavailable.
 	 */
 	constructor({
 		el,
@@ -220,12 +289,14 @@ class SineWaveGenerator {
 	}) {
 		const resolvedEl = typeof el === "string" ? document.querySelector(el) : el;
 		if (!resolvedEl || !(resolvedEl instanceof HTMLCanvasElement)) {
-			throw new Error("SineWaveGenerator requires a valid canvas element.");
+			throw new CanvasError(
+				"SineWaveGenerator requires a valid canvas element.",
+			);
 		}
 		this.el = resolvedEl;
 		this.ctx = this.el.getContext("2d");
 		if (!this.ctx) {
-			throw new Error(
+			throw new CanvasError(
 				"SineWaveGenerator could not acquire a 2D rendering context.",
 			);
 		}
@@ -237,6 +308,7 @@ class SineWaveGenerator {
 		this.handleTouchMove = this.onTouchMove.bind(this);
 		this.handlePointerMove = this.onPointerMove.bind(this);
 		this.animationFrameId = null;
+		/** @type {AddEventListenerOptions} */
 		this.touchListenerOptions = { passive: true };
 		this.eventsBound = false;
 		this.autoResize = autoResize;
@@ -254,8 +326,12 @@ class SineWaveGenerator {
 		this.displayHeight = 0;
 		this.gradient = null;
 		this.lastFrameTime = null;
+		/** @type {{update: function(number): AudioMetricsLike}|null} */
 		this.audioSync = null;
+		/** @type {AudioMapping|null} */
 		this.audioMapping = null;
+		/** @type {WeakMap<Wave, AudioBaseState>} */
+		this.audioState = new WeakMap();
 
 		this.bindEvents();
 	}
@@ -379,6 +455,7 @@ class SineWaveGenerator {
 		if (this.animationFrameId) {
 			return this;
 		}
+		/** @param {number} [time] */
 		const draw = (time) => {
 			if (this.displayWidth === 0 || this.displayHeight === 0) {
 				this.resize();
@@ -495,7 +572,7 @@ class SineWaveGenerator {
 		const endY = Math.sin(TWO_PI + wavePhase) * endAmp + baseY;
 		ctx.lineTo(width, endY);
 
-		ctx.strokeStyle = wave.strokeStyle ?? this.gradient;
+		ctx.strokeStyle = wave.strokeStyle ?? this.gradient ?? "transparent";
 		ctx.lineWidth = LINE_WIDTH;
 		ctx.stroke();
 
@@ -510,11 +587,11 @@ class SineWaveGenerator {
 	 * Adds a new wave to the generator.
 	 * @param {WaveConfig} config - The configuration object for the new wave.
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
-	 * @throws {Error} Throws an error if the configuration object is not provided.
+	 * @throws {ValidationError} Throws if the configuration object is not provided.
 	 */
 	addWave(config) {
 		if (!config || typeof config !== "object") {
-			throw new Error("Invalid wave configuration provided.");
+			throw new ValidationError("Invalid wave configuration provided.");
 		}
 		const newWave = config instanceof Wave ? config : new Wave(config);
 		this.waves.push(newWave);
@@ -525,11 +602,11 @@ class SineWaveGenerator {
 	 * Removes a wave from the generator.
 	 * @param {number} index - The index of the wave to be removed.
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
-	 * @throws {Error} Throws an error if the index is out of bounds.
+	 * @throws {ValidationError} Throws if the index is out of bounds.
 	 */
 	removeWave(index) {
 		if (index < 0 || index >= this.waves.length) {
-			throw new Error("Wave index out of bounds.");
+			throw new ValidationError("Wave index out of bounds.");
 		}
 		this.waves.splice(index, 1);
 		return this;
@@ -539,10 +616,11 @@ class SineWaveGenerator {
 	 * Replace the full wave stack in a single update.
 	 * @param {Wave[]|Object[]} waves - Array of Wave instances or configs.
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 * @throws {ValidationError} Throws if `waves` is not an array.
 	 */
 	setWaves(waves) {
 		if (!Array.isArray(waves)) {
-			throw new Error("setWaves expects an array of wave configs.");
+			throw new ValidationError("setWaves expects an array of wave configs.");
 		}
 		this.waves = waves.map((wave) =>
 			wave instanceof Wave ? wave : new Wave(wave),
@@ -554,11 +632,12 @@ class SineWaveGenerator {
 	 * Apply a quality preset for memory/perf balance.
 	 * @param {"quality"|"balanced"|"battery"} preset - The preset name.
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
+	 * @throws {ValidationError} Throws if `preset` is not a recognized name.
 	 */
 	setQualityPreset(preset) {
 		const next = QUALITY_PRESETS[preset];
 		if (!next) {
-			throw new Error(
+			throw new ValidationError(
 				'Invalid preset. Use "quality", "balanced", or "battery".',
 			);
 		}
@@ -570,14 +649,14 @@ class SineWaveGenerator {
 	/**
 	 * Binds an audio source's live metrics to wave parameters so the
 	 * animation reacts to music (BPM, beats, and frequency energy).
-	 * @param {{update: function(number): Object}} audioSync - An object exposing update(timestampMs), e.g. an AudioSync instance from `audio-sync.js`.
-	 * @param {Object} [mapping] - Per-property audio mapping. Keys are wave properties ("amplitude", "speed", "rotate"); values are `{source, intensity}`, where `source` is a metric name ("energy", "bass", "mid", "treble") and `intensity` scales its effect. Defaults to modulating amplitude by bass and speed by overall energy.
+	 * @param {{update: function(number): AudioMetricsLike}} audioSync - An object exposing update(timestampMs), e.g. an AudioSync instance from `audio-sync.js`.
+	 * @param {AudioMapping} [mapping] - Per-property audio mapping. Keys are wave properties ("amplitude", "speed", "rotate"); values are `{source, intensity}`, where `source` is a metric name ("energy", "bass", "mid", "treble") and `intensity` scales its effect. Defaults to modulating amplitude by bass and speed by overall energy.
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
-	 * @throws {Error} Throws if audioSync does not expose an update() method.
+	 * @throws {ValidationError} Throws if audioSync does not expose an update() method.
 	 */
 	syncToAudio(audioSync, mapping = DEFAULT_AUDIO_MAPPING) {
 		if (!audioSync || typeof audioSync.update !== "function") {
-			throw new Error(
+			throw new ValidationError(
 				"syncToAudio requires an object with an update(timestamp) method.",
 			);
 		}
@@ -591,19 +670,20 @@ class SineWaveGenerator {
 	}
 
 	/**
-	 * Snapshots a wave's pre-audio-sync values so modulation can be applied
-	 * relative to its original configuration rather than compounding.
+	 * Snapshots a wave's pre-audio-sync values (in a private WeakMap, not on
+	 * the wave itself) so modulation can be applied relative to its original
+	 * configuration rather than compounding.
 	 * @param {Wave} wave - The wave to snapshot.
 	 * @returns {Wave} - The wave, for chaining.
 	 */
 	captureAudioBase(wave) {
-		if (!wave._audioBase) {
-			wave._audioBase = {
+		if (!this.audioState.has(wave)) {
+			this.audioState.set(wave, {
 				amplitude: wave.amplitude,
 				speed: wave.speed,
 				rotate: wave.rotate,
-			};
-			wave._beatPulse = 0;
+				beatPulse: 0,
+			});
 		}
 		return wave;
 	}
@@ -620,12 +700,12 @@ class SineWaveGenerator {
 		const waves = this.waves;
 		for (let i = 0, len = waves.length; i < len; i++) {
 			const wave = waves[i];
-			if (wave._audioBase) {
-				wave.amplitude = wave._audioBase.amplitude;
-				wave.speed = wave._audioBase.speed;
-				wave.rotate = wave._audioBase.rotate;
-				delete wave._audioBase;
-				delete wave._beatPulse;
+			const base = this.audioState.get(wave);
+			if (base) {
+				wave.amplitude = base.amplitude;
+				wave.speed = base.speed;
+				wave.rotate = base.rotate;
+				this.audioState.delete(wave);
 			}
 		}
 		this.audioSync = null;
@@ -641,25 +721,26 @@ class SineWaveGenerator {
 	 * @returns {this} - The SineWaveGenerator instance for chaining.
 	 */
 	applyAudioSync(time) {
-		if (!this.audioSync) {
+		const audioSync = this.audioSync;
+		if (!audioSync) {
 			return this;
 		}
-		const metrics = this.audioSync.update(time);
+		const metrics = audioSync.update(time);
 		const mapping = this.audioMapping || DEFAULT_AUDIO_MAPPING;
 		const waves = this.waves;
 		for (let i = 0, len = waves.length; i < len; i++) {
 			const wave = waves[i];
 			this.captureAudioBase(wave);
-			const base = wave._audioBase;
-			wave._beatPulse = metrics.beat
+			const base = /** @type {AudioBaseState} */ (this.audioState.get(wave));
+			base.beatPulse = metrics.beat
 				? AUDIO_BEAT_PULSE_BOOST
-				: wave._beatPulse * AUDIO_BEAT_PULSE_DECAY;
+				: base.beatPulse * AUDIO_BEAT_PULSE_DECAY;
 			if (mapping.amplitude) {
 				const value = metrics[mapping.amplitude.source] || 0;
 				wave.amplitude = Math.max(
 					0,
 					base.amplitude *
-						(1 + value * mapping.amplitude.intensity + wave._beatPulse),
+						(1 + value * mapping.amplitude.intensity + base.beatPulse),
 				);
 			}
 			if (mapping.speed) {
@@ -695,10 +776,18 @@ class SineWaveGenerator {
 
 /* istanbul ignore next */
 if (typeof window !== "undefined") {
-	window.SineWaveGenerator = SineWaveGenerator;
+	/** @type {any} */ (window).SineWaveGenerator = SineWaveGenerator;
+	/** @type {any} */ (window).ValidationError = ValidationError;
+	/** @type {any} */ (window).CanvasError = CanvasError;
 }
 
 /* istanbul ignore next */
 if (typeof module !== "undefined" && module.exports) {
-	module.exports = { SineWaveGenerator, Wave, Ease };
+	module.exports = {
+		SineWaveGenerator,
+		Wave,
+		Ease,
+		ValidationError,
+		CanvasError,
+	};
 }

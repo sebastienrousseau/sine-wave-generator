@@ -18,7 +18,7 @@ jobs:
       node-version: '20'
       package-manager: 'pnpm'
       run-lint: true
-      run-typecheck: false
+      run-typecheck: true
       run-tests: true
       run-build: true
       test-coverage: true
