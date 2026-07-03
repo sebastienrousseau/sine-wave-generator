@@ -33,6 +33,7 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - `autoResize` now also observes the canvas element itself with `ResizeObserver`, catching layout-driven size changes that a window `resize` event alone would miss
 - `ValidationError`, `CanvasError`, `AudioSyncError`: a typed error hierarchy (all `instanceof Error`) replacing generic `Error` throws throughout, so consumers can discriminate failure modes with `instanceof`
 - `tsconfig.json` and a `typecheck` script: JSDoc-driven type-checking with no added build step
+- `colorScheme` option: the default gradient now follows `prefers-color-scheme` live (with a distinct, higher-contrast palette for dark backgrounds), or force `"light"`/`"dark"`
 
 ### Changed
 
@@ -41,6 +42,8 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - `Wave.update()` validates configuration changes before applying
 - **Behavior change:** animations now default to respecting `prefers-reduced-motion` (see `respectReducedMotion` above) — pass `respectReducedMotion: false` to restore the previous always-full-speed behavior
 - **Behavior change:** canvases now get an `aria-hidden` or `role="img"` attribute by default unless one is already present on the element
+- **Behavior change:** the default gradient now varies with `prefers-color-scheme` instead of always using the same colors — pass `colorScheme: "light"` to restore the previous fixed palette
+- `AudioSync.detectBeat()` now documents its algorithm basis and known limitations (single-band bass trigger, 60–200 BPM detection range) in JSDoc and the README
 
 ### Fixed
 

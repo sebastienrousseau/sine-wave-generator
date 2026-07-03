@@ -94,6 +94,8 @@ export interface SineWaveGeneratorOptions {
 	reducedMotionScale?: number;
 	/** Accessible label for the canvas (sets role="img"). Omit to mark the canvas aria-hidden as decorative. */
 	ariaLabel?: string | null;
+	/** Default gradient palette. "auto" follows prefers-color-scheme live; "light"/"dark" force a palette. Defaults to "auto". */
+	colorScheme?: "auto" | "light" | "dark";
 }
 
 /** Sine wave generator that animates waves on a canvas element. */
@@ -128,6 +130,10 @@ export class SineWaveGenerator {
 	reducedMotionScale: number;
 	/** Current prefers-reduced-motion state. */
 	prefersReducedMotion: boolean;
+	/** The configured color scheme mode ("auto", "light", or "dark"). */
+	colorScheme: "auto" | "light" | "dark";
+	/** The currently resolved color scheme used for the default gradient. */
+	resolvedColorScheme: "light" | "dark";
 
 	/** Creates an instance of SineWaveGenerator. Throws CanvasError if there is no DOM or the canvas is invalid. */
 	constructor(options: SineWaveGeneratorOptions);
@@ -170,6 +176,12 @@ export class SineWaveGenerator {
 	unbindResolutionListener(): void;
 	/** Re-reads devicePixelRatio, resizes to match, and re-registers the resolution listener. */
 	updatePixelRatio(): void;
+	/** Resolves the effective color scheme from the colorScheme option and prefers-color-scheme. */
+	detectColorScheme(): "light" | "dark";
+	/** Subscribes to live prefers-color-scheme changes, if colorScheme is "auto". */
+	bindColorSchemeListener(): void;
+	/** Unsubscribes the listener bound by bindColorSchemeListener(), if any. */
+	unbindColorSchemeListener(): void;
 	/** Bind an audio source's live metrics to wave parameters. Returns this for chaining. */
 	syncToAudio(
 		audioSync: { update(timestampMs: number): AudioMetrics },

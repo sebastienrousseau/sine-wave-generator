@@ -1191,5 +1191,72 @@ describe("SineWaveGenerator", () => {
 			const generator = new SineWaveGenerator({ el: canvas });
 			expect(generator.resolutionQuery).toBeNull();
 		});
+
+		it("resolves the color scheme automatically from matchMedia", () => {
+			window.matchMedia = jest.fn(() => createMockMediaQueryList(true));
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.colorScheme).toBe("auto");
+			expect(generator.resolvedColorScheme).toBe("dark");
+			expect(window.matchMedia).toHaveBeenCalledWith(
+				"(prefers-color-scheme: dark)",
+			);
+		});
+
+		it("defaults to a light scheme when matchMedia is unsupported", () => {
+			delete window.matchMedia;
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.resolvedColorScheme).toBe("light");
+			expect(generator.colorSchemeQuery).toBeNull();
+		});
+
+		it("forces the color scheme and skips matchMedia tracking when set explicitly", () => {
+			window.matchMedia = jest.fn(() => createMockMediaQueryList(true));
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({
+				el: canvas,
+				colorScheme: "dark",
+			});
+			expect(generator.colorScheme).toBe("dark");
+			expect(generator.resolvedColorScheme).toBe("dark");
+			expect(generator.colorSchemeQuery).toBeNull();
+			expect(() => generator.unbindColorSchemeListener()).not.toThrow();
+		});
+
+		it("subscribes to and applies live color-scheme changes", () => {
+			const mql = createMockMediaQueryList(false);
+			window.matchMedia = jest.fn(() => mql);
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(mql.addEventListener).toHaveBeenCalledWith(
+				"change",
+				generator.handleColorSchemeChange,
+			);
+			generator.resize();
+			expect(ctx.gradient.addColorStop).toHaveBeenCalledWith(
+				0,
+				"rgba(25, 255, 255, 0)",
+			);
+
+			const resizeSpy = jest.spyOn(generator, "resize");
+			generator.updateColorScheme({ matches: true });
+			expect(generator.resolvedColorScheme).toBe("dark");
+			expect(resizeSpy).toHaveBeenCalled();
+			expect(ctx.gradient.addColorStop).toHaveBeenCalledWith(
+				0,
+				"rgba(56, 189, 248, 0)",
+			);
+			generator.updateColorScheme({ matches: false });
+			expect(generator.resolvedColorScheme).toBe("light");
+
+			generator.unbindColorSchemeListener();
+			expect(mql.removeEventListener).toHaveBeenCalledWith(
+				"change",
+				generator.handleColorSchemeChange,
+			);
+			expect(generator.colorSchemeQuery).toBeNull();
+		});
 	});
 });

@@ -167,6 +167,7 @@ Call `generator.unsyncAudio()` to detach and restore each wave's original amplit
 | `respectReducedMotion` | `boolean`                     | Honor `prefers-reduced-motion` by scaling animation speed down. Defaults to `true`                | No       |
 | `reducedMotionScale`   | `number`                      | Speed multiplier while reduced motion is preferred. Defaults to `0.25`; set to `0` to fully pause | No       |
 | `ariaLabel`            | `string \| null`              | Accessible label for the canvas (sets `role="img"`). Omit for decorative canvases (`aria-hidden`) | No       |
+| `colorScheme`          | `"auto" \| "light" \| "dark"` | Default gradient palette. `"auto"` follows `prefers-color-scheme` live. Defaults to `"auto"`      | No       |
 
 ### WaveConfig
 
@@ -205,6 +206,7 @@ By default, `SineWaveGenerator`:
 - Scales animation speed to `reducedMotionScale` (default `0.25`) when the user has `prefers-reduced-motion` enabled, and updates live if that preference changes. Pass `respectReducedMotion: false` to disable, or `reducedMotionScale: 0` to fully pause instead of slowing down.
 - Tracks `devicePixelRatio` live via a `matchMedia` listener when `pixelRatio` isn't explicitly set, so moving the window to a display with different pixel density stays sharp.
 - Observes the canvas element itself with `ResizeObserver` (in addition to the window `resize` event) when `autoResize` is `true`, so layout-driven size changes — not just window resizes — are picked up automatically.
+- Picks the default gradient's palette from `prefers-color-scheme` (a cooler, higher-contrast palette for dark backgrounds) and updates live if the OS/browser theme changes, when using the built-in gradient (`strokeStyle: null`). Pass `colorScheme: "light"` or `"dark"` to force a palette instead of following the system preference.
 
 ```js
 const generator = new SineWaveGenerator({
@@ -232,6 +234,8 @@ const generator = new SineWaveGenerator({
 | `getMetrics()`        | Return the last computed metrics without sampling |
 
 Metrics returned by `update()`/`getMetrics()`: `energy`, `bass`, `mid`, `treble` (all normalized 0--1), `beat` (boolean, true on the detected frame), `beatPhase` (0--1 progress through the current beat), and `bpm` (manual or auto-detected tempo, or `null` if unknown).
+
+**Beat detection is a lightweight heuristic, not a validated DSP algorithm.** It's a variance-thresholded energy detector on the bass band alone — cheap enough to run once per animation frame, but it under-detects material whose rhythm isn't bass-driven (ambient, classical, sparse/syncopated percussion), and only reports a `bpm` once two or more beats land 60--200 BPM apart. See the `detectBeat()` JSDoc in `src/audio-sync.js` for the full algorithm basis and limitations. For more robust detection, pass a known `bpm` manually, or pair `AudioSync` with a dedicated analysis library (e.g. `realtime-bpm-analyzer`, `web-audio-beat-detector`, or `Meyda` for richer spectral features) and feed its output through a custom object exposing `update(timestampMs)`.
 
 <p align="right"><a href="#sine-wave-generator--smooth-canvas-animation">Back to Top</a></p>
 

@@ -213,6 +213,32 @@ class AudioSync {
 	/**
 	 * Runs a variance-thresholded energy beat detector against the bass band
 	 * and updates the rolling BPM estimate from detected beat intervals.
+	 *
+	 * Algorithm basis: a same-family variant of the classic energy-history
+	 * technique popularized by Joe Sullivan's "Beat Detection Using
+	 * JavaScript and the Web Audio API" — maintain a rolling window of
+	 * recent instant energy, flag a beat when the current sample exceeds a
+	 * variance-scaled multiple of the local average, and derive BPM from
+	 * the median of recent inter-beat intervals. It is intentionally
+	 * simple and cheap to run once per animation frame, not a novel or
+	 * academically validated method.
+	 *
+	 * Known limitations:
+	 * - Single-band trigger (bass only) — a track with its rhythmic
+	 *   emphasis outside the low-frequency band (e.g. hi-hat-driven,
+	 *   sparse bass) will under-detect.
+	 * - BPM is only reported once two or more beats land within
+	 *   {@link MIN_BEAT_INTERVAL_MS}–{@link MAX_BEAT_INTERVAL_MS} of each
+	 *   other and the resulting tempo falls inside {@link MIN_BPM}–
+	 *   {@link MAX_BPM} (60–200) — tempos outside that range are detected
+	 *   as beats but never surfaced as a BPM value.
+	 * - No onset/attack shaping, spectral flux, or multi-band fusion —
+	 *   for material this heuristic under-serves (ambient, classical,
+	 *   sparse/syncopated percussion), consider a dedicated library such
+	 *   as `realtime-bpm-analyzer` or `web-audio-beat-detector`, or pass
+	 *   a manual `bpm` to {@link AudioSync} instead of relying on
+	 *   auto-detection.
+	 *
 	 * @param {number} bassEnergy - Normalized bass band energy for this frame.
 	 * @param {number} timestampMs - The current timestamp in milliseconds.
 	 * @returns {boolean} - True if a beat was detected this frame.

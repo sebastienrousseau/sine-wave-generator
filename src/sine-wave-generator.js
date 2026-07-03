@@ -135,6 +135,19 @@ const LINE_WIDTH = 2;
 const DEFAULT_MAX_PIXEL_RATIO = 2;
 const DEFAULT_REDUCED_MOTION_SCALE = 0.25;
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const DARK_COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
+/** @type {Array<[number, string]>} */
+const LIGHT_GRADIENT_STOPS = [
+	[0, "rgba(25, 255, 255, 0)"],
+	[0.5, "rgba(255, 25, 255, 0.75)"],
+	[1, "rgba(255, 255, 25, 0)"],
+];
+/** @type {Array<[number, string]>} */
+const DARK_GRADIENT_STOPS = [
+	[0, "rgba(56, 189, 248, 0)"],
+	[0.5, "rgba(168, 85, 247, 0.85)"],
+	[1, "rgba(45, 212, 191, 0)"],
+];
 const TWO_PI = Math.PI * 2;
 const GOLDEN_SECTION = (1 - 1 / 1.618033988749895) / 2;
 const GOLDEN_SECTION_INV = 1 / (1 - 2 * GOLDEN_SECTION);
@@ -283,6 +296,7 @@ class SineWaveGenerator {
 	 * @param {boolean} [options.respectReducedMotion=true] - Honor the user's `prefers-reduced-motion` preference by scaling animation speed down (see `reducedMotionScale`) instead of ignoring it.
 	 * @param {number} [options.reducedMotionScale=0.25] - Speed multiplier applied while reduced motion is preferred. Set to 0 to fully pause.
 	 * @param {string|null} [options.ariaLabel=null] - Accessible label for the canvas. When provided, the canvas gets `role="img"` and this label. When omitted, the canvas is marked `aria-hidden="true"` (decorative) unless the element already has an `aria-label` or `aria-hidden` attribute.
+	 * @param {"auto"|"light"|"dark"} [options.colorScheme="auto"] - Which default gradient palette to use. `"auto"` follows `prefers-color-scheme` and updates live if it changes; `"light"`/`"dark"` force a palette. Only affects waves using the default gradient (i.e. `strokeStyle: null`).
 	 * @throws {CanvasError} Throws if there is no DOM (e.g. during server-side rendering) or if the canvas element or its 2D context is unavailable.
 	 */
 	constructor({
@@ -294,6 +308,7 @@ class SineWaveGenerator {
 		respectReducedMotion = true,
 		reducedMotionScale = DEFAULT_REDUCED_MOTION_SCALE,
 		ariaLabel = null,
+		colorScheme = "auto",
 	}) {
 		if (typeof document === "undefined") {
 			throw new CanvasError(
@@ -332,6 +347,7 @@ class SineWaveGenerator {
 		this.handlePointerMove = this.onPointerMove.bind(this);
 		this.handleResolutionChange = this.updatePixelRatio.bind(this);
 		this.handleReducedMotionChange = this.updatePrefersReducedMotion.bind(this);
+		this.handleColorSchemeChange = this.updateColorScheme.bind(this);
 		this.animationFrameId = null;
 		/** @type {AddEventListenerOptions} */
 		this.touchListenerOptions = { passive: true };
@@ -372,6 +388,11 @@ class SineWaveGenerator {
 		this.resolutionQuery = null;
 		/** @type {ResizeObserver|null} */
 		this.resizeObserver = null;
+		this.colorScheme =
+			colorScheme === "light" || colorScheme === "dark" ? colorScheme : "auto";
+		this.resolvedColorScheme = this.detectColorScheme();
+		/** @type {MediaQueryList|null} */
+		this.colorSchemeQuery = null;
 
 		this.bindEvents();
 	}
@@ -390,6 +411,7 @@ class SineWaveGenerator {
 		}
 		this.bindResolutionListener();
 		this.bindReducedMotionListener();
+		this.bindColorSchemeListener();
 		if (this.supportsPointerEvents) {
 			this.el.addEventListener(
 				"pointermove",
@@ -422,6 +444,7 @@ class SineWaveGenerator {
 		}
 		this.unbindResolutionListener();
 		this.unbindReducedMotionListener();
+		this.unbindColorSchemeListener();
 		if (this.supportsPointerEvents) {
 			this.el.removeEventListener(
 				"pointermove",
@@ -518,6 +541,69 @@ class SineWaveGenerator {
 	 */
 	updatePrefersReducedMotion(event) {
 		this.prefersReducedMotion = event.matches;
+	}
+
+	/**
+	 * Resolves the effective color scheme: the forced "light"/"dark" option
+	 * if set, otherwise the live `prefers-color-scheme` result (defaulting
+	 * to "light" when unsupported or unavailable).
+	 * @returns {"light"|"dark"} - The resolved color scheme.
+	 */
+	detectColorScheme() {
+		if (this.colorScheme === "light" || this.colorScheme === "dark") {
+			return this.colorScheme;
+		}
+		if (
+			typeof window === "undefined" ||
+			typeof window.matchMedia !== "function"
+		) {
+			return "light";
+		}
+		return window.matchMedia(DARK_COLOR_SCHEME_QUERY).matches
+			? "dark"
+			: "light";
+	}
+
+	/**
+	 * Subscribes to live prefers-color-scheme changes when colorScheme is
+	 * "auto". No-ops when a scheme is forced or matchMedia is unsupported.
+	 */
+	bindColorSchemeListener() {
+		if (
+			this.colorScheme !== "auto" ||
+			typeof window === "undefined" ||
+			typeof window.matchMedia !== "function"
+		) {
+			return;
+		}
+		this.colorSchemeQuery = window.matchMedia(DARK_COLOR_SCHEME_QUERY);
+		this.colorSchemeQuery.addEventListener(
+			"change",
+			this.handleColorSchemeChange,
+		);
+	}
+
+	/**
+	 * Unsubscribes the listener bound by bindColorSchemeListener(), if any.
+	 */
+	unbindColorSchemeListener() {
+		if (this.colorSchemeQuery) {
+			this.colorSchemeQuery.removeEventListener(
+				"change",
+				this.handleColorSchemeChange,
+			);
+			this.colorSchemeQuery = null;
+		}
+	}
+
+	/**
+	 * Updates the resolved color scheme and rebuilds the default gradient
+	 * in response to a live prefers-color-scheme change.
+	 * @param {MediaQueryListEvent} event - The media query change event.
+	 */
+	updateColorScheme(event) {
+		this.resolvedColorScheme = event.matches ? "dark" : "light";
+		this.resize();
 	}
 
 	/**
@@ -702,9 +788,13 @@ class SineWaveGenerator {
 			this.ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
 		}
 		this.gradient = this.ctx.createLinearGradient(0, 0, this.displayWidth, 0);
-		this.gradient.addColorStop(0, "rgba(25, 255, 255, 0)");
-		this.gradient.addColorStop(0.5, "rgba(255, 25, 255, 0.75)");
-		this.gradient.addColorStop(1, "rgba(255, 255, 25, 0)");
+		const stops =
+			this.resolvedColorScheme === "dark"
+				? DARK_GRADIENT_STOPS
+				: LIGHT_GRADIENT_STOPS;
+		for (let i = 0, len = stops.length; i < len; i++) {
+			this.gradient.addColorStop(stops[i][0], stops[i][1]);
+		}
 		return this;
 	}
 
