@@ -82,12 +82,18 @@ export interface SineWaveGeneratorOptions {
 	el: HTMLCanvasElement | string;
 	/** Array of wave configuration objects. Defaults to []. */
 	waves?: WaveConfig[];
-	/** Device pixel ratio override. */
+	/** Device pixel ratio override. When omitted, tracked automatically and updated live on display changes. */
 	pixelRatio?: number;
 	/** Maximum pixel ratio cap for memory/perf. Defaults to 2. */
 	maxPixelRatio?: number;
-	/** Automatically resize canvas on window resize. Defaults to true. */
+	/** Automatically resize when the canvas element's box size changes (ResizeObserver) or the window resizes. Defaults to true. */
 	autoResize?: boolean;
+	/** Honor prefers-reduced-motion by scaling animation speed down. Defaults to true. */
+	respectReducedMotion?: boolean;
+	/** Speed multiplier applied while reduced motion is preferred. Defaults to 0.25. */
+	reducedMotionScale?: number;
+	/** Accessible label for the canvas (sets role="img"). Omit to mark the canvas aria-hidden as decorative. */
+	ariaLabel?: string | null;
 }
 
 /** Sine wave generator that animates waves on a canvas element. */
@@ -100,10 +106,12 @@ export class SineWaveGenerator {
 	waves: Wave[];
 	/** Whether events are currently bound. */
 	eventsBound: boolean;
-	/** Whether to auto-resize on window resize. */
+	/** Whether to auto-resize on window resize / canvas box changes. */
 	autoResize: boolean;
 	/** Current pixel ratio. */
 	pixelRatio: number;
+	/** Whether pixelRatio is tracked automatically (true) or was explicitly overridden (false). */
+	autoPixelRatio: boolean;
 	/** Maximum pixel ratio cap. */
 	maxPixelRatio: number;
 	/** Current display width in CSS pixels. */
@@ -114,8 +122,14 @@ export class SineWaveGenerator {
 	gradient: CanvasGradient | null;
 	/** Current animation frame ID, or null if stopped. */
 	animationFrameId: number | null;
+	/** Whether prefers-reduced-motion is honored. */
+	respectReducedMotion: boolean;
+	/** Speed multiplier applied while reduced motion is preferred. */
+	reducedMotionScale: number;
+	/** Current prefers-reduced-motion state. */
+	prefersReducedMotion: boolean;
 
-	/** Creates an instance of SineWaveGenerator. Throws CanvasError if canvas is invalid. */
+	/** Creates an instance of SineWaveGenerator. Throws CanvasError if there is no DOM or the canvas is invalid. */
 	constructor(options: SineWaveGeneratorOptions);
 
 	/** Start the animation loop. Returns this for chaining. */
@@ -136,10 +150,26 @@ export class SineWaveGenerator {
 	setQualityPreset(preset: "quality" | "balanced" | "battery"): this;
 	/** Stop and unbind events. Returns this for chaining. */
 	destroy(): this;
-	/** Bind resize, mousemove, and touchmove events. Returns this for chaining. */
+	/** Bind resize, mousemove, touchmove, and responsiveness/accessibility listeners. Returns this for chaining. */
 	bindEvents(): this;
-	/** Unbind all events. Returns this for chaining. */
+	/** Unbind all events and listeners. Returns this for chaining. */
 	unbindEvents(): this;
+	/** Detects the current prefers-reduced-motion state. */
+	detectPrefersReducedMotion(): boolean;
+	/** Observes the canvas element's box size via ResizeObserver, if supported. */
+	bindResizeObserver(): void;
+	/** Disconnects the ResizeObserver bound by bindResizeObserver(), if any. */
+	unbindResizeObserver(): void;
+	/** Subscribes to live prefers-reduced-motion changes, if supported. */
+	bindReducedMotionListener(): void;
+	/** Unsubscribes the listener bound by bindReducedMotionListener(), if any. */
+	unbindReducedMotionListener(): void;
+	/** Subscribes to live devicePixelRatio changes, if pixelRatio was not explicitly set. */
+	bindResolutionListener(): void;
+	/** Unsubscribes the listener bound by bindResolutionListener(), if any. */
+	unbindResolutionListener(): void;
+	/** Re-reads devicePixelRatio, resizes to match, and re-registers the resolution listener. */
+	updatePixelRatio(): void;
 	/** Bind an audio source's live metrics to wave parameters. Returns this for chaining. */
 	syncToAudio(
 		audioSync: { update(timestampMs: number): AudioMetrics },

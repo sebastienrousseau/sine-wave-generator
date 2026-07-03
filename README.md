@@ -157,13 +157,16 @@ Call `generator.unsyncAudio()` to detach and restore each wave's original amplit
 
 `new SineWaveGenerator(options)`
 
-| Option          | Type                          | Description                         | Required |
-| --------------- | ----------------------------- | ----------------------------------- | -------- |
-| `el`            | `HTMLCanvasElement \| string` | Canvas element or CSS selector      | Yes      |
-| `waves`         | `WaveConfig[]`                | Initial wave configurations         | No       |
-| `pixelRatio`    | `number`                      | Override device pixel ratio         | No       |
-| `maxPixelRatio` | `number`                      | Cap pixel ratio for memory control  | No       |
-| `autoResize`    | `boolean`                     | Bind a resize handler automatically | No       |
+| Option                 | Type                          | Description                                                                                       | Required |
+| ---------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------- | -------- |
+| `el`                   | `HTMLCanvasElement \| string` | Canvas element or CSS selector                                                                    | Yes      |
+| `waves`                | `WaveConfig[]`                | Initial wave configurations                                                                       | No       |
+| `pixelRatio`           | `number`                      | Override device pixel ratio. Omit to track it automatically, including live display changes       | No       |
+| `maxPixelRatio`        | `number`                      | Cap pixel ratio for memory control                                                                | No       |
+| `autoResize`           | `boolean`                     | Auto-resize on canvas box changes (`ResizeObserver`) and window resize                            | No       |
+| `respectReducedMotion` | `boolean`                     | Honor `prefers-reduced-motion` by scaling animation speed down. Defaults to `true`                | No       |
+| `reducedMotionScale`   | `number`                      | Speed multiplier while reduced motion is preferred. Defaults to `0.25`; set to `0` to fully pause | No       |
+| `ariaLabel`            | `string \| null`              | Accessible label for the canvas (sets `role="img"`). Omit for decorative canvases (`aria-hidden`) | No       |
 
 ### WaveConfig
 
@@ -180,19 +183,36 @@ Call `generator.unsyncAudio()` to detach and restore each wave's original amplit
 
 ### Instance methods
 
-| Method                             | Description                                                    |
-| ---------------------------------- | -------------------------------------------------------------- |
-| `start()`                          | Start the animation loop                                       |
-| `stop()`                           | Stop the animation loop and unbind events                      |
-| `resize()`                         | Recalculate canvas size and rebuild gradients                  |
-| `addWave(config)`                  | Add a new wave at runtime                                      |
-| `removeWave(index)`                | Remove a wave by index                                         |
-| `bindEvents()`                     | Bind resize, mouse, and touch events                           |
-| `unbindEvents()`                   | Unbind all events                                              |
-| `syncToAudio(audioSync, mapping?)` | Bind an audio source's live metrics to wave parameters         |
-| `unsyncAudio()`                    | Detach the bound audio source and restore original wave values |
+| Method                             | Description                                                           |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| `start()`                          | Start the animation loop                                              |
+| `stop()`                           | Stop the animation loop and unbind events                             |
+| `resize()`                         | Recalculate canvas size and rebuild gradients                         |
+| `addWave(config)`                  | Add a new wave at runtime                                             |
+| `removeWave(index)`                | Remove a wave by index                                                |
+| `bindEvents()`                     | Bind resize, mouse, touch, and responsiveness/accessibility listeners |
+| `unbindEvents()`                   | Unbind all events and listeners                                       |
+| `syncToAudio(audioSync, mapping?)` | Bind an audio source's live metrics to wave parameters                |
+| `unsyncAudio()`                    | Detach the bound audio source and restore original wave values        |
 
 A high `maxPixelRatio` on large canvases will increase memory use proportionally.
+
+### Accessibility & responsiveness
+
+By default, `SineWaveGenerator`:
+
+- Marks the canvas `aria-hidden="true"` (it's decorative by default) unless you pass `ariaLabel`, in which case it sets `role="img"` and that label instead — set your own `aria-*` attributes on the element beforehand to opt out.
+- Scales animation speed to `reducedMotionScale` (default `0.25`) when the user has `prefers-reduced-motion` enabled, and updates live if that preference changes. Pass `respectReducedMotion: false` to disable, or `reducedMotionScale: 0` to fully pause instead of slowing down.
+- Tracks `devicePixelRatio` live via a `matchMedia` listener when `pixelRatio` isn't explicitly set, so moving the window to a display with different pixel density stays sharp.
+- Observes the canvas element itself with `ResizeObserver` (in addition to the window `resize` event) when `autoResize` is `true`, so layout-driven size changes — not just window resizes — are picked up automatically.
+
+```js
+const generator = new SineWaveGenerator({
+	el: "#sine",
+	ariaLabel: "Ambient background animation",
+	reducedMotionScale: 0, // fully pause instead of slowing down
+});
+```
 
 ### AudioSync
 

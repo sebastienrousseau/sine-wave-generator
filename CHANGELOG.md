@@ -27,17 +27,26 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - Pause/resume example controls and a performance-tuned demo
 - `AudioSync` (`src/audio-sync.js`): analyzes an `HTMLMediaElement` or `MediaStream` via the Web Audio API and derives real-time energy, frequency-band, beat, and BPM metrics
 - `SineWaveGenerator.syncToAudio()` / `unsyncAudio()`: bind an `AudioSync` (or any object exposing `update(timestamp)`) so wave amplitude, speed, and rotation react to music, with a configurable per-property metric mapping
+- `respectReducedMotion` / `reducedMotionScale` options: honor the user's `prefers-reduced-motion` preference by default, scaling animation speed (or fully pausing) instead of ignoring it, and updating live if the preference changes
+- `ariaLabel` option: canvases are now `aria-hidden="true"` by default (decorative), or `role="img"` with the given label when provided
+- `pixelRatio` is now tracked automatically (unless explicitly overridden) and updates live via a `matchMedia` listener when the display's pixel density changes
+- `autoResize` now also observes the canvas element itself with `ResizeObserver`, catching layout-driven size changes that a window `resize` event alone would miss
+- `ValidationError`, `CanvasError`, `AudioSyncError`: a typed error hierarchy (all `instanceof Error`) replacing generic `Error` throws throughout, so consumers can discriminate failure modes with `instanceof`
+- `tsconfig.json` and a `typecheck` script: JSDoc-driven type-checking with no added build step
 
 ### Changed
 
 - Responsive canvas sizing now respects element dimensions and device pixel ratio caps
 - `strokeStyle` is now honored; set to `null` for the built-in gradient
 - `Wave.update()` validates configuration changes before applying
+- **Behavior change:** animations now default to respecting `prefers-reduced-motion` (see `respectReducedMotion` above) — pass `respectReducedMotion: false` to restore the previous always-full-speed behavior
+- **Behavior change:** canvases now get an `aria-hidden` or `role="img"` attribute by default unless one is already present on the element
 
 ### Fixed
 
 - Pointer interactions now clamp to valid ranges for predictable phase updates
 - Touch handling now guards against empty touch lists
+- The constructor now throws a clear `CanvasError` instead of a raw `ReferenceError` when called without a DOM (e.g. during server-side rendering)
 
 ## v0.0.2 (2023-02-20)
 

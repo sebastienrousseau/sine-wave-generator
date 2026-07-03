@@ -133,6 +133,8 @@ const DEFAULT_STROKE_STYLE = null;
 const DEFAULT_SEGMENT_LENGTH = 10;
 const LINE_WIDTH = 2;
 const DEFAULT_MAX_PIXEL_RATIO = 2;
+const DEFAULT_REDUCED_MOTION_SCALE = 0.25;
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 const TWO_PI = Math.PI * 2;
 const GOLDEN_SECTION = (1 - 1 / 1.618033988749895) / 2;
 const GOLDEN_SECTION_INV = 1 / (1 - 2 * GOLDEN_SECTION);
@@ -275,10 +277,13 @@ class SineWaveGenerator {
 	 * @param {Object} options - The initialization options.
 	 * @param {HTMLCanvasElement|string} options.el - The canvas element or selector for the canvas.
 	 * @param {Wave[]|Object[]} [options.waves=[]] - Array of Wave instances or configs to be animated.
-	 * @param {number} [options.pixelRatio=window.devicePixelRatio] - Device pixel ratio override.
+	 * @param {number} [options.pixelRatio=window.devicePixelRatio] - Device pixel ratio override. When omitted, the ratio is tracked automatically and updated live if the display's pixel density changes (e.g. moving the window to a different monitor).
 	 * @param {number} [options.maxPixelRatio=2] - Maximum pixel ratio cap for memory/perf.
-	 * @param {boolean} [options.autoResize=true] - Automatically resize on window resize.
-	 * @throws {CanvasError} Throws if the canvas element or its 2D context is unavailable.
+	 * @param {boolean} [options.autoResize=true] - Automatically resize when the canvas element's box size changes (via ResizeObserver) or the window resizes.
+	 * @param {boolean} [options.respectReducedMotion=true] - Honor the user's `prefers-reduced-motion` preference by scaling animation speed down (see `reducedMotionScale`) instead of ignoring it.
+	 * @param {number} [options.reducedMotionScale=0.25] - Speed multiplier applied while reduced motion is preferred. Set to 0 to fully pause.
+	 * @param {string|null} [options.ariaLabel=null] - Accessible label for the canvas. When provided, the canvas gets `role="img"` and this label. When omitted, the canvas is marked `aria-hidden="true"` (decorative) unless the element already has an `aria-label` or `aria-hidden` attribute.
+	 * @throws {CanvasError} Throws if there is no DOM (e.g. during server-side rendering) or if the canvas element or its 2D context is unavailable.
 	 */
 	constructor({
 		el,
@@ -286,7 +291,16 @@ class SineWaveGenerator {
 		pixelRatio,
 		maxPixelRatio = DEFAULT_MAX_PIXEL_RATIO,
 		autoResize = true,
+		respectReducedMotion = true,
+		reducedMotionScale = DEFAULT_REDUCED_MOTION_SCALE,
+		ariaLabel = null,
 	}) {
+		if (typeof document === "undefined") {
+			throw new CanvasError(
+				"SineWaveGenerator requires a browser environment with a DOM. " +
+					"`document` is undefined — avoid constructing it during server-side rendering.",
+			);
+		}
 		const resolvedEl = typeof el === "string" ? document.querySelector(el) : el;
 		if (!resolvedEl || !(resolvedEl instanceof HTMLCanvasElement)) {
 			throw new CanvasError(
@@ -300,6 +314,15 @@ class SineWaveGenerator {
 				"SineWaveGenerator could not acquire a 2D rendering context.",
 			);
 		}
+		if (ariaLabel) {
+			this.el.setAttribute("role", "img");
+			this.el.setAttribute("aria-label", ariaLabel);
+		} else if (
+			!this.el.hasAttribute("aria-label") &&
+			!this.el.hasAttribute("aria-hidden")
+		) {
+			this.el.setAttribute("aria-hidden", "true");
+		}
 		this.waves = waves.map((wave) =>
 			wave instanceof Wave ? wave : new Wave(wave),
 		);
@@ -307,6 +330,8 @@ class SineWaveGenerator {
 		this.handleMouseMove = this.onMouseMove.bind(this);
 		this.handleTouchMove = this.onTouchMove.bind(this);
 		this.handlePointerMove = this.onPointerMove.bind(this);
+		this.handleResolutionChange = this.updatePixelRatio.bind(this);
+		this.handleReducedMotionChange = this.updatePrefersReducedMotion.bind(this);
 		this.animationFrameId = null;
 		/** @type {AddEventListenerOptions} */
 		this.touchListenerOptions = { passive: true };
@@ -314,10 +339,11 @@ class SineWaveGenerator {
 		this.autoResize = autoResize;
 		this.supportsPointerEvents =
 			typeof window !== "undefined" && "PointerEvent" in window;
-		this.pixelRatio =
-			typeof pixelRatio === "number" && Number.isFinite(pixelRatio)
-				? pixelRatio
-				: window.devicePixelRatio || 1;
+		this.autoPixelRatio =
+			typeof pixelRatio !== "number" || !Number.isFinite(pixelRatio);
+		this.pixelRatio = this.autoPixelRatio
+			? window.devicePixelRatio || 1
+			: /** @type {number} */ (pixelRatio);
 		this.maxPixelRatio =
 			typeof maxPixelRatio === "number" && Number.isFinite(maxPixelRatio)
 				? Math.max(1, maxPixelRatio)
@@ -332,6 +358,20 @@ class SineWaveGenerator {
 		this.audioMapping = null;
 		/** @type {WeakMap<Wave, AudioBaseState>} */
 		this.audioState = new WeakMap();
+		this.respectReducedMotion = Boolean(respectReducedMotion);
+		this.reducedMotionScale =
+			typeof reducedMotionScale === "number" &&
+			Number.isFinite(reducedMotionScale) &&
+			reducedMotionScale >= 0
+				? reducedMotionScale
+				: DEFAULT_REDUCED_MOTION_SCALE;
+		this.prefersReducedMotion = this.detectPrefersReducedMotion();
+		/** @type {MediaQueryList|null} */
+		this.reducedMotionQuery = null;
+		/** @type {MediaQueryList|null} */
+		this.resolutionQuery = null;
+		/** @type {ResizeObserver|null} */
+		this.resizeObserver = null;
 
 		this.bindEvents();
 	}
@@ -346,7 +386,10 @@ class SineWaveGenerator {
 		}
 		if (this.autoResize) {
 			window.addEventListener("resize", this.handleResize);
+			this.bindResizeObserver();
 		}
+		this.bindResolutionListener();
+		this.bindReducedMotionListener();
 		if (this.supportsPointerEvents) {
 			this.el.addEventListener(
 				"pointermove",
@@ -375,7 +418,10 @@ class SineWaveGenerator {
 		}
 		if (this.autoResize) {
 			window.removeEventListener("resize", this.handleResize);
+			this.unbindResizeObserver();
 		}
+		this.unbindResolutionListener();
+		this.unbindReducedMotionListener();
 		if (this.supportsPointerEvents) {
 			this.el.removeEventListener(
 				"pointermove",
@@ -392,6 +438,132 @@ class SineWaveGenerator {
 		}
 		this.eventsBound = false;
 		return this;
+	}
+
+	/**
+	 * Observes the canvas element's own box size so resizes triggered by
+	 * layout (not just window resize) are picked up automatically. No-ops
+	 * in environments without ResizeObserver support.
+	 */
+	bindResizeObserver() {
+		if (typeof ResizeObserver === "undefined") {
+			return;
+		}
+		this.resizeObserver = new ResizeObserver(() => {
+			this.resize();
+		});
+		this.resizeObserver.observe(this.el);
+	}
+
+	/**
+	 * Disconnects the ResizeObserver bound by bindResizeObserver(), if any.
+	 */
+	unbindResizeObserver() {
+		if (this.resizeObserver) {
+			this.resizeObserver.disconnect();
+			this.resizeObserver = null;
+		}
+	}
+
+	/**
+	 * Detects the current prefers-reduced-motion state.
+	 * @returns {boolean} - True if reduced motion is preferred and should be honored.
+	 */
+	detectPrefersReducedMotion() {
+		if (
+			!this.respectReducedMotion ||
+			typeof window === "undefined" ||
+			typeof window.matchMedia !== "function"
+		) {
+			return false;
+		}
+		return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+	}
+
+	/**
+	 * Subscribes to live changes in the prefers-reduced-motion preference.
+	 * No-ops if respectReducedMotion is disabled or matchMedia is unsupported.
+	 */
+	bindReducedMotionListener() {
+		if (
+			!this.respectReducedMotion ||
+			typeof window === "undefined" ||
+			typeof window.matchMedia !== "function"
+		) {
+			return;
+		}
+		this.reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+		this.reducedMotionQuery.addEventListener(
+			"change",
+			this.handleReducedMotionChange,
+		);
+	}
+
+	/**
+	 * Unsubscribes the listener bound by bindReducedMotionListener(), if any.
+	 */
+	unbindReducedMotionListener() {
+		if (this.reducedMotionQuery) {
+			this.reducedMotionQuery.removeEventListener(
+				"change",
+				this.handleReducedMotionChange,
+			);
+			this.reducedMotionQuery = null;
+		}
+	}
+
+	/**
+	 * Updates the tracked prefers-reduced-motion state in response to a live change.
+	 * @param {MediaQueryListEvent} event - The media query change event.
+	 */
+	updatePrefersReducedMotion(event) {
+		this.prefersReducedMotion = event.matches;
+	}
+
+	/**
+	 * Subscribes to live devicePixelRatio changes (e.g. moving the window to
+	 * a display with different pixel density) when pixelRatio was not
+	 * explicitly overridden. The listener re-registers itself on each
+	 * change, since a matched resolution media query goes stale afterwards.
+	 */
+	bindResolutionListener() {
+		if (
+			!this.autoPixelRatio ||
+			typeof window === "undefined" ||
+			typeof window.matchMedia !== "function"
+		) {
+			return;
+		}
+		const dpr = window.devicePixelRatio || 1;
+		this.resolutionQuery = window.matchMedia(`(resolution: ${dpr}dppx)`);
+		this.resolutionQuery.addEventListener(
+			"change",
+			this.handleResolutionChange,
+		);
+	}
+
+	/**
+	 * Unsubscribes the listener bound by bindResolutionListener(), if any.
+	 */
+	unbindResolutionListener() {
+		if (this.resolutionQuery) {
+			this.resolutionQuery.removeEventListener(
+				"change",
+				this.handleResolutionChange,
+			);
+			this.resolutionQuery = null;
+		}
+	}
+
+	/**
+	 * Re-reads devicePixelRatio, resizes to match, and re-registers the
+	 * resolution-change listener for the new ratio.
+	 */
+	updatePixelRatio() {
+		this.unbindResolutionListener();
+		this.pixelRatio = window.devicePixelRatio || 1;
+		this.resize();
+		this.bindResolutionListener();
 	}
 
 	/**
@@ -473,12 +645,15 @@ class SineWaveGenerator {
 				frameDeltaSeconds === null
 					? 1
 					: Math.min(5, Math.max(0, frameDeltaSeconds * 60));
+			const motionScale = this.prefersReducedMotion
+				? this.reducedMotionScale
+				: 1;
 			this.lastFrameTime = isNumberTime ? time : 0;
 			this.applyAudioSync(isNumberTime ? time : 0);
 			this.ctx.clearRect(0, 0, this.displayWidth, this.displayHeight);
 			const waves = this.waves;
 			for (let i = 0, len = waves.length; i < len; i++) {
-				this.drawWave(waves[i], deltaScale);
+				this.drawWave(waves[i], deltaScale * motionScale);
 			}
 			this.animationFrameId = requestAnimationFrame(draw);
 		};

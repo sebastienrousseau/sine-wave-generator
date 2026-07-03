@@ -947,4 +947,249 @@ describe("SineWaveGenerator", () => {
 			expect(generator.waves).toEqual([]);
 		});
 	});
+
+	describe("accessibility, motion & display responsiveness", () => {
+		const createMockMediaQueryList = (matches) => ({
+			matches,
+			addEventListener: jest.fn(),
+			removeEventListener: jest.fn(),
+		});
+
+		class MockResizeObserver {
+			constructor(callback) {
+				this.callback = callback;
+				this.observe = jest.fn();
+				this.disconnect = jest.fn();
+				this.unobserve = jest.fn();
+			}
+		}
+
+		let originalMatchMedia;
+		let originalResizeObserver;
+
+		beforeEach(() => {
+			originalMatchMedia = window.matchMedia;
+			originalResizeObserver = global.ResizeObserver;
+		});
+
+		afterEach(() => {
+			window.matchMedia = originalMatchMedia;
+			global.ResizeObserver = originalResizeObserver;
+		});
+
+		it("marks the canvas aria-hidden by default when no label is given", () => {
+			const canvas = createCanvas(createMockContext());
+			new SineWaveGenerator({ el: canvas });
+			expect(canvas.getAttribute("aria-hidden")).toBe("true");
+			expect(canvas.hasAttribute("aria-label")).toBe(false);
+		});
+
+		it("sets role=img and aria-label when ariaLabel is provided", () => {
+			const canvas = createCanvas(createMockContext());
+			new SineWaveGenerator({
+				el: canvas,
+				ariaLabel: "Ambient wave animation",
+			});
+			expect(canvas.getAttribute("role")).toBe("img");
+			expect(canvas.getAttribute("aria-label")).toBe("Ambient wave animation");
+			expect(canvas.hasAttribute("aria-hidden")).toBe(false);
+		});
+
+		it("does not override an existing aria-label", () => {
+			const canvas = createCanvas(createMockContext());
+			canvas.setAttribute("aria-label", "Custom label");
+			new SineWaveGenerator({ el: canvas });
+			expect(canvas.getAttribute("aria-label")).toBe("Custom label");
+			expect(canvas.hasAttribute("aria-hidden")).toBe(false);
+		});
+
+		it("does not override an existing aria-hidden attribute", () => {
+			const canvas = createCanvas(createMockContext());
+			canvas.setAttribute("aria-hidden", "false");
+			new SineWaveGenerator({ el: canvas });
+			expect(canvas.getAttribute("aria-hidden")).toBe("false");
+		});
+
+		it("observes the canvas with ResizeObserver when supported", () => {
+			global.ResizeObserver = MockResizeObserver;
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.resizeObserver).toBeInstanceOf(MockResizeObserver);
+			expect(generator.resizeObserver.observe).toHaveBeenCalledWith(canvas);
+			const resizeSpy = jest.spyOn(generator, "resize");
+			generator.resizeObserver.callback();
+			expect(resizeSpy).toHaveBeenCalled();
+			generator.unbindResizeObserver();
+			expect(generator.resizeObserver).toBeNull();
+		});
+
+		it("skips ResizeObserver setup when unsupported", () => {
+			delete global.ResizeObserver;
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.resizeObserver).toBeNull();
+			expect(() => generator.unbindResizeObserver()).not.toThrow();
+		});
+
+		it("detects prefers-reduced-motion via matchMedia when supported", () => {
+			window.matchMedia = jest.fn(() => createMockMediaQueryList(true));
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.prefersReducedMotion).toBe(true);
+			expect(window.matchMedia).toHaveBeenCalledWith(
+				"(prefers-reduced-motion: reduce)",
+			);
+		});
+
+		it("treats reduced motion as false when respectReducedMotion is disabled", () => {
+			window.matchMedia = jest.fn(() => createMockMediaQueryList(true));
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({
+				el: canvas,
+				respectReducedMotion: false,
+			});
+			expect(generator.prefersReducedMotion).toBe(false);
+			expect(generator.reducedMotionQuery).toBeNull();
+		});
+
+		it("treats reduced motion as false when matchMedia is unsupported", () => {
+			delete window.matchMedia;
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.prefersReducedMotion).toBe(false);
+		});
+
+		it("subscribes and unsubscribes the reduced-motion listener", () => {
+			const mql = createMockMediaQueryList(false);
+			window.matchMedia = jest.fn(() => mql);
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(mql.addEventListener).toHaveBeenCalledWith(
+				"change",
+				generator.handleReducedMotionChange,
+			);
+			generator.unbindReducedMotionListener();
+			expect(mql.removeEventListener).toHaveBeenCalledWith(
+				"change",
+				generator.handleReducedMotionChange,
+			);
+			expect(generator.reducedMotionQuery).toBeNull();
+			expect(() => generator.unbindReducedMotionListener()).not.toThrow();
+		});
+
+		it("updates prefersReducedMotion when the media query changes", () => {
+			window.matchMedia = jest.fn(() => createMockMediaQueryList(false));
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			generator.updatePrefersReducedMotion({ matches: true });
+			expect(generator.prefersReducedMotion).toBe(true);
+		});
+
+		it("scales animation speed down while reduced motion is preferred", () => {
+			const ctx = createMockContext();
+			const canvas = createCanvas(ctx);
+			const generator = new SineWaveGenerator({
+				el: canvas,
+				reducedMotionScale: 0.25,
+			});
+			generator.waves = [
+				new Wave({
+					amplitude: 10,
+					wavelength: 80,
+					segmentLength: 10,
+					speed: 1,
+				}),
+			];
+			generator.prefersReducedMotion = false;
+			let rafCount = 0;
+			global.requestAnimationFrame = jest.fn((callback) => {
+				rafCount += 1;
+				if (rafCount === 1) {
+					callback(1000);
+				}
+				return 1;
+			});
+			generator.start();
+			const fullSpeedPhase = generator.waves[0].phase;
+
+			generator.stop();
+			generator.waves[0].phase = 0;
+			generator.lastFrameTime = null;
+			generator.prefersReducedMotion = true;
+			rafCount = 0;
+			global.requestAnimationFrame = jest.fn((callback) => {
+				rafCount += 1;
+				if (rafCount === 1) {
+					callback(1000);
+				}
+				return 2;
+			});
+			generator.start();
+			const reducedPhase = generator.waves[0].phase;
+
+			expect(reducedPhase).toBeGreaterThan(0);
+			expect(reducedPhase).toBeLessThan(fullSpeedPhase);
+		});
+
+		it("binds the resolution listener and re-reads pixelRatio on change", () => {
+			const mql = createMockMediaQueryList(false);
+			window.matchMedia = jest.fn(() => mql);
+			window.devicePixelRatio = 2;
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.autoPixelRatio).toBe(true);
+			expect(window.matchMedia).toHaveBeenCalledWith("(resolution: 2dppx)");
+			expect(mql.addEventListener).toHaveBeenCalledWith(
+				"change",
+				generator.handleResolutionChange,
+			);
+
+			const resizeSpy = jest.spyOn(generator, "resize");
+			window.devicePixelRatio = 3;
+			generator.updatePixelRatio();
+			expect(mql.removeEventListener).toHaveBeenCalledWith(
+				"change",
+				generator.handleResolutionChange,
+			);
+			expect(generator.pixelRatio).toBe(3);
+			expect(resizeSpy).toHaveBeenCalled();
+			expect(window.matchMedia).toHaveBeenLastCalledWith("(resolution: 3dppx)");
+		});
+
+		it("falls back to a pixel ratio of 1 when devicePixelRatio is falsy", () => {
+			window.matchMedia = jest.fn(() => createMockMediaQueryList(false));
+			window.devicePixelRatio = 0;
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(window.matchMedia).toHaveBeenCalledWith("(resolution: 1dppx)");
+			generator.updatePixelRatio();
+			expect(generator.pixelRatio).toBe(1);
+		});
+
+		it("falls back to the default reducedMotionScale when given an invalid value", () => {
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({
+				el: canvas,
+				reducedMotionScale: -1,
+			});
+			expect(generator.reducedMotionScale).toBe(0.25);
+		});
+
+		it("does not track resolution changes when pixelRatio is explicitly set", () => {
+			window.matchMedia = jest.fn(() => createMockMediaQueryList(false));
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas, pixelRatio: 1.5 });
+			expect(generator.autoPixelRatio).toBe(false);
+			expect(generator.pixelRatio).toBe(1.5);
+			expect(generator.resolutionQuery).toBeNull();
+			expect(() => generator.unbindResolutionListener()).not.toThrow();
+		});
+
+		it("skips resolution tracking when matchMedia is unsupported", () => {
+			delete window.matchMedia;
+			const canvas = createCanvas(createMockContext());
+			const generator = new SineWaveGenerator({ el: canvas });
+			expect(generator.resolutionQuery).toBeNull();
+		});
+	});
 });
