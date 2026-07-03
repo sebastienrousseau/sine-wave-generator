@@ -1829,13 +1829,13 @@
 		generator.addWave({
 			amplitude: 18,
 			wavelength: 140,
-			speed: 0.4 * motionScale,
+			speed: 0.045 * motionScale,
 			segmentLength: 6,
 		});
 		generator.addWave({
 			amplitude: 12,
 			wavelength: 100,
-			speed: 0.5 * motionScale,
+			speed: 0.06 * motionScale,
 			segmentLength: 6,
 			strokeStyle: "rgba(168, 85, 247, 0.55)",
 		});
@@ -2354,9 +2354,9 @@
 		safeCall(() => startExample("variableWidth", 4, drawVariableWidth));
 		safeCall(() => startExample("compositingGlow", 4, drawCompositingGlow));
 		safeCall(() => startExample("zenMode", 8, drawZenMode));
-		safeCall(() => startExample("heartbeatMonitor", 1, drawHeartbeatMonitor));
+		safeCall(() => startExample("heartbeatMonitor", 4, drawHeartbeatMonitor));
 		safeCall(() => startVoiceWaveform());
-		safeCall(() => startExample("waveLoop", 6, drawWaveLoop));
+		safeCall(() => startExample("waveLoop", 10, drawWaveLoop));
 		safeCall(() => startStringPhysics());
 		safeCall(() => startAudioSpectrogram());
 		safeCall(() => startResponsiveResize());
