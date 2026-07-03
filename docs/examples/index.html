@@ -94,8 +94,8 @@ ctx.lineTo(x, y);</code></pre></div></article><article class="card" data-example
 const audioSync = new AudioSync();
 audioSync.connect(micStream);
 generator.syncToAudio(audioSync, {
-  amplitude: { source: "energy", intensity: 3 },
-  speed: { source: "treble", intensity: 1.5 },
+  amplitude: { source: "energy", intensity: 1.5 },
+  speed: { source: "treble", intensity: 0.6 },
 });</code></pre></div></article><article class="card" data-example="waveLoop" id="waveLoop"><h3>Wave loop</h3><p>A closed, continuously wobbling ribbon — no start, no end.</p><canvas class="demo-canvas" id="waveLoopCanvas" aria-label="Wave loop"></canvas><div class="controls control-stack" data-controls><label class="control-group"><span>Amplitude</span><div class="control-row"><input type="range" min="4" max="24" step="1" value="14" data-control="amplitude"/><span data-value></span></div></label> <label class="control-group"><span>Lobes</span><div class="control-row"><input type="range" min="2" max="16" step="1" value="6" data-control="frequency"/><span data-value></span></div></label></div><button class="btn view-code-toggle" type="button">View Code</button><div class="code-reveal"><pre class="code-block"><code>// Closed loop with a sine-modulated radius
 for (let i = 0; i &lt;= points; i++) {
   const angle = (i / points) * TWO_PI;

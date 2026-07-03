@@ -1634,7 +1634,7 @@
 		const centerY = height * 0.5;
 		const amplitude = controls.amplitude;
 		ctx.beginPath();
-		for (let x = 0; x <= width; x += 3) {
+		for (let x = 0; x <= width; x += 1) {
 			const percent = (((x / width + time / TWO_PI) % 1) + 1) % 1;
 			const beat = ekgWaveform(percent);
 			const y = centerY - beat * amplitude * 3;
@@ -1867,8 +1867,8 @@
 				audioSync = new window.AudioSync();
 				audioSync.connect(stream);
 				generator.syncToAudio(audioSync, {
-					amplitude: { source: "energy", intensity: 3 },
-					speed: { source: "treble", intensity: 1.5 },
+					amplitude: { source: "energy", intensity: 1.5 },
+					speed: { source: "treble", intensity: 0.6 },
 				});
 				status.textContent = "Listening — speak or play music";
 				button.textContent = "Stop";
