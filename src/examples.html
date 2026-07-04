@@ -1370,7 +1370,8 @@ for (let x = 0; x &lt;= width; x += 4) {
 					<h2>Rhythm &amp; signal</h2>
 					<p>
 						Biometric, voice, and looping waveforms — the shapes a heartbeat
-						monitor, a voice assistant, or a seamless loop actually draw.
+						monitor, a voice message, a listening indicator, an equalizer, or a
+						seamless loop actually draw.
 					</p>
 				</div>
 				<div class="card-grid">
@@ -1424,22 +1425,39 @@ const y = centerY - beat * amplitude * 3;
 ctx.lineTo(x, y);</code></pre>
 						</div>
 					</article>
-					<article class="card" data-example="voiceWaveform" id="voiceWaveform">
-						<h3>Voice waveform</h3>
-						<p>
-							Live microphone input driving amplitude and speed via
-							<code>AudioSync</code>.
-						</p>
+					<article class="card" data-example="wavePattern" id="wavePattern">
+						<h3>Wave pattern</h3>
+						<p>Three soft, overlapping layers for a calm background texture.</p>
 						<canvas
 							class="demo-canvas"
-							id="voiceWaveformCanvas"
-							aria-label="Voice waveform"
+							id="wavePatternCanvas"
+							aria-label="Wave pattern"
 						></canvas>
-						<div class="controls">
-							<button class="btn" type="button" data-action="voice-start">
-								Start listening
-							</button>
-							<span class="status" data-voice-status>Idle</span>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="4"
+										max="28"
+										step="1"
+										value="16"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Frequency</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="2"
+										max="16"
+										step="1"
+										value="8"
+										data-control="frequency"
+									/><span data-value></span></div
+							></label>
 						</div>
 						<button class="btn view-code-toggle" type="button">
 							View Code
@@ -1447,13 +1465,140 @@ ctx.lineTo(x, y);</code></pre>
 						<div class="code-reveal">
 							<pre
 								class="code-block"
-							><code>// Bind live mic input to wave amplitude and speed
+							><code>// Three overlapping layers, each with its own hue and offset
+layers.forEach((layer, i) =&gt; {
+  const y = centerY + Math.sin(x * freq + time + layer.offset) * amplitude;
+  ctx.strokeStyle = `hsla(${layer.hue}deg 70% 65% / ${layer.alpha})`;
+});</code></pre>
+						</div>
+					</article>
+					<article class="card" data-example="voiceLineWave" id="voiceLineWave">
+						<h3>Voice line wave</h3>
+						<p>
+							A voice-message-style bar waveform, driven by a speech envelope.
+						</p>
+						<canvas
+							class="demo-canvas"
+							id="voiceLineWaveCanvas"
+							aria-label="Voice line wave"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="180"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="10"
+										max="40"
+										step="1"
+										value="24"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
+						<div class="code-reveal">
+							<pre
+								class="code-block"
+							><code>// Bar height from a speech-like envelope, with occasional pauses
+const envelope = Math.sin(t) * 0.5 + Math.sin(t * 2.3) * 0.3 + Math.sin(t * 0.6) * 0.4;
+const gate = Math.max(0.08, (Math.sin(t * 0.2) + 1) * 0.5);
+const barHeight = Math.abs(envelope) * amplitude * gate;</code></pre>
+						</div>
+					</article>
+					<article class="card" data-example="searchMicWave" id="searchMicWave">
+						<h3>Search mic wave</h3>
+						<p>
+							Pulsing rings around a mic dot, live from
+							<code>AudioSync</code>.
+						</p>
+						<canvas
+							class="demo-canvas"
+							id="searchMicWaveCanvas"
+							aria-label="Search mic wave"
+						></canvas>
+						<div class="controls">
+							<button class="btn" type="button" data-action="mic-start">
+								Start listening
+							</button>
+							<span class="status" data-mic-status>Idle</span>
+						</div>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
+						<div class="code-reveal">
+							<pre
+								class="code-block"
+							><code>// Ring radius pulses with live mic energy
 const audioSync = new AudioSync();
 audioSync.connect(micStream);
-generator.syncToAudio(audioSync, {
-  amplitude: { source: "energy", intensity: 1.5 },
-  speed: { source: "treble", intensity: 0.6 },
-});</code></pre>
+const energy = audioSync.getMetrics().energy;
+const radius = baseRadius + smoothedEnergy * 32;</code></pre>
+						</div>
+					</article>
+					<article
+						class="card"
+						data-example="audioVoiceWave"
+						id="audioVoiceWave"
+					>
+						<h3>Audio voice wave</h3>
+						<p>A multi-band equalizer-style spectrum visualizer.</p>
+						<canvas
+							class="demo-canvas"
+							id="audioVoiceWaveCanvas"
+							aria-label="Audio voice wave"
+						></canvas>
+						<div class="controls control-stack" data-controls>
+							<label class="control-group"
+								><span>Tempo (BPM)</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="40"
+										max="180"
+										step="1"
+										value="96"
+										data-control="bpm"
+									/><span data-value></span></div
+							></label>
+							<label class="control-group"
+								><span>Amplitude</span>
+								<div class="control-row">
+									<input
+										type="range"
+										min="4"
+										max="20"
+										step="1"
+										value="10"
+										data-control="amplitude"
+									/><span data-value></span></div
+							></label>
+						</div>
+						<button class="btn view-code-toggle" type="button">
+							View Code
+						</button>
+						<div class="code-reveal">
+							<pre
+								class="code-block"
+							><code>// 24 independent bands, each with its own phase offset
+for (let i = 0; i &lt; bands; i++) {
+  const level = (Math.sin(t) * 0.5 + Math.sin(t * 1.7 + i) * 0.3 + 1) * 0.5;
+  ctx.fillRect(x, baseline - barHeight, barWidth * 0.7, barHeight);
+}</code></pre>
 						</div>
 					</article>
 					<article class="card" data-example="waveLoop" id="waveLoop">

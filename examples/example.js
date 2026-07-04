@@ -269,9 +269,22 @@
 				purpose: "Visualize a biometric signal, not just a decorative wave.",
 				why: "A recognizable EKG shape reads as data, not just motion.",
 			},
-			voiceWaveform: {
-				purpose: "Show AudioSync driving a wave from a real microphone.",
-				why: "Live input makes the audio-reactive API tangible.",
+			wavePattern: {
+				purpose: "A calm, layered decorative backdrop.",
+				why: "Soft overlapping hues read as texture, not noise.",
+			},
+			voiceLineWave: {
+				purpose: "A voice-message-style playback waveform.",
+				why: "Bar height driven by a speech-like envelope reads as recorded audio.",
+			},
+			searchMicWave: {
+				purpose:
+					"Show AudioSync driving a listening indicator from a real mic.",
+				why: "Pulsing rings around a mic dot is instantly recognizable as 'listening'.",
+			},
+			audioVoiceWave: {
+				purpose: "A multi-band equalizer-style visualizer.",
+				why: "Independent per-band bars read as a spectrum, not a single wave.",
 			},
 			waveLoop: {
 				purpose: "A seamless, endlessly looping ambient motif.",
@@ -1691,6 +1704,69 @@
 		ctx.shadowBlur = 0;
 	};
 
+	const drawWavePattern = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const freq = controls.frequency * 0.02;
+		const layers = [
+			{ offset: 0, hue: 200, alpha: 0.55 },
+			{ offset: 1.1, hue: 260, alpha: 0.4 },
+			{ offset: 2.2, hue: 320, alpha: 0.3 },
+		];
+		layers.forEach((layer, i) => {
+			ctx.beginPath();
+			for (let x = 0; x <= width; x += 4) {
+				const value = Math.sin(x * freq + time + layer.offset);
+				const y = centerY + value * amplitude * (1 - i * 0.15);
+				if (x === 0) {
+					ctx.moveTo(x, y);
+				} else {
+					ctx.lineTo(x, y);
+				}
+			}
+			ctx.strokeStyle = `hsla(${layer.hue}deg 70% 65% / ${layer.alpha})`;
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		});
+	};
+
+	const drawVoiceLineWave = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const amplitude = controls.amplitude;
+		const barWidth = 4;
+		const gap = 3;
+		const count = Math.floor(width / (barWidth + gap));
+		for (let i = 0; i < count; i++) {
+			const x = i * (barWidth + gap);
+			const t = time + i * 0.35;
+			const envelope =
+				Math.sin(t) * 0.5 + Math.sin(t * 2.3) * 0.3 + Math.sin(t * 0.6) * 0.4;
+			const gate = Math.max(0.08, (Math.sin(t * 0.2) + 1) * 0.5);
+			const barHeight = Math.max(2, Math.abs(envelope) * amplitude * gate);
+			const hue = hueFromValue(envelope, 200);
+			ctx.fillStyle = `hsla(${hue}deg 75% 60% / 0.8)`;
+			ctx.fillRect(x, centerY - barHeight, barWidth, barHeight * 2);
+		}
+	};
+
+	const drawAudioVoiceWave = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const baseline = height * 0.78;
+		const bands = 24;
+		const barWidth = width / bands;
+		for (let i = 0; i < bands; i++) {
+			const t = time * 1.5 + i * 0.4;
+			const level = (Math.sin(t) * 0.5 + Math.sin(t * 1.7 + i) * 0.3 + 1) * 0.5;
+			const barHeight = Math.max(3, level * controls.amplitude * 3);
+			const x = i * barWidth + barWidth * 0.15;
+			const hue = hueFromValue(level, 190);
+			ctx.fillStyle = `hsla(${hue}deg 80% 55% / 0.85)`;
+			ctx.fillRect(x, baseline - barHeight, barWidth * 0.7, barHeight);
+		}
+	};
+
 	/* --- String physics --- */
 
 	const startStringPhysics = () => {
@@ -1814,33 +1890,65 @@
 
 	/* --- Voice waveform (AudioSync + microphone) --- */
 
-	const startVoiceWaveform = () => {
-		const card = document.querySelector('[data-example="voiceWaveform"]');
+	const startSearchMicWave = () => {
+		const card = document.querySelector('[data-example="searchMicWave"]');
 		if (!card) {
 			return;
 		}
 		const canvas = card.querySelector("canvas");
-		const button = card.querySelector("[data-action=voice-start]");
-		const status = card.querySelector("[data-voice-status]");
+		const button = card.querySelector("[data-action=mic-start]");
+		const status = card.querySelector("[data-mic-status]");
 		if (!canvas || !button || !status) {
 			return;
 		}
 		const generator = createGenerator(canvas);
 		generator.addWave({
-			amplitude: 18,
+			amplitude: 10,
 			wavelength: 140,
-			speed: 0.045 * motionScale,
-			segmentLength: 6,
-		});
-		generator.addWave({
-			amplitude: 12,
-			wavelength: 100,
-			speed: 0.06 * motionScale,
-			segmentLength: 6,
-			strokeStyle: "rgba(168, 85, 247, 0.55)",
+			speed: 0.03 * motionScale,
+			segmentLength: 8,
+			strokeStyle: "rgba(99, 102, 241, 0.2)",
 		});
 		let audioSync = null;
 		let stream = null;
+		let smoothedEnergy = 0;
+
+		generator.drawWave = (wave, deltaScale = 1) => {
+			const { width, height } = getSize(generator, canvas);
+			const ctx = generator.ctx;
+			const centerX = width * 0.5;
+			const centerY = height * 0.5;
+			const targetEnergy = audioSync ? audioSync.getMetrics().energy : 0;
+			smoothedEnergy += (targetEnergy - smoothedEnergy) * 0.15;
+
+			ctx.save();
+			ctx.beginPath();
+			ctx.moveTo(0, centerY);
+			for (let x = 0; x <= width; x += 8) {
+				const value = Math.sin(x * 0.03 + wave.phase);
+				ctx.lineTo(x, centerY + value * wave.amplitude);
+			}
+			ctx.strokeStyle = wave.strokeStyle;
+			ctx.lineWidth = 1.5;
+			ctx.stroke();
+			ctx.restore();
+
+			for (let ring = 2; ring >= 0; ring -= 1) {
+				const baseRadius = 22 + ring * 16;
+				const radius = baseRadius + smoothedEnergy * 32;
+				ctx.beginPath();
+				ctx.arc(centerX, centerY, radius, 0, TWO_PI);
+				ctx.strokeStyle = `rgba(99, 102, 241, ${0.45 - ring * 0.12})`;
+				ctx.lineWidth = 2;
+				ctx.stroke();
+			}
+			ctx.beginPath();
+			ctx.arc(centerX, centerY, 12 + smoothedEnergy * 10, 0, TWO_PI);
+			ctx.fillStyle = "rgba(99, 102, 241, 0.9)";
+			ctx.fill();
+
+			wave.phase += wave.speed * TWO_PI * deltaScale;
+		};
 
 		const stopListening = () => {
 			if (!audioSync) {
@@ -1866,11 +1974,7 @@
 				stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 				audioSync = new window.AudioSync();
 				audioSync.connect(stream);
-				generator.syncToAudio(audioSync, {
-					amplitude: { source: "energy", intensity: 1.5 },
-					speed: { source: "treble", intensity: 0.6 },
-				});
-				status.textContent = "Listening — speak or play music";
+				status.textContent = "Listening — try saying something";
 				button.textContent = "Stop";
 			} catch {
 				status.textContent = "Microphone access blocked";
@@ -2355,7 +2459,10 @@
 		safeCall(() => startExample("compositingGlow", 4, drawCompositingGlow));
 		safeCall(() => startExample("zenMode", 8, drawZenMode));
 		safeCall(() => startExample("heartbeatMonitor", 4, drawHeartbeatMonitor));
-		safeCall(() => startVoiceWaveform());
+		safeCall(() => startExample("wavePattern", 6, drawWavePattern));
+		safeCall(() => startExample("voiceLineWave", 4, drawVoiceLineWave));
+		safeCall(() => startSearchMicWave());
+		safeCall(() => startExample("audioVoiceWave", 4, drawAudioVoiceWave));
 		safeCall(() => startExample("waveLoop", 10, drawWaveLoop));
 		safeCall(() => startStringPhysics());
 		safeCall(() => startAudioSpectrogram());
