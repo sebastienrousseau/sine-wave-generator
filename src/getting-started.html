@@ -28,16 +28,16 @@
 			content="https://cloudcdn.pro/clients/sinewavegenerator/v1/logos/sinewavegenerator.svg"
 		/>
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta
-			name="twitter:title"
-			content="Get started - Sine Wave Generator"
-		/>
+		<meta name="twitter:title" content="Get started - Sine Wave Generator" />
 		<meta
 			name="twitter:description"
 			content="Install and launch animated canvas waves quickly with ready-to-copy patterns."
 		/>
 		<meta name="theme-color" content="#0ea5e9" />
-		<link rel="canonical" href="https://sine-wave-generator.com/getting-started/" />
+		<link
+			rel="canonical"
+			href="https://sine-wave-generator.com/getting-started/"
+		/>
 		<link rel="stylesheet" href="../reset.css" />
 		<link rel="icon" href="../favicon.ico" />
 	</head>
@@ -115,9 +115,7 @@
 						stroke-linecap="round"
 						stroke-linejoin="round"
 					>
-						<path
-							d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
-						></path>
+						<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
 					</svg>
 				</button>
 				<button
@@ -216,6 +214,29 @@ gen.start();</code></pre>
 						for editor autocompletion.
 					</p>
 				</div>
+
+				<h3>Minimal reproduction</h3>
+				<div class="card">
+					<p>
+						One self-contained file — no build step, no bundler. Paste it into a
+						sandbox or a bug report and it just works.
+					</p>
+					<pre class="code-block"><code>&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;canvas id="sine" style="width: 100%; height: 300px"&gt;&lt;/canvas&gt;
+    &lt;script src="https://unpkg.com/@sebastienrousseau/sine-wave-generator"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      const generator = new SineWaveGenerator({
+        el: "#sine",
+        autoResize: true,
+        waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
+      });
+      generator.start();
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+				</div>
 			</section>
 
 			<section class="section alt-section" id="common-patterns">
@@ -240,17 +261,23 @@ gen.start();</code></pre>
 					</div>
 					<div class="card">
 						<h3>Responsive container</h3>
-						<p>Use ResizeObserver for components that resize independently.</p>
-						<pre class="code-block"><code>const gen = new SineWaveGenerator({ el: canvas });
-const ro = new ResizeObserver(() => gen.resize());
-ro.observe(canvas.parentElement);
+						<p>
+							<code>autoResize</code> (on by default) already watches the canvas
+							element itself, not just the window — no manual
+							<code>ResizeObserver</code> needed.
+						</p>
+						<pre
+							class="code-block"
+						><code>const gen = new SineWaveGenerator({ el: canvas, autoResize: true });
 
 gen.start();</code></pre>
 					</div>
 					<div class="card">
 						<h3>Pointer interaction</h3>
 						<p>Bind to pointer move for responsive phase shifts.</p>
-						<pre class="code-block"><code>canvas.addEventListener("pointermove", (event) => {
+						<pre
+							class="code-block"
+						><code>canvas.addEventListener("pointermove", (event) => {
   const y = event.clientY / canvas.clientHeight;
   gen.waves.forEach((wave) => {
     wave.phase = y * Math.PI * 2;

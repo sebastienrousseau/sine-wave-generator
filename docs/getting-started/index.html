@@ -23,7 +23,21 @@ const gen = new SineWaveGenerator({
   waves: [{ amplitude: 30, wavelength: 140, speed: 0.8 }],
 });
 
-gen.start();</code></pre><p>The package exports <code>SineWaveGenerator</code>, <code>Wave</code>, and <code>Ease</code> with full JSDoc annotations for editor autocompletion.</p></div></section><section class="section alt-section" id="common-patterns"><div class="section-header"><h2>Common patterns</h2><p>Production‑ready by default.</p></div><div class="card-grid"><div class="card"><h3>Hero background</h3><p>Full-bleed canvas with layered waves and low opacity.</p><pre class="code-block"><code>const gen = new SineWaveGenerator({
+gen.start();</code></pre><p>The package exports <code>SineWaveGenerator</code>, <code>Wave</code>, and <code>Ease</code> with full JSDoc annotations for editor autocompletion.</p></div><h3>Minimal reproduction</h3><div class="card"><p>One self-contained file — no build step, no bundler. Paste it into a sandbox or a bug report and it just works.</p><pre class="code-block"><code>&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;canvas id="sine" style="width: 100%; height: 300px"&gt;&lt;/canvas&gt;
+    &lt;script src="https://unpkg.com/@sebastienrousseau/sine-wave-generator"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      const generator = new SineWaveGenerator({
+        el: "#sine",
+        autoResize: true,
+        waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
+      });
+      generator.start();
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre></div></section><section class="section alt-section" id="common-patterns"><div class="section-header"><h2>Common patterns</h2><p>Production‑ready by default.</p></div><div class="card-grid"><div class="card"><h3>Hero background</h3><p>Full-bleed canvas with layered waves and low opacity.</p><pre class="code-block"><code>const gen = new SineWaveGenerator({
   el: "#hero",
   autoResize: true,
   waves: [
@@ -32,9 +46,7 @@ gen.start();</code></pre><p>The package exports <code>SineWaveGenerator</code>, 
   ]
 });
 
-gen.start();</code></pre></div><div class="card"><h3>Responsive container</h3><p>Use ResizeObserver for components that resize independently.</p><pre class="code-block"><code>const gen = new SineWaveGenerator({ el: canvas });
-const ro = new ResizeObserver(() => gen.resize());
-ro.observe(canvas.parentElement);
+gen.start();</code></pre></div><div class="card"><h3>Responsive container</h3><p><code>autoResize</code> (on by default) already watches the canvas element itself, not just the window — no manual <code>ResizeObserver</code> needed.</p><pre class="code-block"><code>const gen = new SineWaveGenerator({ el: canvas, autoResize: true });
 
 gen.start();</code></pre></div><div class="card"><h3>Pointer interaction</h3><p>Bind to pointer move for responsive phase shifts.</p><pre class="code-block"><code>canvas.addEventListener("pointermove", (event) => {
   const y = event.clientY / canvas.clientHeight;

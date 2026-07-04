@@ -294,6 +294,10 @@
 				purpose: "Record your voice, preview it live, then play it back.",
 				why: "Shows AudioSync as a real UI building block, not just a visualizer.",
 			},
+			waveMixer: {
+				purpose: "A DJ-style crossfade between two independent waves.",
+				why: "Two waves with independent volume and a live blend control.",
+			},
 			reducedMotionDemo: {
 				purpose: "Preview how the library behaves for reduced-motion users.",
 				why: "Accessibility should be visible and testable, not just a prose footnote.",
@@ -1779,6 +1783,44 @@
 		}
 	};
 
+	const drawWaveMixer = ({ ctx, canvas, controls, time, generator }) => {
+		const { width, height } = getSize(generator, canvas);
+		const centerY = height * 0.5;
+		const crossfade = controls.crossfade / 100;
+		const volumeA = controls.volumeA / 100;
+		const volumeB = controls.volumeB / 100;
+		const ampA = 26 * volumeA * (1 - crossfade);
+		const ampB = 26 * volumeB * crossfade;
+
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 4) {
+			const percent = x / width;
+			const y = centerY + Math.sin(percent * TWO_PI * 2 + time) * ampA;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		ctx.strokeStyle = `rgba(56, 189, 248, ${0.35 + volumeA * 0.5})`;
+		ctx.lineWidth = 2.5;
+		ctx.stroke();
+
+		ctx.beginPath();
+		for (let x = 0; x <= width; x += 4) {
+			const percent = x / width;
+			const y = centerY + Math.sin(percent * TWO_PI * 3 + time * 1.3) * ampB;
+			if (x === 0) {
+				ctx.moveTo(x, y);
+			} else {
+				ctx.lineTo(x, y);
+			}
+		}
+		ctx.strokeStyle = `rgba(244, 114, 182, ${0.35 + volumeB * 0.5})`;
+		ctx.lineWidth = 2.5;
+		ctx.stroke();
+	};
+
 	/* --- Reduced motion demo --- */
 
 	const startReducedMotionDemo = () => {
@@ -2669,6 +2711,7 @@
 		safeCall(() => startSearchMicWave());
 		safeCall(() => startExample("audioVoiceWave", 4, drawAudioVoiceWave));
 		safeCall(() => startExample("waveLoop", 10, drawWaveLoop));
+		safeCall(() => startExample("waveMixer", 5, drawWaveMixer));
 		safeCall(() => startVoiceRecorder());
 		safeCall(() => startReducedMotionDemo());
 		safeCall(() => startColorSchemeDemo());
