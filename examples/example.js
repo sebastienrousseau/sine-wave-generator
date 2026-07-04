@@ -290,6 +290,18 @@
 				purpose: "A seamless, endlessly looping ambient motif.",
 				why: "Closed curves read as calmer and more continuous than open waves.",
 			},
+			voiceRecorder: {
+				purpose: "Record your voice, preview it live, then play it back.",
+				why: "Shows AudioSync as a real UI building block, not just a visualizer.",
+			},
+			reducedMotionDemo: {
+				purpose: "Preview how the library behaves for reduced-motion users.",
+				why: "Accessibility should be visible and testable, not just a prose footnote.",
+			},
+			colorSchemeDemo: {
+				purpose: "Show the built-in gradient adapting to light or dark themes.",
+				why: "Proves theming works without reconfiguring the generator instance.",
+			},
 		};
 		document.querySelectorAll("[data-example]").forEach((card) => {
 			if (!card.closest("#examples")) {
@@ -1767,6 +1779,199 @@
 		}
 	};
 
+	/* --- Reduced motion demo --- */
+
+	const startReducedMotionDemo = () => {
+		const card = document.querySelector('[data-example="reducedMotionDemo"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		const toggle = card.querySelector("[data-action=toggle-reduced-motion]");
+		const status = card.querySelector("[data-reduced-motion-status]");
+		if (!canvas || !toggle || !status) {
+			return;
+		}
+		const generator = createGenerator(canvas);
+		generator.addWave({
+			amplitude: 22,
+			wavelength: 150,
+			speed: 0.05 * motionScale,
+			segmentLength: 8,
+		});
+		generator.addWave({
+			amplitude: 14,
+			wavelength: 100,
+			speed: 0.06 * motionScale,
+			segmentLength: 8,
+			strokeStyle: "rgba(14, 165, 233, 0.4)",
+		});
+
+		const updateStatus = () => {
+			status.textContent = generator.prefersReducedMotion
+				? `Reduced motion ON — running at ${Math.round(generator.reducedMotionScale * 100)}% speed`
+				: "Reduced motion OFF — full speed";
+			toggle.setAttribute(
+				"aria-pressed",
+				generator.prefersReducedMotion ? "true" : "false",
+			);
+			toggle.textContent = generator.prefersReducedMotion
+				? "Disable reduced motion"
+				: "Simulate reduced motion";
+		};
+		toggle.addEventListener("click", () => {
+			generator.prefersReducedMotion = !generator.prefersReducedMotion;
+			updateStatus();
+		});
+		updateStatus();
+		observeStart(canvas, () => generator.start());
+	};
+
+	/* --- Color scheme demo --- */
+
+	const startColorSchemeDemo = () => {
+		const card = document.querySelector('[data-example="colorSchemeDemo"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		const toggle = card.querySelector("[data-action=toggle-color-scheme]");
+		const status = card.querySelector("[data-color-scheme-status]");
+		if (!canvas || !toggle || !status) {
+			return;
+		}
+		const generator = createGenerator(canvas, { colorScheme: "light" });
+		generator.addWave({
+			amplitude: 20,
+			wavelength: 140,
+			speed: 0.05 * motionScale,
+			segmentLength: 8,
+		});
+
+		const updateStatus = () => {
+			status.textContent = `Palette: ${generator.resolvedColorScheme}`;
+			toggle.textContent =
+				generator.resolvedColorScheme === "dark"
+					? "Switch to light"
+					: "Switch to dark";
+		};
+		toggle.addEventListener("click", () => {
+			const next = generator.resolvedColorScheme === "dark" ? "light" : "dark";
+			generator.colorScheme = next;
+			generator.resolvedColorScheme = next;
+			generator.resize();
+			canvas.style.background = next === "dark" ? "#0b1220" : "";
+			updateStatus();
+		});
+		updateStatus();
+		observeStart(canvas, () => generator.start());
+	};
+
+	/* --- Voice recorder --- */
+
+	const startVoiceRecorder = () => {
+		const card = document.querySelector('[data-example="voiceRecorder"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
+		const recordButton = card.querySelector("[data-action=record-toggle]");
+		const status = card.querySelector("[data-record-status]");
+		const playback = card.querySelector("[data-playback]");
+		if (!canvas || !recordButton || !status || !playback) {
+			return;
+		}
+		const generator = createGenerator(canvas);
+		generator.addWave({
+			amplitude: 16,
+			wavelength: 130,
+			speed: 0.04 * motionScale,
+			segmentLength: 6,
+		});
+
+		let stream = null;
+		let audioSync = null;
+		let mediaRecorder = null;
+		let chunks = [];
+		let recording = false;
+
+		const cleanupStream = () => {
+			if (stream) {
+				stream.getTracks().forEach((track) => track.stop());
+				stream = null;
+			}
+		};
+
+		const stopRecording = () => {
+			if (mediaRecorder && mediaRecorder.state !== "inactive") {
+				mediaRecorder.stop();
+			}
+			if (audioSync) {
+				generator.unsyncAudio();
+				audioSync.disconnect();
+				audioSync = null;
+			}
+			recording = false;
+			recordButton.textContent = "Start recording";
+			status.textContent = "Idle";
+		};
+
+		const startRecording = async () => {
+			if (
+				recording ||
+				typeof window.AudioSync !== "function" ||
+				typeof window.MediaRecorder !== "function"
+			) {
+				status.textContent = "Not supported";
+				return;
+			}
+			try {
+				stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+				audioSync = new window.AudioSync();
+				audioSync.connect(stream);
+				generator.syncToAudio(audioSync, {
+					amplitude: { source: "energy", intensity: 1.5 },
+				});
+				chunks = [];
+				const mimeType = window.MediaRecorder.isTypeSupported("audio/webm")
+					? "audio/webm"
+					: "";
+				mediaRecorder = mimeType
+					? new window.MediaRecorder(stream, { mimeType })
+					: new window.MediaRecorder(stream);
+				mediaRecorder.ondataavailable = (event) => {
+					if (event.data.size > 0) {
+						chunks.push(event.data);
+					}
+				};
+				mediaRecorder.onstop = () => {
+					const blob = new Blob(chunks, {
+						type: mediaRecorder.mimeType || "audio/webm",
+					});
+					playback.src = URL.createObjectURL(blob);
+					playback.hidden = false;
+					cleanupStream();
+				};
+				mediaRecorder.start();
+				recording = true;
+				recordButton.textContent = "Stop recording";
+				status.textContent = "Recording — speak now";
+			} catch {
+				status.textContent = "Microphone access blocked";
+			}
+		};
+
+		recordButton.addEventListener("click", () => {
+			if (recording) {
+				stopRecording();
+			} else {
+				startRecording();
+			}
+		});
+
+		observeStart(canvas, () => generator.start());
+	};
+
 	/* --- String physics --- */
 
 	const startStringPhysics = () => {
@@ -2464,6 +2669,9 @@
 		safeCall(() => startSearchMicWave());
 		safeCall(() => startExample("audioVoiceWave", 4, drawAudioVoiceWave));
 		safeCall(() => startExample("waveLoop", 10, drawWaveLoop));
+		safeCall(() => startVoiceRecorder());
+		safeCall(() => startReducedMotionDemo());
+		safeCall(() => startColorSchemeDemo());
 		safeCall(() => startStringPhysics());
 		safeCall(() => startAudioSpectrogram());
 		safeCall(() => startResponsiveResize());
