@@ -16,7 +16,15 @@ const generator = new SineWaveGenerator({
   waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }]
 });
 
-generator.start();</code></pre></div></div><h3>TypeScript</h3><div class="card"><p>Types are bundled with the package. Import the interfaces directly:</p><pre class="code-block"><code>import { SineWaveGenerator, Wave, Ease } from "@sebastienrousseau/sine-wave-generator";
+generator.start();</code></pre></div><div class="card"><h3>React</h3><pre class="code-block"><code>import { useSineWaveGenerator } from
+  "@sebastienrousseau/sine-wave-generator/use-sine-wave-generator";
+
+const Wave = () =&gt; {
+  const { canvasRef } = useSineWaveGenerator({
+    waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
+  });
+  return &lt;canvas ref={canvasRef} /&gt;;
+};</code></pre><p><a href="/react-quickstart/">See it running live &rarr;</a></p></div></div><h3>TypeScript</h3><div class="card"><p>Types are bundled with the package. Import the interfaces directly:</p><pre class="code-block"><code>import { SineWaveGenerator, Wave, Ease } from "@sebastienrousseau/sine-wave-generator";
 
 const gen = new SineWaveGenerator({
   el: "#canvas",

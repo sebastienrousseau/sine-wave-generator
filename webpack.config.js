@@ -26,36 +26,49 @@ module.exports = {
 			filename: "index.html",
 			favicon: "favicon.ico",
 			template: "src/template.html",
+			chunks: ["main"],
 		}),
 		new HtmlWebpackPlugin({
 			filename: "getting-started/index.html",
 			favicon: "favicon.ico",
 			template: "src/getting-started.html",
+			chunks: ["main"],
 		}),
 		new HtmlWebpackPlugin({
 			filename: "examples/index.html",
 			favicon: "favicon.ico",
 			template: "src/examples.html",
+			chunks: ["main"],
 		}),
 		new HtmlWebpackPlugin({
 			filename: "playground/index.html",
 			favicon: "favicon.ico",
 			template: "src/playground.html",
+			chunks: ["main"],
 		}),
 		new HtmlWebpackPlugin({
 			filename: "docs/api/index.html",
 			favicon: "favicon.ico",
 			template: "src/docs-api.html",
+			chunks: ["main"],
 		}),
 		new HtmlWebpackPlugin({
 			filename: "guides/index.html",
 			favicon: "favicon.ico",
 			template: "src/guides.html",
+			chunks: ["main"],
 		}),
 		new HtmlWebpackPlugin({
 			filename: "showcase/index.html",
 			favicon: "favicon.ico",
 			template: "src/showcase.html",
+			chunks: ["main"],
+		}),
+		new HtmlWebpackPlugin({
+			filename: "react-quickstart/index.html",
+			favicon: "favicon.ico",
+			template: "src/react-quickstart.html",
+			chunks: ["main", "reactQuickstart"],
 		}),
 		new CopyPlugin({
 			patterns: [
@@ -72,10 +85,13 @@ module.exports = {
 		static: "./dist",
 		open: true,
 	},
-	entry: "./src/sine-wave-generator.js",
+	entry: {
+		main: "./src/sine-wave-generator.js",
+		reactQuickstart: "./examples/react-quickstart.js",
+	},
 	output: {
 		path: path.resolve(__dirname, "dist"),
-		filename: "main.js",
+		filename: "[name].js",
 	},
 	mode: "production",
 	optimization: {
