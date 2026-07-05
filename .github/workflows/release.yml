@@ -24,8 +24,6 @@ jobs:
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
           scope: "@sebastienrousseau"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: pnpm install --frozen-lockfile
       - run: pnpm run format:check
       - run: pnpm run lint
@@ -33,26 +31,41 @@ jobs:
       - run: pnpm test
       - run: pnpm run build
 
-  # Publish to npm on push to main branch
+  # Publish to npm on push to main branch, via npm Trusted Publishing (OIDC) —
+  # no long-lived NPM_TOKEN. id-token: write lets the npm CLI mint a short-
+  # lived OIDC token; npmjs.com verifies it against the Trusted Publisher
+  # config (org/repo/workflow filename) registered for this package.
+  #
+  # This uses `npm publish` rather than `pnpm publish` for the actual publish
+  # step: pnpm's own OIDC support is new and has had reliability issues in
+  # recent versions (e.g. pnpm/pnpm#11513 — 404s on the exact GitHub Actions
+  # + OIDC setup used here), while npm's is generally available and stable.
+  # Dependency install/build still use pnpm; only the final publish switches
+  # to the raw npm CLI, which doesn't care which package manager installed
+  # node_modules.
   publish:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
           version: 9
-      - name: Use Node.js 20.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: "22"
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
           scope: "@sebastienrousseau"
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
+      # Trusted publishing requires npm CLI 11.5.1+; the version bundled
+      # with actions/setup-node isn't guaranteed to be new enough yet.
+      - run: npm install -g npm@latest
       - name: Publish to npm
-        run: pnpm publish --access public --tag latest --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --tag latest --provenance
