@@ -18,7 +18,7 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 
 ---
 
-## v0.0.3 (2026-01-26)
+## v0.0.3 (2026-07-05)
 
 ### Added
 
@@ -36,6 +36,13 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - `colorScheme` option: the default gradient now follows `prefers-color-scheme` live (with a distinct, higher-contrast palette for dark backgrounds), or force `"light"`/`"dark"`
 - `useSineWaveGenerator` (`src/use-sine-wave-generator.js`): an optional React hook that creates, starts, and destroys a `SineWaveGenerator` across the component lifecycle. `react` is an optional peer dependency — only required if this file is imported
 - Dual ESM/CJS build (via `tsup`) plus a `package.json` `exports` map: `require("@sebastienrousseau/sine-wave-generator")` and `import ... from "@sebastienrousseau/sine-wave-generator"` (and the `/audio-sync`, `/use-sine-wave-generator` subpaths) now both resolve natively. The previous `require(".../src/*.js")` deep-import paths still work unchanged, kept as explicit legacy aliases in the exports map
+- A live `/react-quickstart/` page — three running React examples (basic multi-wave, hero background, audio-reactive microphone) built on `useSineWaveGenerator`, with equal footing in the global site nav
+- Ten new example demos in the "Rhythm & signal" gallery section: heartbeat monitor, decorative wave pattern, voice-message-style waveform, live-microphone listening indicator, equalizer-style visualizer, closed wave loop, voice recorder (record/preview/playback), DJ-style dual-wave mixer, a reduced-motion preview toggle, and a light/dark adaptive-gradient toggle
+- Restored the "Fundamentals" (basic wave, layered waves, pointer reactive, dynamic wave management, performance mode, custom easing, pause/resume) and "Responsive resize" demos to the deployed Examples gallery — previously only present in an unbuilt legacy file, so they never actually shipped
+- `llms.txt` and `llms-full.txt` (the [llmstxt.org](https://llmstxt.org/) convention) for AI coding assistants, plus a documented path to expose them to MCP-capable tools via `mcpdoc`
+- schema.org `SoftwareApplication` structured data on the homepage
+- A minimal single-file reproduction snippet on the Getting Started page, suitable for pasting into a sandbox or bug report
+- A full regression test suite for the examples gallery, the React quickstart bundle, and every code example in the README and Getting Started page — all executed against the real library, not just checked by eye (175+ new tests)
 
 ### Changed
 
@@ -46,12 +53,17 @@ An enhanced sine wave generator tailored for web applications, offering advanced
 - **Behavior change:** canvases now get an `aria-hidden` or `role="img"` attribute by default unless one is already present on the element
 - **Behavior change:** the default gradient now varies with `prefers-color-scheme` instead of always using the same colors — pass `colorScheme: "light"` to restore the previous fixed palette
 - `AudioSync.detectBeat()` now documents its algorithm basis and known limitations (single-band bass trigger, 60–200 BPM detection range) in JSDoc and the README
+- The Examples gallery is reorganized around what you're building rather than how it's drawn (for example, the generic "Examples" section is now "Backgrounds & decorative patterns", "Lab presets" is now "Hero background presets", "Advanced modes" is now "Generative & experimental art")
+- Off-screen example cards use `content-visibility: auto` to reduce the initial render cost of the ~50-canvas Examples gallery
+- The Examples-gallery search is now debounced and matches only each card's title/description, instead of reading full card text (including code samples) on every keystroke
 
 ### Fixed
 
 - Pointer interactions now clamp to valid ranges for predictable phase updates
 - Touch handling now guards against empty touch lists
 - The constructor now throws a clear `CanvasError` instead of a raw `ReferenceError` when called without a DOM (e.g. during server-side rendering)
+- The voice-waveform and heartbeat-monitor examples animated too fast and looked "scattered" — the underlying wave speed and beats-per-cycle values were recalibrated against every other demo's established pacing
+- The homepage previously carried two separate, conflicting schema.org `SoftwareApplication` JSON-LD blocks (different descriptions, one missing version/license); consolidated into one
 
 ## v0.0.2 (2023-02-20)
 
