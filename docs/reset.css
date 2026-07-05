@@ -747,6 +747,16 @@ button {
 	gap: 20px;
 }
 
+.card-grid .card {
+	/* The Examples gallery renders ~50 of these on one page; skipping
+	   layout/paint for the ones currently off-screen cuts initial
+	   render cost substantially. contain-intrinsic-size is a rough
+	   average card height so scrollbar/scroll-position stay stable
+	   before each card is first measured. */
+	content-visibility: auto;
+	contain-intrinsic-size: auto 450px;
+}
+
 .card {
 	background: var(--card-bg);
 	border: 1px solid var(--card-border);
