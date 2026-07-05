@@ -149,7 +149,99 @@
 				</div>
 			</section>
 
-			<section class="section alt-section" id="examples">
+			<section class="section alt-section" id="fundamentals">
+				<div class="section-header">
+					<h2>Fundamentals</h2>
+					<p>Core interactions you can remix immediately.</p>
+				</div>
+				<div class="card-grid">
+					<article class="card" data-example="basicWave" id="basicWave">
+						<h3>Basic wave</h3>
+						<p>Single wave with default gradient stroke.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasBasic"
+							aria-label="Basic wave"
+						></canvas>
+					</article>
+					<article class="card" data-example="layeredWaves" id="layeredWaves">
+						<h3>Layered waves</h3>
+						<p>Stack multiple waves for depth and parallax.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasMulti"
+							aria-label="Layered waves"
+						></canvas>
+					</article>
+					<article
+						class="card"
+						data-example="pointerReactive"
+						id="pointerReactive"
+					>
+						<h3>Pointer reactive</h3>
+						<p>Pointer movement shapes amplitude and wavelength.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPointer"
+							aria-label="Pointer reactive"
+						></canvas>
+					</article>
+					<article
+						class="card"
+						data-example="dynamicManagement"
+						id="dynamicManagement"
+					>
+						<h3>Dynamic management</h3>
+						<p>Programmatic add/remove of wave layers.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasDynamic"
+							aria-label="Dynamic waves"
+						></canvas>
+					</article>
+					<article
+						class="card"
+						data-example="performanceMode"
+						id="performanceMode"
+					>
+						<h3>Performance mode</h3>
+						<p>Low-memory settings with pixel-ratio caps.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPerformance"
+							aria-label="Performance mode"
+						></canvas>
+					</article>
+					<article class="card" data-example="customEasing" id="customEasing">
+						<h3>Custom easing</h3>
+						<p>Swap easing curves for cinematic motion.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasEasing"
+							aria-label="Custom easing"
+						></canvas>
+					</article>
+					<article class="card" data-example="pauseResume" id="pauseResume">
+						<h3>Pause and resume</h3>
+						<p>Explicit control over the render loop.</p>
+						<canvas
+							class="demo-canvas"
+							id="sineCanvasPause"
+							aria-label="Pause resume"
+						></canvas>
+						<div class="controls">
+							<button class="btn" type="button" data-action="pause">
+								Pause
+							</button>
+							<button class="btn" type="button" data-action="resume">
+								Resume
+							</button>
+						</div>
+					</article>
+				</div>
+			</section>
+
+			<section class="section" id="examples">
 				<div class="section-header">
 					<h2>Examples</h2>
 					<p>Purposeful motion, tuned for the real world.</p>
@@ -1156,7 +1248,7 @@ for (let x = 0; x &lt;= width; x += 6) {
 				</div>
 			</section>
 
-			<section class="section" id="motion-lab">
+			<section class="section alt-section" id="motion-lab">
 				<div class="section-header">
 					<h2>Motion lab</h2>
 					<p>High-end motion studies that feel tactile and musical.</p>
@@ -1365,7 +1457,7 @@ for (let x = 0; x &lt;= width; x += 4) {
 				</div>
 			</section>
 
-			<section class="section alt-section" id="rhythm-signal">
+			<section class="section" id="rhythm-signal">
 				<div class="section-header">
 					<h2>Rhythm &amp; signal</h2>
 					<p>
@@ -1749,7 +1841,7 @@ ctx.lineTo(x, centerY + Math.sin(percent * TWO_PI * 3 + time * 1.3) * ampB);</co
 				</div>
 			</section>
 
-			<section class="section" id="accessibility-theming">
+			<section class="section alt-section" id="accessibility-theming">
 				<div class="section-header">
 					<h2>Accessibility &amp; theming</h2>
 					<p>
@@ -1837,7 +1929,7 @@ generator.resize();</code></pre>
 				</div>
 			</section>
 
-			<section class="section alt-section" id="lab">
+			<section class="section" id="lab">
 				<div class="section-header">
 					<h2>Lab presets</h2>
 					<p>Curated scenes you can drop into a hero section.</p>
@@ -1918,7 +2010,7 @@ generator.resize();</code></pre>
 				</div>
 			</section>
 
-			<section class="section" id="advanced-modes">
+			<section class="section alt-section" id="advanced-modes">
 				<div class="section-header">
 					<h2>Advanced modes</h2>
 					<p>Experimental sketches built on sine-driven motion.</p>

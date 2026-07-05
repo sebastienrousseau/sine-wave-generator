@@ -2242,10 +2242,16 @@
 	/* --- Responsive resize demo --- */
 
 	const startResponsiveResize = () => {
-		const canvas = document.getElementById("responsiveResizeCanvas");
+		const card = document.querySelector('[data-example="responsiveResize"]');
+		if (!card) {
+			return;
+		}
+		const canvas = card.querySelector("canvas");
 		if (!canvas) {
 			return;
 		}
+		// autoResize (on by default) already watches the canvas element itself
+		// via ResizeObserver, so no manual observer is needed here.
 		const generator = createGenerator(canvas, { autoResize: true });
 		generator.addWave({
 			amplitude: 24,
@@ -2260,13 +2266,6 @@
 			segmentLength: 12,
 			strokeStyle: "rgba(14,165,233,0.4)",
 		});
-		const container = canvas.parentElement;
-		if (container) {
-			const ro = new ResizeObserver(() => {
-				generator.resize();
-			});
-			ro.observe(container);
-		}
 		observeStart(canvas, () => generator.start());
 	};
 

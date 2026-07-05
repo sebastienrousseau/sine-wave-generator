@@ -14,10 +14,7 @@
 			property="og:description"
 			content="Short guides for hero backgrounds, scroll-reactive waves, audio-driven visuals, and performance tuning."
 		/>
-		<meta
-			property="og:url"
-			content="https://sine-wave-generator.com/guides/"
-		/>
+		<meta property="og:url" content="https://sine-wave-generator.com/guides/" />
 		<meta
 			property="og:image"
 			content="https://cloudcdn.pro/clients/sinewavegenerator/v1/logos/sinewavegenerator.svg"
@@ -37,7 +34,11 @@
 		<div class="loading-overlay" id="loadingOverlay">
 			<div class="loading-spinner"></div>
 		</div>
-		<canvas id="heroBackgroundCanvas" class="hero-bg-canvas" aria-hidden="true"></canvas>
+		<canvas
+			id="heroBackgroundCanvas"
+			class="hero-bg-canvas"
+			aria-hidden="true"
+		></canvas>
 		<header class="site-header">
 			<div class="brand">
 				<img
@@ -147,13 +148,14 @@
 					<article class="card">
 						<h3>Audio-driven waves</h3>
 						<p>Use WebAudio input to drive intensity and color.</p>
-						<a class="btn-secondary" href="/guides/#audio-driven"
-							>Learn more</a
-						>
+						<a class="btn-secondary" href="/guides/#audio-driven">Learn more</a>
 					</article>
 					<article class="card">
 						<h3>Quality presets</h3>
-						<p>Balance memory and clarity for battery, balanced, and quality modes.</p>
+						<p>
+							Balance memory and clarity for battery, balanced, and quality
+							modes.
+						</p>
 						<a class="btn-secondary" href="/guides/#quality-presets"
 							>Learn more</a
 						>
@@ -168,7 +170,10 @@
 				</div>
 				<div class="guide-layout">
 					<div class="guide-demo" data-example="heroBackgroundGuide">
-						<canvas class="demo-canvas" aria-label="Hero background demo"></canvas>
+						<canvas
+							class="demo-canvas"
+							aria-label="Hero background demo"
+						></canvas>
 						<pre class="code-block"><code>const gen = new SineWaveGenerator({
   el: "#hero",
   autoResize: true,
@@ -182,7 +187,9 @@ gen.start();</code></pre>
 					</div>
 					<div class="card">
 						<h3>Purpose</h3>
-						<p>Give the page depth and calm motion without competing with copy.</p>
+						<p>
+							Give the page depth and calm motion without competing with copy.
+						</p>
 						<h3>Why it works</h3>
 						<p>
 							Two slow waves create parallax at low contrast. The eye reads the
@@ -207,8 +214,13 @@ gen.start();</code></pre>
 				</div>
 				<div class="guide-layout">
 					<div class="guide-demo" data-example="scrollReactive">
-						<canvas class="demo-canvas" aria-label="Scroll reactive demo"></canvas>
-						<pre class="code-block"><code>window.addEventListener("scroll", () => {
+						<canvas
+							class="demo-canvas"
+							aria-label="Scroll reactive demo"
+						></canvas>
+						<pre
+							class="code-block"
+						><code>window.addEventListener("scroll", () => {
   const progress = scrollY / (docHeight - innerHeight);
   wave.amplitude = 10 + 30 * progress;
   wave.wavelength = 140 + 240 * (1 - progress);
@@ -247,7 +259,9 @@ gen.start();</code></pre>
 							</button>
 							<span data-audio-status>Idle</span>
 						</div>
-						<pre class="code-block"><code>const analyser = audioCtx.createAnalyser();
+						<pre
+							class="code-block"
+						><code>const analyser = audioCtx.createAnalyser();
 analyser.fftSize = 128;
 // Map frequency bins to wave intensity.</code></pre>
 					</div>
@@ -277,13 +291,20 @@ analyser.fftSize = 128;
 				</div>
 				<div class="guide-layout">
 					<div class="guide-demo" data-example="qualityPresets">
-						<canvas class="demo-canvas" aria-label="Quality presets demo"></canvas>
+						<canvas
+							class="demo-canvas"
+							aria-label="Quality presets demo"
+						></canvas>
 						<div class="quality-buttons">
 							<button class="btn-secondary is-active" data-quality="balanced">
 								Balanced
 							</button>
-							<button class="btn-secondary" data-quality="quality">Quality</button>
-							<button class="btn-secondary" data-quality="battery">Battery</button>
+							<button class="btn-secondary" data-quality="quality">
+								Quality
+							</button>
+							<button class="btn-secondary" data-quality="battery">
+								Battery
+							</button>
 						</div>
 						<div class="quality-status" data-quality-status>
 							Quality preset: balanced
@@ -309,6 +330,49 @@ gen.setQualityPreset("battery");</code></pre>
 						<a class="btn-secondary" href="/docs/api/#setqualitypreset"
 							>Learn more</a
 						>
+					</div>
+				</div>
+			</section>
+
+			<section class="section" id="responsive-resize">
+				<div class="section-header">
+					<h2>Responsive resize</h2>
+					<p>Stays sharp when its container changes, not just the window.</p>
+				</div>
+				<div class="guide-layout">
+					<div class="guide-demo" data-example="responsiveResize">
+						<canvas
+							class="demo-canvas"
+							aria-label="Responsive resize demo"
+						></canvas>
+						<pre
+							class="code-block"
+						><code>const gen = new SineWaveGenerator({ el: canvas, autoResize: true });
+
+gen.start();
+// No manual ResizeObserver needed — autoResize already watches
+// the canvas element itself, not just the window.</code></pre>
+					</div>
+					<div class="card">
+						<h3>Purpose</h3>
+						<p>Keep the canvas crisp in layouts that resize independently.</p>
+						<h3>Why it works</h3>
+						<p>
+							<code>autoResize</code> observes the canvas element's own box size
+							via <code>ResizeObserver</code>, in addition to the window
+							<code>resize</code> event, catching layout-driven changes a window
+							listener alone would miss.
+						</p>
+						<h3>How to apply</h3>
+						<ul>
+							<li>Leave <code>autoResize</code> on (the default).</li>
+							<li>
+								Cap <code>maxPixelRatio</code> on high-DPI displays to control
+								memory.
+							</li>
+							<li>Delete any manual resize wiring you may already have.</li>
+						</ul>
+						<a class="btn-secondary" href="/docs/api/#resize">Learn more</a>
 					</div>
 				</div>
 			</section>
