@@ -15,8 +15,8 @@ jobs:
     name: Node CI
     uses: sebastienrousseau/pipelines/.github/workflows/node-ci.yml@main
     with:
-      node-version: '20'
-      package-manager: 'pnpm'
+      node-version: "20"
+      package-manager: "pnpm"
       run-lint: true
       run-typecheck: true
       run-tests: true

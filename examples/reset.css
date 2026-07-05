@@ -1200,7 +1200,9 @@ textarea:focus-visible {
 		opacity: 0;
 		transform: translateY(-10px);
 		pointer-events: none;
-		transition: opacity 0.18s ease, transform 0.18s ease;
+		transition:
+			opacity 0.18s ease,
+			transform 0.18s ease;
 	}
 
 	[data-theme="dark"] .nav {
