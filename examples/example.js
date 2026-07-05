@@ -646,13 +646,31 @@
 			if (items.length === 0) {
 				return;
 			}
-			input.addEventListener("input", () => {
+			// Cache each item's searchable text once at setup time instead of
+			// re-serializing it on every keystroke — for the examples grid
+			// this also means matching against title + description only,
+			// not each card's full code sample.
+			const entries = items.map((item) => {
+				const searchTarget =
+					mode === "examples"
+						? [item.querySelector("h3"), item.querySelector("p")]
+								.filter(Boolean)
+								.map((el) => el.textContent)
+								.join(" ")
+						: item.textContent;
+				return { item, text: searchTarget.toLowerCase() };
+			});
+			let debounceTimer = null;
+			const applyFilter = () => {
 				const query = input.value.trim().toLowerCase();
-				items.forEach((item) => {
-					const text = item.textContent.toLowerCase();
+				entries.forEach(({ item, text }) => {
 					const match = query === "" || text.includes(query);
 					item.style.display = match ? "" : "none";
 				});
+			};
+			input.addEventListener("input", () => {
+				clearTimeout(debounceTimer);
+				debounceTimer = setTimeout(applyFilter, 80);
 			});
 		});
 	};

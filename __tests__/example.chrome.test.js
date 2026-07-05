@@ -158,13 +158,28 @@ describe("examples/example.js — Site-wide chrome", () => {
 		});
 	});
 
-	it("filters the examples gallery via the search input", () => {
+	it("filters the examples gallery via the search input, debounced, matching only title/description", () => {
+		jest.useFakeTimers();
 		bootExamplePage({ page: "examples" });
 		const search = document.getElementById("examples-search");
 		expect(search).toBeTruthy();
-		search.value = "wave";
+		const waveLoop = document.querySelector('[data-example="waveLoop"]');
+		const pulseMatrix = document.querySelector('[data-example="pulseMatrix"]');
+
+		search.value = "wave loop";
 		search.dispatchEvent(new window.Event("input", { bubbles: true }));
+		// Not yet applied — filtering is debounced.
+		expect(waveLoop.style.display).not.toBe("none");
+		jest.advanceTimersByTime(80);
+		expect(waveLoop.style.display).toBe("");
+		expect(pulseMatrix.style.display).toBe("none");
+
+		// A rapid second keystroke resets the debounce timer rather than
+		// stacking a second filter pass.
 		search.value = "";
 		search.dispatchEvent(new window.Event("input", { bubbles: true }));
+		jest.advanceTimersByTime(80);
+		expect(waveLoop.style.display).toBe("");
+		expect(pulseMatrix.style.display).toBe("");
 	});
 });
