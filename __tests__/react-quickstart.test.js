@@ -1,7 +1,13 @@
 "use strict";
 
+// @testing-library/react normally sets this as a side effect of being
+// required; this file drives act() directly instead, so it must be set
+// explicitly or react-dom's act-environment detection is inconsistent.
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
 const { act } = require("react");
 const { installBrowserMocks } = require("./helpers/browserMocks");
+const { mountAll } = require("../examples/react-quickstart.js");
 
 const createMockCanvasContext = () => {
 	const gradient = { addColorStop: () => {} };
@@ -63,10 +69,7 @@ describe("examples/react-quickstart.js", () => {
 	it("mounts the demo canvas into #react-quickstart-root when present", async () => {
 		document.body.innerHTML = '<div id="react-quickstart-root"></div>';
 		await act(async () => {
-			jest.isolateModules(() => {
-				require("../examples/react-quickstart.js");
-			});
-			await new Promise((resolve) => setTimeout(resolve, 0));
+			mountAll();
 		});
 		const root = document.getElementById("react-quickstart-root");
 		const canvas = root.querySelector("canvas");
@@ -74,23 +77,18 @@ describe("examples/react-quickstart.js", () => {
 		expect(canvas.getAttribute("aria-label")).toBe("React sine wave demo");
 	});
 
-	it("does nothing when none of the mount points are present", () => {
+	it("does nothing when none of the mount points are present", async () => {
 		document.body.innerHTML = "";
-		expect(() => {
-			jest.isolateModules(() => {
-				require("../examples/react-quickstart.js");
-			});
-		}).not.toThrow();
+		await act(async () => {
+			expect(() => mountAll()).not.toThrow();
+		});
 		expect(document.querySelector("canvas")).toBeNull();
 	});
 
 	it("mounts the hero-background demo into #react-hero-root when present", async () => {
 		document.body.innerHTML = '<div id="react-hero-root"></div>';
 		await act(async () => {
-			jest.isolateModules(() => {
-				require("../examples/react-quickstart.js");
-			});
-			await new Promise((resolve) => setTimeout(resolve, 0));
+			mountAll();
 		});
 		const root = document.getElementById("react-hero-root");
 		const canvas = root.querySelector("canvas");
@@ -103,22 +101,19 @@ describe("examples/react-quickstart.js", () => {
 	it("mounts the audio-reactive demo and starts/stops listening", async () => {
 		document.body.innerHTML = '<div id="react-audio-root"></div>';
 		await act(async () => {
-			jest.isolateModules(() => {
-				require("../examples/react-quickstart.js");
-			});
-			await new Promise((resolve) => setTimeout(resolve, 0));
+			mountAll();
 		});
 		const root = document.getElementById("react-audio-root");
 		const canvas = root.querySelector("canvas");
-		expect(canvas.getAttribute("aria-label")).toBe(
-			"Audio-reactive React demo",
-		);
+		expect(canvas.getAttribute("aria-label")).toBe("Audio-reactive React demo");
 		const button = root.querySelector("button");
 		expect(button.textContent).toBe("Start listening");
 
 		await act(async () => {
 			button.click();
-			await new Promise((resolve) => setTimeout(resolve, 0));
+			await Promise.resolve();
+			await Promise.resolve();
+			await Promise.resolve();
 		});
 		expect(root.querySelector("span").textContent).toMatch(/Listening/);
 		expect(button.textContent).toBe("Stop");
@@ -136,16 +131,15 @@ describe("examples/react-quickstart.js", () => {
 		);
 		document.body.innerHTML = '<div id="react-audio-root"></div>';
 		await act(async () => {
-			jest.isolateModules(() => {
-				require("../examples/react-quickstart.js");
-			});
-			await new Promise((resolve) => setTimeout(resolve, 0));
+			mountAll();
 		});
 		const root = document.getElementById("react-audio-root");
 		const button = root.querySelector("button");
 		await act(async () => {
 			button.click();
-			await new Promise((resolve) => setTimeout(resolve, 0));
+			await Promise.resolve();
+			await Promise.resolve();
+			await Promise.resolve();
 		});
 		expect(root.querySelector("span").textContent).toBe(
 			"Microphone access blocked",

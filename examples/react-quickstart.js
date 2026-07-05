@@ -178,6 +178,15 @@ const mountComponent = (id, Component) => {
 	}
 };
 
-mountComponent("react-quickstart-root", SineWaveDemo);
-mountComponent("react-hero-root", HeroBackgroundDemo);
-mountComponent("react-audio-root", AudioReactiveDemo);
+/** Exported so tests can re-run mounting against a fresh DOM without
+ * needing to bust any module cache — the module itself, and the React
+ * instance it renders with, stay the same throughout a test file. */
+const mountAll = () => {
+	mountComponent("react-quickstart-root", SineWaveDemo);
+	mountComponent("react-hero-root", HeroBackgroundDemo);
+	mountComponent("react-audio-root", AudioReactiveDemo);
+};
+
+mountAll();
+
+module.exports = { mountAll };

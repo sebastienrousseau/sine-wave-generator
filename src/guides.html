@@ -271,8 +271,9 @@ analyser.fftSize = 128;
 						<p>Turn audio energy into visual rhythm.</p>
 						<h3>Why it works</h3>
 						<p>
-							FFT bins provide a stable amplitude envelope that maps cleanly to
-							wave height and color.
+							The analyser hands you a fresh energy reading many times a second
+							— steady enough that the wave doesn't jitter, fast enough that it
+							still feels live.
 						</p>
 						<h3>How to apply</h3>
 						<ul>
@@ -319,8 +320,9 @@ gen.setQualityPreset("battery");</code></pre>
 						<p>Keep visuals consistent across devices with one switch.</p>
 						<h3>Why it works</h3>
 						<p>
-							Pixel ratio controls the render buffer size, which is the biggest
-							cost driver for canvas memory and fill rate.
+							Pixel ratio is the single biggest lever on canvas cost — it sets
+							how many actual pixels get redrawn every frame, not just how many
+							you see on screen.
 						</p>
 						<h3>How to apply</h3>
 						<ul>
