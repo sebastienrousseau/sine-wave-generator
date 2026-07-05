@@ -1,0 +1,261 @@
+# Sine Wave Generator (full reference)
+
+> A ~3KB gzipped, zero-runtime-dependency JavaScript library that renders animated sine waves on an HTML5 Canvas 2D context, with an optional Web Audio API audio-reactivity layer (AudioSync) and an optional React hook (useSineWaveGenerator).
+
+Package: `@sebastienrousseau/sine-wave-generator` (npm). Version: 0.0.3. License: Apache-2.0.
+Homepage: https://sine-wave-generator.com
+Repository: https://github.com/sebastienrousseau/sine-wave-generator
+
+This file inlines the full API reference and guide content for tools that can't follow links. For narrative/example content see https://sine-wave-generator.com/llms.txt and the linked pages.
+
+## Install
+
+```bash
+npm install @sebastienrousseau/sine-wave-generator
+# or: yarn add @sebastienrousseau/sine-wave-generator
+# or: pnpm add @sebastienrousseau/sine-wave-generator
+```
+
+No bundler or build step is required to consume the library: drop `src/sine-wave-generator.js` in with a `<script>` tag, or `require`/`import` it directly. Requires any evergreen browser with Canvas 2D support; `AudioSync` additionally requires the Web Audio API (supported in all evergreen browsers).
+
+## Quick start — browser `<script>` tag
+
+```html
+<canvas id="sine"></canvas>
+<script src="https://unpkg.com/@sebastienrousseau/sine-wave-generator"></script>
+<script>
+  const generator = new SineWaveGenerator({
+    el: "#sine",
+    maxPixelRatio: 2,
+    waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
+  });
+  generator.start();
+</script>
+```
+
+## Quick start — CommonJS / ESM
+
+```js
+// CommonJS
+const { SineWaveGenerator } = require("@sebastienrousseau/sine-wave-generator");
+// ESM
+import { SineWaveGenerator } from "@sebastienrousseau/sine-wave-generator";
+
+const generator = new SineWaveGenerator({
+  el: "#sine",
+  maxPixelRatio: 2,
+  waves: [{ amplitude: 26, wavelength: 120, speed: 0.8 }],
+});
+generator.start();
+```
+
+`AudioSync` is available the same way from the `/audio-sync` subpath:
+
+```js
+const { AudioSync } = require("@sebastienrousseau/sine-wave-generator/audio-sync");
+```
+
+The package ships both a CommonJS and a native ESM build (resolved automatically via `package.json` exports), plus bundled TypeScript types. Set `strokeStyle` to `null` on a wave to use the built-in gradient stroke.
+
+## Quick start — React
+
+An optional `useSineWaveGenerator` hook is available from the `/use-sine-wave-generator` subpath (raw source, not bundled — `react` is a peer dependency, only required if you import this). It creates the generator on mount, starts it, and destroys it on unmount.
+
+```jsx
+import { useSineWaveGenerator } from "@sebastienrousseau/sine-wave-generator/use-sine-wave-generator";
+
+function AmbientBackground() {
+  const { canvasRef } = useSineWaveGenerator({
+    waves: [{ amplitude: 20, wavelength: 120, speed: 0.5 }],
+    ariaLabel: "Ambient background animation",
+  });
+  return <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />;
+}
+```
+
+The hook creates the generator once from the options passed on the first render (a new `waves` array on a later render calls `setWaves()` automatically), and returns `generatorRef` as an escape hatch — call any instance method on `generatorRef.current` (`addWave`, `syncToAudio`, `setQualityPreset`, ...) for anything else you need to update imperatively (for example, binding a live microphone via `AudioSync` on a button click, not on mount).
+
+## Quick start — TypeScript
+
+Type definitions ship with the package.
+
+```ts
+import {
+  SineWaveGenerator,
+  Wave,
+  Ease,
+  WaveConfig,
+  SineWaveGeneratorOptions,
+  ValidationError,
+  CanvasError,
+} from "@sebastienrousseau/sine-wave-generator";
+import {
+  AudioSync,
+  AudioSyncOptions,
+  AudioMapping,
+  AudioMetrics,
+  AudioSyncError,
+} from "@sebastienrousseau/sine-wave-generator/audio-sync";
+```
+
+Every error thrown by this library is one of `ValidationError`, `CanvasError`, or `AudioSyncError` (all extend `Error`), so you can discriminate failure modes with `instanceof` instead of matching on message strings:
+
+```ts
+try {
+  new SineWaveGenerator({ el: "#missing-canvas" });
+} catch (error) {
+  if (error instanceof CanvasError) {
+    // canvas element or its 2D context is missing/unusable
+  }
+  throw error;
+}
+```
+
+## API reference — SineWaveGenerator constructor
+
+`new SineWaveGenerator(options)`
+
+| Option | Type | Description | Required |
+| --- | --- | --- | --- |
+| `el` | `HTMLCanvasElement \| string` | Canvas element or CSS selector | Yes |
+| `waves` | `WaveConfig[]` | Initial wave configurations | No |
+| `pixelRatio` | `number` | Override device pixel ratio. Omit to track it automatically, including live display changes | No |
+| `maxPixelRatio` | `number` | Cap pixel ratio for memory control | No |
+| `autoResize` | `boolean` | Auto-resize on canvas box changes (ResizeObserver) and window resize | No |
+| `respectReducedMotion` | `boolean` | Honor prefers-reduced-motion by scaling animation speed down. Defaults to true | No |
+| `reducedMotionScale` | `number` | Speed multiplier while reduced motion is preferred. Defaults to 0.25; set to 0 to fully pause | No |
+| `ariaLabel` | `string \| null` | Accessible label for the canvas (sets role="img"). Omit for decorative canvases (aria-hidden) | No |
+| `colorScheme` | `"auto" \| "light" \| "dark"` | Default gradient palette. "auto" follows prefers-color-scheme live. Defaults to "auto" | No |
+
+## API reference — WaveConfig
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `phase` | `number` | Random | Phase offset in radians |
+| `speed` | `number` | Random 0.5-1.0 | Animation speed multiplier |
+| `amplitude` | `number` | 10 | Wave height in pixels |
+| `wavelength` | `number` | 100 | Peak-to-peak distance in pixels |
+| `strokeStyle` | `string \| null` | null | CSS colour or null for gradient |
+| `segmentLength` | `number` | 10 | Point density (lower is smoother) |
+| `easing` | `function` | `Ease.sineInOut` | Easing curve for wave shape |
+| `rotate` | `number` | 0 | Rotation angle in degrees (0-359) |
+
+## API reference — SineWaveGenerator instance methods
+
+| Method | Description |
+| --- | --- |
+| `start()` | Start the animation loop |
+| `stop()` | Stop the animation loop and unbind events |
+| `resize()` | Recalculate canvas size and rebuild gradients |
+| `addWave(config)` | Add a new wave at runtime |
+| `removeWave(index)` | Remove a wave by index |
+| `bindEvents()` | Bind resize, mouse, touch, and responsiveness/accessibility listeners |
+| `unbindEvents()` | Unbind all events and listeners |
+| `syncToAudio(audioSync, mapping?)` | Bind an audio source's live metrics to wave parameters |
+| `unsyncAudio()` | Detach the bound audio source and restore original wave values |
+
+A high `maxPixelRatio` on large canvases will increase memory use proportionally.
+
+## Accessibility & responsiveness behavior (on by default)
+
+- Marks the canvas `aria-hidden="true"` (decorative by default) unless you pass `ariaLabel`, in which case it sets `role="img"` and that label instead.
+- Scales animation speed to `reducedMotionScale` (default 0.25) when the user has `prefers-reduced-motion` enabled, and updates live if that preference changes. Pass `respectReducedMotion: false` to disable, or `reducedMotionScale: 0` to fully pause instead of slowing down.
+- Tracks `devicePixelRatio` live via a `matchMedia` listener when `pixelRatio` isn't explicitly set.
+- Observes the canvas element itself with `ResizeObserver` (in addition to the window resize event) when `autoResize` is true.
+- Picks the default gradient's palette from `prefers-color-scheme` and updates live if the OS/browser theme changes, when using the built-in gradient (`strokeStyle: null`). Pass `colorScheme: "light"` or `"dark"` to force a palette.
+
+## API reference — AudioSync
+
+`new AudioSync(options?)` — analyzes an `HTMLMediaElement` or `MediaStream` with the Web Audio API and derives real-time metrics for `syncToAudio()`.
+
+| Option | Type | Default | Description |
+| --- | --- | --- | --- |
+| `fftSize` | `number` | 1024 | FFT size for the analyser (must be power of 2) |
+| `smoothingTimeConstant` | `number` | 0.8 | Analyser smoothing, 0-1 |
+| `bpm` | `number \| null` | null | Manual tempo override; omit to auto-detect |
+
+| Method | Description |
+| --- | --- |
+| `connect(source)` | Connect an HTMLMediaElement or MediaStream |
+| `disconnect()` | Disconnect and reset analysis state |
+| `update(timestampMs)` | Sample the source and refresh metrics |
+| `getMetrics()` | Return the last computed metrics without sampling |
+
+Metrics returned by `update()`/`getMetrics()`: `energy`, `bass`, `mid`, `treble` (all normalized 0-1), `beat` (boolean, true on the detected frame), `beatPhase` (0-1 progress through the current beat), and `bpm` (manual or auto-detected tempo, or null if unknown).
+
+Beat detection is a lightweight heuristic, not a validated DSP algorithm — a variance-thresholded energy detector on the bass band alone. It under-detects material whose rhythm isn't bass-driven (ambient, classical, sparse/syncopated percussion), and only reports a bpm once two or more beats land 60-200 BPM apart. For more robust detection, pass a known bpm manually, or pair AudioSync with a dedicated analysis library (realtime-bpm-analyzer, web-audio-beat-detector, or Meyda) and feed its output through a custom object exposing `update(timestampMs)`.
+
+Custom mapping example (which metric drives which wave property, and how strongly):
+
+```js
+generator.syncToAudio(audioSync, {
+  amplitude: { source: "bass", intensity: 2 },
+  speed: { source: "energy", intensity: 1 },
+  rotate: { source: "treble", intensity: 0.5 },
+});
+```
+
+## Guide — Hero background
+
+Purpose: give the page depth and calm motion without competing with copy.
+Why it works: two slow waves create parallax at low contrast; the eye reads the motion as atmosphere, not content.
+How to apply: keep amplitude under 20px to avoid stealing attention; use two wavelengths for depth (e.g. 220 + 160); lower stroke opacity to 0.15-0.4 for softness; set `autoResize: true` for responsive headers.
+
+```js
+const gen = new SineWaveGenerator({
+  el: "#hero",
+  autoResize: true,
+  waves: [
+    { amplitude: 16, wavelength: 220, speed: 0.6 },
+    { amplitude: 10, wavelength: 160, speed: 0.4 },
+  ],
+});
+gen.start();
+```
+
+## Guide — Scroll-reactive parallax
+
+Purpose: let users feel scroll progression without extra UI.
+Why it works: amplitude increases while wavelength tightens, so the motion intensifies naturally as users move through the page.
+How to apply: throttle updates with `requestAnimationFrame`; clamp progress to 0-1 for stable motion; provide a reduced-motion fallback (slow or pause).
+
+```js
+window.addEventListener("scroll", () => {
+  const progress = scrollY / (docHeight - innerHeight);
+  wave.amplitude = 10 + 30 * progress;
+  wave.wavelength = 140 + 240 * (1 - progress);
+});
+```
+
+## Guide — Audio-driven waves
+
+Purpose: turn audio energy into visual rhythm.
+Why it works: the analyser hands you a fresh energy reading many times a second — steady enough that the wave doesn't jitter, fast enough that it still feels live.
+How to apply: start audio on a user gesture to satisfy mobile autoplay policies; normalize 0-255 analyser data into 0-1 amplitudes; use light smoothing for natural motion.
+
+## Guide — Quality presets
+
+Purpose: keep visuals consistent across devices with one switch.
+Why it works: pixel ratio is the single biggest lever on canvas cost — it sets how many actual pixels get redrawn every frame, not just how many you see on screen.
+How to apply: use `balanced` as the default; switch to `battery` on mobile or low power; offer `quality` for hero moments.
+
+```js
+gen.setQualityPreset("balanced");
+gen.setQualityPreset("quality");
+gen.setQualityPreset("battery");
+```
+
+## Guide — Responsive resize
+
+Purpose: keep the canvas crisp in layouts that resize independently, not just the window.
+Why it works: `autoResize` observes the canvas element's own box size via ResizeObserver, in addition to the window resize event, catching layout-driven changes a window listener alone would miss.
+How to apply: leave `autoResize` on (the default, so no manual ResizeObserver wiring is needed); cap `maxPixelRatio` on high-DPI displays to control memory.
+
+```js
+const gen = new SineWaveGenerator({ el: canvas, autoResize: true });
+gen.start();
+```
+
+## Using this project's docs with AI coding tools
+
+This project publishes `llms.txt` (https://sine-wave-generator.com/llms.txt) and this full reference (https://sine-wave-generator.com/llms-full.txt) per the llmstxt.org convention. To expose them directly to an MCP-capable coding assistant (Claude Desktop, Claude Code, Cursor, Windsurf), point a generic MCP docs server such as `mcpdoc` at the llms.txt URL — see the project README's "AI tools & MCP" section for a ready-to-paste config.

@@ -1,0 +1,23 @@
+# Sine Wave Generator
+
+> A ~3KB gzipped, zero-runtime-dependency JavaScript library that renders animated sine waves on an HTML5 Canvas 2D context, with an optional Web Audio API audio-reactivity layer (AudioSync) and an optional React hook (useSineWaveGenerator).
+
+Works as a single `<script>` tag (UMD global `window.SineWaveGenerator`) with no build step, or via `require`/`import` (dual CommonJS/ESM build, resolved through `package.json` exports, with bundled TypeScript types). Renders multiple independently-configured, layered waves at 60fps via `requestAnimationFrame`, with built-in pointer/touch interaction, device-pixel-ratio-aware sizing, `prefers-reduced-motion` and `prefers-color-scheme` awareness, and `ResizeObserver`-based auto-resize. The optional `AudioSync` class binds wave amplitude, speed, and rotation to a live `HTMLMediaElement` or `MediaStream` (music, microphone) via `AnalyserNode` — deriving energy/bass/mid/treble bands, beat detection, and BPM. The optional `useSineWaveGenerator` hook creates, starts, and destroys a generator across a React component's lifecycle.
+
+Package: `@sebastienrousseau/sine-wave-generator` (npm). Current version: 0.0.3. License: Apache-2.0.
+
+## Docs
+
+- [Getting started](https://sine-wave-generator.com/getting-started/): Installation (npm/CDN), quick-start snippets for browser `<script>` tag, CommonJS/ESM, React, and TypeScript usage, a single-file minimal reproduction suitable for bug reports, and common patterns (hero background, responsive container, pointer interaction).
+- [API reference](https://sine-wave-generator.com/docs/api/): Full `SineWaveGenerator` constructor options, `WaveConfig` properties, instance methods, `AudioSync` options/methods/metrics, and error types (`ValidationError`, `CanvasError`, `AudioSyncError`).
+- [Guides](https://sine-wave-generator.com/guides/): Short recipes — hero background, scroll-reactive parallax, audio-driven waves, quality presets (`battery`/`balanced`/`quality`), responsive resize.
+- [Examples](https://sine-wave-generator.com/examples/): A large gallery of live, copyable canvas demos, organized by what you're building (backgrounds & decorative patterns, interactive/exploratory motion, voice/audio/biometric UI, accessibility & theming, hero presets, generative art) rather than by drawing technique.
+- [React quickstart](https://sine-wave-generator.com/react-quickstart/): Live, running React examples built on `useSineWaveGenerator` — a basic demo, a hero-background pattern, and an audio-reactive (microphone) pattern.
+- [Playground](https://sine-wave-generator.com/playground/): A live config-panel editor — adjust wave parameters and presets, export the resulting config as a code snippet.
+
+## Optional
+
+- [Showcase](https://sine-wave-generator.com/showcase/): Projects built with Sine Wave Generator.
+- [GitHub repository](https://github.com/sebastienrousseau/sine-wave-generator): Source, issues, CHANGELOG, CONTRIBUTING.
+- [npm package](https://www.npmjs.com/package/@sebastienrousseau/sine-wave-generator): Install page, published versions.
+- [llms-full.txt](https://sine-wave-generator.com/llms-full.txt): This project's full API reference and guide content inlined in one file, for tools that can't follow links.

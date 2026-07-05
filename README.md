@@ -29,6 +29,7 @@ The library ships at roughly 3 KB gzipped. It uses `requestAnimationFrame` for b
 - [React](#react)
 - [Examples](#examples)
 - [TypeScript](#typescript)
+- [AI tools & MCP](#ai-tools--mcp)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -325,6 +326,35 @@ try {
 	throw error;
 }
 ```
+
+---
+
+## AI tools & MCP
+
+This project publishes [`llms.txt`](https://sine-wave-generator.com/llms.txt) and [`llms-full.txt`](https://sine-wave-generator.com/llms-full.txt) (the [llmstxt.org](https://llmstxt.org/) convention) — a structured, link-indexed summary and a full-content reference respectively, meant for LLMs and AI coding assistants to consume at inference time rather than crawling the whole site.
+
+To expose these directly to an MCP-capable assistant (Claude Desktop, Claude Code, Cursor, Windsurf), point a generic MCP documentation server such as [`mcpdoc`](https://github.com/langchain-ai/mcpdoc) at the `llms.txt` URL instead of building or running anything project-specific. A typical MCP client config looks like:
+
+```json
+{
+	"mcpServers": {
+		"mcpdoc": {
+			"command": "uvx",
+			"args": [
+				"--from",
+				"mcpdoc",
+				"mcpdoc",
+				"--urls",
+				"SineWaveGenerator:https://sine-wave-generator.com/llms.txt"
+			]
+		}
+	}
+}
+```
+
+Check `mcpdoc`'s own docs for the current invocation flags and where your specific client expects this config — it may change between `mcpdoc` versions.
+
+Note: neither `llms.txt` adoption nor MCP exposure is proven to affect search ranking or how often an AI cites this project — treat both as low-cost hygiene for tools that respect them, not as an SEO or marketing lever.
 
 ---
 

@@ -40,6 +40,31 @@
 		<link rel="canonical" href="https://sine-wave-generator.com" />
 		<link rel="stylesheet" href="reset.css" />
 		<link rel="icon" href="favicon.ico" />
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "SoftwareApplication",
+				"name": "Sine Wave Generator",
+				"description": "A ~3KB gzipped, zero-runtime-dependency JavaScript library for rendering animated sine waves on HTML5 Canvas, with an optional Web Audio API audio-reactivity layer and an optional React hook.",
+				"applicationCategory": "DeveloperApplication",
+				"operatingSystem": "Any (runs in any evergreen web browser)",
+				"softwareVersion": "0.0.3",
+				"url": "https://sine-wave-generator.com",
+				"downloadUrl": "https://www.npmjs.com/package/@sebastienrousseau/sine-wave-generator",
+				"codeRepository": "https://github.com/sebastienrousseau/sine-wave-generator",
+				"license": "https://www.apache.org/licenses/LICENSE-2.0",
+				"author": {
+					"@type": "Organization",
+					"name": "Team Sine Wave Generator",
+					"url": "https://sine-wave-generator.com"
+				},
+				"offers": {
+					"@type": "Offer",
+					"price": "0",
+					"priceCurrency": "USD"
+				}
+			}
+		</script>
 	</head>
 	<body>
 		<div class="loading-overlay" id="loadingOverlay">
@@ -136,9 +161,7 @@
 		<main class="page">
 			<section class="editorial-hero">
 				<h1>Sine Wave Generator</h1>
-				<p>
-					A compact canvas engine for layered, performant waves.
-				</p>
+				<p>A compact canvas engine for layered, performant waves.</p>
 			</section>
 
 			<section class="editorial-section">
@@ -146,9 +169,7 @@
 					<div>
 						<p class="eyebrow">FOUNDATIONS</p>
 						<h2>Start with the fundamentals</h2>
-						<p>
-							A tiny API, big results. Build your first wave in minutes.
-						</p>
+						<p>A tiny API, big results. Build your first wave in minutes.</p>
 						<div class="editorial-actions">
 							<a class="cta" href="/getting-started/">Get started</a>
 							<a class="btn-secondary" href="/examples/">Learn more</a>
@@ -168,15 +189,16 @@
 					<div>
 						<p class="eyebrow">PLAYGROUND</p>
 						<h2>Presets, tuned</h2>
-						<p>
-							Explore, export, and hand off with confidence.
-						</p>
+						<p>Explore, export, and hand off with confidence.</p>
 						<div class="editorial-actions">
 							<a class="btn-secondary" href="/playground/">Learn more</a>
 						</div>
 					</div>
 					<div class="editorial-media" data-example="pulseMatrix">
-						<canvas class="demo-canvas" aria-label="Pulse matrix preview"></canvas>
+						<canvas
+							class="demo-canvas"
+							aria-label="Pulse matrix preview"
+						></canvas>
 					</div>
 				</div>
 			</section>
@@ -186,15 +208,18 @@
 					<div>
 						<p class="eyebrow">PERFORMANCE</p>
 						<h2>Quality you can switch</h2>
-						<p>
-							Quality, balanced, battery—one line.
-						</p>
+						<p>Quality, balanced, battery—one line.</p>
 						<div class="editorial-actions">
-							<a class="btn-secondary" href="/guides/#quality-presets">Learn more</a>
+							<a class="btn-secondary" href="/guides/#quality-presets"
+								>Learn more</a
+							>
 						</div>
 					</div>
 					<div class="editorial-media" data-example="compositingGlow">
-						<canvas class="demo-canvas" aria-label="Compositing glow preview"></canvas>
+						<canvas
+							class="demo-canvas"
+							aria-label="Compositing glow preview"
+						></canvas>
 					</div>
 				</div>
 			</section>
@@ -227,7 +252,6 @@
 				</div>
 			</section>
 
-			
 			<footer class="site-footer">
 				<div class="footer-links">
 					<a href="/getting-started/">Get started</a>
@@ -248,21 +272,6 @@
 				</p>
 			</footer>
 		</main>
-		<script type="application/ld+json">
-			{
-				"@context": "https://schema.org",
-				"@type": "SoftwareApplication",
-				"name": "Sine Wave Generator",
-				"applicationCategory": "DeveloperApplication",
-				"operatingSystem": "Web",
-				"description": "Lightweight JavaScript library for animated sine wave visualizations on HTML5 Canvas.",
-				"url": "https://sine-wave-generator.com",
-				"publisher": {
-					"@type": "Organization",
-					"name": "Sine Wave Generator"
-				}
-			}
-		</script>
 		<script defer src="example.js" data-template-script="example"></script>
 		<script>
 			(() => {

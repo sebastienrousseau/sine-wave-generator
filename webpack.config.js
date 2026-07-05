@@ -78,6 +78,8 @@ module.exports = {
 				{ from: "LICENSE", to: "." },
 				{ from: "sitemap.xml", to: "." },
 				{ from: "robots.txt", to: "." },
+				{ from: "llms.txt", to: "." },
+				{ from: "llms-full.txt", to: "." },
 			],
 		}),
 	],
