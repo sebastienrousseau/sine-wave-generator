@@ -301,14 +301,16 @@ import {
 	Ease,
 	WaveConfig,
 	SineWaveGeneratorOptions,
+	ValidationError,
+	CanvasError,
+} from "@sebastienrousseau/sine-wave-generator";
+import {
 	AudioSync,
 	AudioSyncOptions,
 	AudioMapping,
 	AudioMetrics,
-	ValidationError,
-	CanvasError,
 	AudioSyncError,
-} from "@sebastienrousseau/sine-wave-generator";
+} from "@sebastienrousseau/sine-wave-generator/audio-sync";
 ```
 
 Every error thrown by this library is one of `ValidationError`, `CanvasError`, or `AudioSyncError` (all extend `Error`), so you can discriminate failure modes with `instanceof` instead of matching on message strings:

@@ -70,4 +70,17 @@ module.exports = [
 			"prefer-template": "error",
 		},
 	},
+	{
+		// These two files execute extracted README/getting-started.html code
+		// snippets against the real library to verify the docs stay accurate
+		// — new Function() here evaluates trusted, static repo content, not
+		// user input, so the eval-avoidance rules don't apply.
+		files: [
+			"__tests__/readme-examples.test.js",
+			"__tests__/getting-started-examples.test.js",
+		],
+		rules: {
+			"no-new-func": "off",
+		},
+	},
 ];
