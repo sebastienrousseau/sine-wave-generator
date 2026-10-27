@@ -62,10 +62,27 @@ jobs:
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
           scope: "@sebastienrousseau"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
+      # Every push to main reaches this job, but a version can be published
+      # only once: skip the publish when package.json's version is already
+      # on the registry, instead of failing on "cannot publish over".
+      - name: Check whether this version is already published
+        id: published
+        run: |
+          spec="$(node -p 'const p = require("./package.json"); p.name + "@" + p.version')"
+          if npm view "$spec" version >/dev/null 2>&1; then
+            echo "$spec is already on npm; nothing to publish."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.published.outputs.skip != 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.published.outputs.skip != 'true'
+        run: pnpm run build
       # Trusted publishing requires npm CLI 11.5.1+; the version bundled
       # with actions/setup-node isn't guaranteed to be new enough yet.
-      - run: npm install -g npm@latest
+      - if: steps.published.outputs.skip != 'true'
+        run: npm install -g npm@latest
       - name: Publish to npm
+        if: steps.published.outputs.skip != 'true'
         run: npm publish --access public --tag latest --provenance
